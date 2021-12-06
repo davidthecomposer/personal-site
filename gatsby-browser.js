@@ -1,7 +1,14 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/browser-apis/
- */
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin"
+import { MorphSVGPlugin } from "gsap/MorphSVGPlugin"
+import ScrollToPlugin from "gsap/ScrollToPlugin"
+import { CustomEase } from "gsap/CustomEase"
 
-// You can delete this file if you're not using it
+gsap.registerPlugin(
+  ScrollTrigger,
+  DrawSVGPlugin,
+  ScrollToPlugin,
+  MorphSVGPlugin,
+  CustomEase
+)

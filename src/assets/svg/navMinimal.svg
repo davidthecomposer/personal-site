@@ -1,0 +1,8 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="40" height="40" rx="5" fill="#1C1A1F" fill-opacity="0.5"/>
+<line class="nav_line1" x1="39" y1="6.5" x2="10" y2="6.5" stroke="#FFCEF8"/>
+<line class="nav_line2" x1="3" y1="13.5" x2="33" y2="13.5" stroke="#FFCEF8"/>
+<line class="nav_line3" x1="7" y1="20.5" x2="37" y2="20.5" stroke="#FFCEF8"/>
+<line class="nav_line4" x1="15" y1="27.5" x2="37" y2="27.5" stroke="#FFCEF8"/>
+<line class="nav_line5" x1="9" y1="34.5" x2="39" y2="34.5" stroke="#FFCEF8"/>
+</svg>

@@ -1,38 +1,88 @@
+const path = require("path")
+require("dotenv").config()
+
+const contentfulConfig = {
+  spaceId: process.env.CONTENTFUL_SPACE_ID,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+  previewToken: process.env.CONTENTFUL_PREVIEW_TOKEN,
+}
+
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
-    siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
+    siteUrl: "https://www.davidhalcampbell.com",
+    title: "David Campbell",
+    description: "David Campbell Music News and Compositions",
+    image: path.join(__dirname, "src/assets/svg/logo.svg"),
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-styled-components`,
     `gatsby-plugin-image`,
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: `gatsby-plugin-typescript`,
       options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
+        isTSX: true, // defaults to false
+        jsxPragma: `jsx`, // defaults to "React"
+        allExtensions: true, // defaults to false
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
+    {
+      resolve: `gatsby-plugin-svgr`,
+      options: {
+        prettier: true,
+        svgo: true,
+        memo: true,
+        svgoConfig: {
+          plugins: [
+            { removeViewBox: false },
+            { removeDimensions: true },
+            { removeRasterImages: true },
+            { reusePaths: true },
+            { cleanupIDs: false },
+            { prefixIds: false },
+            { removeUselessDefs: true },
+          ],
+        },
+      },
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `David Campbell Website`,
+        short_name: `David Campbell`,
         start_url: `/`,
         background_color: `#663399`,
-        // This will impact how browsers show your PWA/website
-        // https://css-tricks.com/meta-theme-color-and-trickery/
-        // theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/assets/svg/logo.svg`, // This path is relative to the root of the site.
       },
     },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    {
+      resolve: "gatsby-plugin-root-import",
+      options: {
+        components: path.join(__dirname, "src/components"),
+        src: path.join(__dirname, "src"),
+        styles: path.join(__dirname, "src/assets/styles"),
+        pages: path.join(__dirname, "src/pages"),
+        fonts: path.join(__dirname, "src/assets/fonts"),
+        hooks: path.join(__dirname, "src/utils/hooks"),
+        images: path.join(__dirname, "src/assets/images"),
+        svg: path.join(__dirname, "src/assets/svg"),
+        assets: path.join(__dirname, "src/assets"),
+        sections: path.join(__dirname, "src/sections"),
+        types: path.join(__dirname, "src/types"),
+        templates: path.join(__dirname, "src/templates"),
+        forms: path.join(__dirname, "src/components/forms"),
+        buttons: path.join(__dirname, "src/components/buttons"),
+        utils: path.join(__dirname, "src/utils"),
+        data: path.join(__dirname, "src/assets/data"),
+      },
+    },
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: contentfulConfig.spaceId,
+        accessToken: contentfulConfig.accessToken,
+      },
+    },
   ],
 }
