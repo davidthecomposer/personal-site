@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
-import { Heading1, Body1 } from "styles/text"
+import text from "styles/text"
 import colors from "styles/Colors"
 import media from "styles/media"
 import davidHuge from "images/davidHuge.jpg"
@@ -245,7 +245,7 @@ const HeaderWrapper = styled.div`
 `
 
 const Header = styled.h2`
-  ${Heading1};
+  ${text.desktop.h1};
   color: ${colors.brightPurple};
   transform: translate(-5.6vw, 100%);
   position: absolute;
@@ -293,7 +293,8 @@ const HeaderLine = styled.div`
 `
 
 const Text = styled.div`
-  ${Body1};
+  ${text.desktop.bodyS};
+  color: ${colors.coolWhite};
   position: absolute;
   width: 36.5vw;
   height: 75.6vw;

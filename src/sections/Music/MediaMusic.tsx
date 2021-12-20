@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import ContactForm from "components/ContactForm"
 import styled from "styled-components"
-import { Heading1, Body1, SubHeader, SubHeader2 } from "styles/text"
+import text from "styles/text"
 import colors from "styles/Colors"
 import media from "styles/media"
 import mediaMusicBG from "assets/images/mediaMusicBG.jpg"
@@ -10,7 +10,6 @@ import { mediaPieces } from "data/MediaPieces"
 
 import gsap from "gsap"
 import AudioPlayer from "components/AudioPlayer"
-import { ReactComponent as ButtonArrowSVG } from "assets/svg/buttonArrow.svg"
 
 const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   const header = useRef(null)
@@ -21,7 +20,6 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   const [enter, setEnter] = useState(false)
   const [mobileInfo, setMobileInfo] = useState(false)
   const [activeScreen, setActiveScreen] = useState(0)
-  const [trackState, setTrackState] = useState(0)
 
   useEffect(() => {
     if (headerLine.current) {
@@ -34,8 +32,8 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
         duration: 1,
         ease: "power1.inOut",
       })
-        .to(header.current, { y: 0, duration: 0.6 }, 1)
-        .to(header.current, { x: 0, duration: 0.6 }, 1.6)
+        .to(".title_word", { stagger: 0.2, y: 0, duration: 0.6 }, 1)
+        .to(".title_word", { stagger: 0.2, x: 0, duration: 0.6 }, 1.6)
     }
   }, [])
 
@@ -48,12 +46,11 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
         },
       })
 
-      tl.from(
-        screen.current,
+      tl.to(
+        ".media_pieces",
         {
-          x: "+=3vw",
-          y: "+=3vw",
-          opacity: 0,
+          stagger: 0.12,
+          opacity: 1,
           duration: 1,
           ease: "power1.inOut",
         },
@@ -78,69 +75,38 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
     }
   }, [])
 
-  useEffect(() => {
-    setTrackState(0)
-  }, [activeScreen])
-
   const allTracks = mediaPieces.map((track: any, i: number) => {
     return (
-      <ScreenWrapper
-        key={`track-presentation-${i}`}
-        activeScreen={activeScreen === i}
-      >
-        <ControlPanel>
-          <Story trackState={trackState === 0} onClick={() => setTrackState(0)}>
-            Story
-          </Story>
-          <Music trackState={trackState === 1} onClick={() => setTrackState(1)}>
-            Music
-          </Music>
-          {/* <Details>Details</Details> */}
-        </ControlPanel>
-        <TextWrapper>
-          <TrackText visibleText={activeScreen === i && trackState === 0}>
-            {track.story}
-          </TrackText>
-          <TrackText visibleText={activeScreen === i && trackState === 1}>
-            {track.music}
-          </TrackText>
-        </TextWrapper>
+      <MediaPiece key={`track-presentation-${i}`} className={`media_pieces`}>
         <ImageWrapper>
+          <ControlPanel>
+            <Listen>LISTEN</Listen>
+          </ControlPanel>
           <img src={mobile ? track.img[1] : track.img[0]} alt={track.title} />
+          <TextWrapper>
+            <TrackText>{track.story}</TrackText>
+          </TextWrapper>
         </ImageWrapper>
         <Title>{track.title}</Title>
-      </ScreenWrapper>
+      </MediaPiece>
     )
   })
 
   return (
     <Wrapper id="media-music">
       <HeaderWrapper>
-        <Header ref={header}>Music for Media</Header>
+        <Header ref={header}>
+          {" "}
+          <span className="title_word">Music</span>{" "}
+          <span className="title_word">for</span>{" "}
+          <span className="title_word">Media</span>
+        </Header>
         <HeaderLine ref={headerLine} />
       </HeaderWrapper>
 
-      <MobileWrapper>
-        <MobileInner mobileInfo={mobileInfo}>
-          <AudioPlayer
-            introAni={playListEnter}
-            setActiveScreen={setActiveScreen}
-            setMobileInfo={setMobileInfo}
-            mobileInfo={mobileInfo}
-            mediaPieces={mediaPieces}
-          />
-          {mobile && (
-            <Info
-              mobileInfo={mobileInfo}
-              onClick={() => setMobileInfo(!mobileInfo)}
-            >
-              Tracks
-            </Info>
-          )}
-          <Screen ref={screen}>{allTracks}</Screen>
-        </MobileInner>
-      </MobileWrapper>
-      <MobileWrapper1>
+      <MediaPieces ref={screen}>{allTracks}</MediaPieces>
+
+      <BottomSection>
         <CTA ref={cta} enter={enter}>
           <HeadLine>Have a Media Project?</HeadLine>
           <Text>
@@ -155,7 +121,7 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
               setEnter(mobile ? !enter : true)
             }}
           >
-            Get in Touch <Arrow />
+            Get in Touch
           </GetInTouch>
         </CTA>
         <ContactForm
@@ -166,13 +132,12 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
           leftValT={"33%"}
           topValT={"0"}
         />
-      </MobileWrapper1>
+      </BottomSection>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.section`
-  height: 125vw;
   padding: 21.4vw 0 0 0;
   background-image: url(${mediaMusicBG});
   background-size: cover;
@@ -191,35 +156,14 @@ const Wrapper = styled.section`
   }
 `
 
-const Info = styled.button<{ mobileInfo: boolean }>`
-  ${PrimaryButtonStyle};
-  width: 29vw;
-  height: 9.7vw;
-  border-radius: 2.4vw;
-  border-color: white;
-  position: absolute;
-  z-index: 100;
-  left: 105vw;
-  top: 12vw;
-  opacity: ${props => (props.mobileInfo ? 1 : 0)};
-  transition: opacity 0.3s 0.4s;
-  ${media.mobile} {
-    border-radius: 1.2vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 22px;
-    width: 150px;
-    height: 50px;
-    border-radius: 8px;
-    left: 544px;
-    top: 70px;
-  }
-`
-
 const Header = styled.h2`
-  ${Heading1};
-  color: ${colors.brightPurple};
-  transform: translate(5.6vw, 100%);
+  ${text.desktop.h1};
+  color: ${colors.headlineWhite};
+
+  span {
+    display: inline-block;
+    transform: translate(8vw, 110%);
+  }
   position: absolute;
   width: fit-content;
 
@@ -235,9 +179,9 @@ const Header = styled.h2`
 
 const HeaderLine = styled.div`
   width: 82.4vw;
-  height: 0.3vw;
+  height: 0.31vw;
   margin-left: 5.6vw;
-  background: ${colors.brightPurple};
+  background: ${colors.headlineWhite};
   position: absolute;
   bottom: 0;
   transform: scaleX(0);
@@ -261,8 +205,7 @@ const HeaderLine = styled.div`
 const HeaderWrapper = styled.div`
   position: relative;
   width: 90vw;
-  height: 5vw;
-
+  height: 7vw;
   margin-left: 5.6vw;
   overflow: hidden;
 
@@ -275,24 +218,9 @@ const HeaderWrapper = styled.div`
   }
 `
 
-const MobileWrapper = styled.div`
-  ${media.mobile} {
-    position: relative;
-    display: flex;
-    width: 100vw;
-    overflow: hidden;
-    height: 145vw;
-    margin-top: 13vw;
-  }
-  ${media.tabletPortrait} {
-    width: 517px;
-    height: 750px;
-    margin-top: 67px;
-    left: 180px;
-  }
-`
-
-const MobileWrapper1 = styled.div`
+const BottomSection = styled.div`
+  position: relative;
+  height: 1000px;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -310,39 +238,14 @@ const MobileWrapper1 = styled.div`
   }
 `
 
-const MobileInner = styled.div<{ mobileInfo: boolean }>`
-  ${media.mobile} {
-    width: fit-content;
-    transform: translateX(${props => (props.mobileInfo ? "-100vw" : "0")});
-    transition: 0.5s;
-  }
-  ${media.tabletPortrait} {
-    width: fit-content;
-    transform: translateX(${props => (props.mobileInfo ? "-517px" : "0")});
-    transition: 0.5s;
-  }
-`
+const MediaPieces = styled.div`
+  position: relative;
+  width: 96vw;
+  margin: 6.25vw auto;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
 
-const Screen = styled.div`
-  position: absolute;
-  width: 60vw;
-  height: 31vw;
-  left: 34vw;
-  top: 41vw;
-  padding: 1.5vw;
-
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    #151515 0%,
-    #131313 28.12%,
-    #0f0e10 53.65%,
-    #0b0b0c 75%,
-    #09090a 100%
-  );
-  /* card Shadow */
-
-  box-shadow: 1vw 1vw 2vw 1vw rgba(0, 0, 0, 0.25);
-  border-radius: 2px;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -357,15 +260,59 @@ const Screen = styled.div`
   }
 `
 
-const ScreenWrapper = styled.div<{ activeScreen: boolean }>`
-  position: absolute;
-  width: 60vw;
-  height: 25vw;
-  padding: 1.5vw;
+const TextWrapper = styled.div`
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
-  opacity: ${props => (props.activeScreen ? 1 : 0)};
-  transition: opacity 0.5s;
+  z-index: 3;
+  padding: 1.25vw 0.5vw 1.25vw 9vw;
+  position: absolute;
+  background: #00000090;
+  color: ${colors.coolWhite};
+  opacity: 0;
+  transition: 0.3s;
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    top: 85vw;
+    width: 90.3vw;
+  }
+  ${media.tabletPortrait} {
+    top: 440px;
+    width: 467px;
+  }
+`
+
+const MediaPiece = styled.div`
+  position: relative;
+  width: 30.25vw;
+  height: 20.94vw;
+  cursor: pointer;
+  border-radius: 0.38vw;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.3s;
+
+  margin-bottom: 1.88vw;
+  margin-right: 1.25vw;
+  padding: 0;
+
+  background: linear-gradient(
+    94.3deg,
+    #000000 0.09%,
+    rgba(7, 10, 1, 0.5) 0.1%,
+    rgba(16, 17, 16, 0.38) 99.67%
+  );
+  ${media.hover} {
+    :hover {
+      ${TextWrapper} {
+        opacity: 1;
+        transition: 0.3s;
+      }
+    }
+  }
+
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -380,19 +327,20 @@ const ScreenWrapper = styled.div<{ activeScreen: boolean }>`
 
 const ControlPanel = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  width: 20vw;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  top: 0;
+  left: 0.35vw;
+  width: 7.5vw;
+  height: 100%;
+  z-index: 10;
 `
 
-const Story = styled.button<{ trackState: boolean }>`
+const Listen = styled.button`
   ${PrimaryButtonStyle};
-  padding: 0;
-  text-align: center;
-  border-color: #50caff;
-  margin-bottom: 1.4vw;
-  margin-right: 1.9vw;
   position: relative;
-  z-index: 10;
+  color: ${colors.coolWhite};
   transition: 0.2s;
   ${media.hover} {
     :hover {
@@ -403,82 +351,15 @@ const Story = styled.button<{ trackState: boolean }>`
   }
 
   ${media.mobile} {
-    position: absolute;
-    margin: 0;
-    left: 4.8vw;
-    width: 29vw;
-    height: 9.7vw;
-    border-radius: 1.2vw;
-    top: 1vw;
-    opacity: ${props => (props.trackState ? 0 : 1)};
-    transform: scale(${props => (props.trackState ? 0 : 1)});
-    z-index: 0;
-    transition: opacity 0.5s transform 0s 0.5s;
   }
   ${media.tabletPortrait} {
-    left: 25px;
-    width: 150px;
-    height: 50px;
-    border-radius: 12px;
-    top: 5px;
   }
 `
-const Music = styled.button<{ trackState: boolean }>`
-  ${PrimaryButtonStyle};
-  padding: 0;
-  text-align: center;
-  border-color: ${colors.activeTeal};
-  border-radius: 0.6vw;
-  margin-bottom: 1.4vw;
-  position: relative;
-  z-index: 10;
-  transition: 0.2s;
-  ${media.hover} {
-    :hover {
-      transform: scale(1.03);
-      transition-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
-      transition: 0.2s;
-    }
-  }
-
-  ${media.mobile} {
-    position: absolute;
-    margin: 0;
-    left: 4.8vw;
-    width: 29vw;
-    height: 9.7vw;
-    border-radius: 1.2vw;
-    text-align: left;
-    padding-left: 2vw;
-    opacity: ${props => (props.trackState ? 0 : 1)};
-    transform: scale(${props => (props.trackState ? 0 : 1)});
-    transition: opacity 0.5s transform 0 0.5s;
-  }
-  ${media.tabletPortrait} {
-    font-size: 22px;
-    left: 25px;
-    width: 150px;
-    height: 50px;
-    border-radius: 8px;
-  }
-`
-// const Details = styled.button`
-//   ${PrimaryButtonStyle};
-//   padding: 0;
-//   text-align: center;
-//   border-color: #f5ed28;
-//   margin-bottom: 1.4vw;
-
-//   ${media.tablet} {
-//   }
-//   ${media.mobile} {
-//   }
-// `;
 
 const Text = styled.div`
-  ${Body1};
+  ${text.desktop.bodyS};
   width: 17vw;
-
+  color: ${colors.coolWhite};
   ${media.mobile} {
     font-size: 4.3vw;
   }
@@ -487,12 +368,11 @@ const Text = styled.div`
   }
 `
 
-const TrackText = styled.p<{ visibleText?: boolean }>`
-  ${Body1};
-  width: 17vw;
-  opacity: ${props => (props.visibleText ? 1 : 0)};
-  position: absolute;
-  top: 0;
+const TrackText = styled.p`
+  ${text.desktop.bodyXS};
+  font-size: 1vw;
+  opacity: 1;
+  position: relative;
 
   ${media.mobile} {
     font-size: 3.9vw;
@@ -507,40 +387,30 @@ const TrackText = styled.p<{ visibleText?: boolean }>`
 `
 
 const Title = styled.h3`
-  ${SubHeader2};
-  position: absolute;
-  right: 1.5vw;
-  bottom: 1.5vw;
-
+  ${text.desktop.h5};
+  position: relative;
+  width: 100%;
+  text-align: right;
+  color: ${colors.coolWhite};
+  margin-top: 0.63vw;
+  padding-right: 0.63vw;
   ${media.mobile} {
-    font-size: 5.8vw;
-    bottom: auto;
-    top: 5.1vw;
-    right: 4.6vw;
-    width: 55.6vw;
-    text-align: right;
   }
   ${media.tabletPortrait} {
-    font-size: 30px;
-    top: 26px;
-    right: 24px;
-    width: 287px;
   }
 `
 
 const ImageWrapper = styled.div`
-  position: absolute;
-  width: 38.8vw;
-  height: 23.3vw;
-  right: 1.5vw;
-  top: 1.5vw;
-
+  position: relative;
+  width: 30.25vw;
+  height: 17.75vw;
   img {
     position: absolute;
+    object-fit: cover;
+    width: 30.25vw;
+    height: 17.75vw;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
   }
 
   ${media.mobile} {
@@ -562,7 +432,7 @@ const CTA = styled.div<{ enter: boolean }>`
   width: 46vw;
   height: 19.8vw;
   left: 6.3vw;
-  top: 94.4vw;
+  top: 6.25vw;
   z-index: 3;
   ${Text} {
     width: 100%;
@@ -585,9 +455,10 @@ const CTA = styled.div<{ enter: boolean }>`
 `
 
 const HeadLine = styled.h3`
-  ${SubHeader};
+  ${text.desktop.h4};
   width: 100%;
   margin-bottom: 1.7vw;
+  color: ${colors.coolWhite};
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -598,46 +469,13 @@ const HeadLine = styled.h3`
   }
 `
 
-const Arrow = styled(ButtonArrowSVG)`
-  width: 2.5vw;
-  height: 1vw;
-  margin-left: 1.5vw;
-  z-index: 3;
-  color: ${colors.activeTeal};
-  transition: 0.5s;
-  path {
-    fill: currentColor;
-  }
-
-  ${media.mobile} {
-    width: 9.7vw;
-    height: 3.9vw;
-    margin-left: 5vw;
-  }
-  ${media.tabletPortrait} {
-    width: 50px;
-    height: 20px;
-    margin-left: 26px;
-  }
-`
-
 const GetInTouch = styled.button`
   position: absolute;
   bottom: 0;
   left: 0;
   ${PrimaryButtonStyle};
   border-color: ${colors.activeTeal};
-  width: 12.5vw;
-
-  padding-left: 0.8vw;
-
-  :hover {
-    ${Arrow} {
-      transform: translateX(0.4vw);
-
-      transition: 0.5s;
-    }
-  }
+  color: ${colors.coolWhite};
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -653,21 +491,6 @@ const GetInTouch = styled.button`
     height: 50px;
     border-radius: 8px;
     margin-top: 81px;
-  }
-`
-
-const TextWrapper = styled.div`
-  width: 19.3vw;
-  position: relative;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-    top: 85vw;
-    width: 90.3vw;
-  }
-  ${media.tabletPortrait} {
-    top: 440px;
-    width: 467px;
   }
 `
 

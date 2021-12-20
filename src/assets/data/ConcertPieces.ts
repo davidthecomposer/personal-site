@@ -107,7 +107,7 @@ const enterrement =
 
 const vocalPieces = [
   {
-    title: "Song Cycle (unnamed)",
+    title: "#unfilt{her}ed",
     key: "song-cycle",
     year: "2021",
     description:
@@ -228,7 +228,7 @@ const soloPieces = [
   {
     title: "Copernicus Etudes",
     key: "copernicus",
-    year: "2012-2020",
+    year: "2020",
     description:
       "These Piano Etudes are a collection of works that I have written, revised, and added to over the last decade or so. sometime in 2020 I think I was finally happy enough with them to call them finished. Each piece explores different principles of modern compositional practices and ideas while loosely tying into some kind of theme around one of the planet's (or dwarf planets - sorry, Pluto) geology, features, or position in the solar system.",
     movements: [
@@ -267,7 +267,7 @@ const orchestralPieces = [
   {
     title: "Cycle",
     key: "cycle",
-    year: "2017-present",
+    year: "2017-",
     description:
       "This piece is still in progress. It is a large scale orchestral work depicting the water cycle.",
     movements: [
@@ -499,48 +499,50 @@ export const concertPieces = [
     nexTitle: "Solo Music",
     tabName: "Solo",
     playList: tableOfContents[0],
-
-    allPieces: [
-      {
-        cover: true,
-        title: "Concert Music",
-        key: "",
-        year: "",
-        description: "",
-        movements: [""],
-        instrumentation: [""],
-        scoreSample: [""],
-        duration: "",
-      },
-    ],
+    allPieces: soloPieces,
+    colors: {
+      background: `linear-gradient(90deg, rgba(12, 117, 111, 0.69) 0.79%, rgba(12, 117, 111, 0.21) 98.19%)`,
+      button: `#0C756F`,
+    },
   },
   {
     nexTitle: "Vocal Music",
     tabName: "Vocal",
     playList: tableOfContents[1],
-    allPieces: soloPieces,
+    allPieces: vocalPieces,
+    colors: {
+      background: `linear-gradient(90.05deg, rgba(115, 117, 12, 0.42) 2.37%, rgba(115, 117, 12, 0.42) 2.38%, rgba(170, 173, 10, 0.105) 98.45%);`,
+      button: `#D7DB02`,
+    },
   },
   {
     nexTitle: "Orchestral Music",
     tabName: "Orchestral",
     playList: tableOfContents[2],
-    allPieces: vocalPieces,
+    allPieces: orchestralPieces,
+    colors: {
+      background: `linear-gradient(90deg, rgba(182, 130, 30, 0.69) 0%, rgba(178, 127, 27, 0.0790625) 99.39%, rgba(235, 158, 10, 0) 112.25%, rgba(177, 126, 27, 0) 112.25%);`,
+      button: `#B17E1B`,
+    },
   },
   {
     nexTitle: "Chamber Music",
     tabName: "Chamber",
     playList: tableOfContents[3],
-    allPieces: orchestralPieces,
+    allPieces: chamberPieces,
+    colors: {
+      background: `linear-gradient(90deg, rgba(27, 69, 177, 0.71) 0%, rgba(27, 69, 177, 0.23) 100%);`,
+      button: `#1B45B1`,
+    },
   },
   {
     nexTitle: "Choral Music",
     tabName: "Choral",
     playList: tableOfContents[4],
-    allPieces: chamberPieces,
-  },
-  {
-    nexTitle: "",
-    playList: [""],
     allPieces: choralPieces,
+    colors: {
+      background: `linear-gradient(90deg, rgba(174, 27, 177, 0.71) 0%, rgba(138, 27, 177, 0.23) 100%);`,
+      button: `#9C1BB1`,
+    },
   },
 ]

@@ -1,139 +1,108 @@
-import media from "./media";
-import colors from "./Colors";
+import media from "./media"
+import colors from "./Colors"
 
-export const Heading1 = `font-family: "Julius Sans One";
- font-size: 5vw;
-  `;
-export const SlideHeading = `
-font-family: Julius Sans One;
+const mainStyles = {
+  headings: `font-family: "Nixie One";
+    font-style: normal;
+    font-weight: normal;
+    line-height: 100%;
+    letter-spacing: -0.02em;`,
+  body: `
+    font-family: "Maven Pro";
 font-style: normal;
 font-weight: normal;
-font-size: 4.4vw;
-line-height: 100%;
+line-height: 140%;
 letter-spacing: -0.02em;
-color: #E5FCFA;
-
-`;
-
-export const MetroHeading32 = `
-font-family: Metrophobic;
-font-style: normal;
-font-weight: normal;
-font-size: 2vw;
-line-height: 100%;
-letter-spacing: -0.02em;
-color: #E5FCFA;
-
-`;
-
-export const Body1 = `
-font-family: Metrophobic;
-font-style: normal;
-font-weight: normal;
-font-size: 1.1vw;
-line-height: 150%;
-letter-spacing: -0.02em;
-
-color: ${colors.coolWhite};
-`;
-
-export const BodySmall = `
-font-family: Metrophobic;
-font-style: normal;
-font-weight: normal;
-font-size: 0.9vw;
-line-height: 150%;
-letter-spacing: -0.02em;
-
-color: black;
-`;
-
-export const SubHeader = `
-font-family: Julius Sans One;
-font-style: normal;
-font-weight: normal;
-font-size: 4vw;
-line-height: 100%;
-letter-spacing: -0.02em;
-color: #E5FCFA;
-`;
-
-export const SubHeader2 = `
-font-family: Julius Sans One;
-font-style: normal;
-font-weight: normal;
-font-size: 3vw;
-line-height: 100%;
-letter-spacing: -0.02em;
-color: #E5FCFA;
-`;
-
-export const FooterSubHeader = `
-font-family: Julius Sans One;
-font-style: normal;
-font-weight: normal;
-font-size: 2.3vw;
-line-height: 100%;
-letter-spacing: -0.02em;
-`;
-
-export const SubHeader3 = `
-font-family: Julius Sans One;
-font-style: normal;
-font-weight: 300;
-font-size: 1.3vw;
-line-height: 100%;
-letter-spacing: -0.02em;
-color: black;
-${media.mobile} {
-    font-size: 3.4vw;
+    `,
 }
-`;
 
-export const FormLabel = `
-font-family: Metrophobic;
-font-style: normal;
-font-weight: normal;
-font-size: 1.3vw;
-
-line-height: 200%;
-/* identical to box height, or 40px */
-
-letter-spacing: -0.02em;
-
-color: #FFCEF8;
-${media.fullWidth} {
-    font-size: max(24px);
+const text = {
+  fullWidth: {
+    h1: `
+       ${mainStyles.headings};
+       font-size: 96px;
+       `,
+    h2: `
+       ${mainStyles.headings};
+       font-size: 80px;
+       `,
+    h3: `
+       ${mainStyles.headings};
+       font-size: 64px;
+       `,
+    h4: `
+       ${mainStyles.headings};
+       font-size: 48px;
+       `,
+    h5: `
+       ${mainStyles.headings};
+       font-size: 36px;
+       `,
+    h6: `
+       ${mainStyles.headings};
+       font-size: 24px;
+       `,
+    bodyL: `
+       ${mainStyles.body};
+       font-size: 36px;
+       `,
+    bodyM: `
+       ${mainStyles.body};
+       font-size: 24px;
+       `,
+    bodyS: `
+       ${mainStyles.body};
+       font-size: 18px;
+       `,
+    bodyXS: `
+       ${mainStyles.body};
+       font-size: 12px;
+       `,
+  },
+  desktop: {
+    h1: `
+       ${mainStyles.headings};
+       font-size: 6vw;
+       `,
+    h2: `
+       ${mainStyles.headings};
+       font-size: 5vw;
+       `,
+    h3: `
+       ${mainStyles.headings};
+       font-size: 4vw;
+       `,
+    h4: `
+       ${mainStyles.headings};
+       font-size: 3vw;
+       `,
+    h5: `
+       ${mainStyles.headings};
+       font-size: 2.25vw;
+       `,
+    h6: `
+       ${mainStyles.headings};
+       font-size: 1.5vw;
+       `,
+    bodyL: `
+       ${mainStyles.body};
+       font-size: 2.25vw;
+       `,
+    bodyM: `
+       ${mainStyles.body};
+       font-size: 1.5vw;
+       `,
+    bodyS: `
+       ${mainStyles.body};
+       font-size: 1.13vw;
+       `,
+    bodyXS: `
+       ${mainStyles.body};
+       font-size: 0.75vw;
+       `,
+  },
+  tablet: {},
+  mobile: {},
 }
-`;
 
-export const Playlist = `
-font-family: Metrophobic;
-font-style: normal;
-font-weight: normal;
-font-size: 1.1vw;
-line-height: 150%;
-letter-spacing: -0.02em;
-color: rgba(23, 22, 27, 0.7);
-
-${media.mobile} {
-    font-size: 3.4vw;
-}
-`;
-
-export const ConcertTitle = `
-font-family: Metrophobic;
-font-style: normal;
-font-weight: normal;
-text-align: center;
-font-size: 3.1vw;
-line-height: 150%;
-letter-spacing: -0.02em;
-color: rgba(23, 22, 27, 0.7);
-${media.mobile} {
-    font-size: 5.3vw;
-}
-${media.tabletPortrait} {
-    font-size: 30px;
-}
-`;
+export default text

@@ -1,21 +1,20 @@
-import { Body1 } from "./text"
+import text from "./text"
 import media from "./media"
 import colors from "./Colors"
 
 export const PrimaryButtonStyle = `
 width: 7.5vw;
-height: 2.5vw;
-background: transparent;
+height: 7.5vw;
 
 appearance: none;
 -webkit-appearance: none;
-${Body1};
-border: 0.1vw solid white;
-border-width: min(2px);
+${text.desktop.bodyS};
+border: 1px solid ${colors.buttonGrey};
+border-width: min(1px);
 box-sizing: border-box;
-border-radius: 0.5vw;
-padding-left: 2.3vw; 
-text-align: left;
+border-radius: 7.5vw;
+ background: #00000050;
+text-align: center;
 cursor: pointer;
 ${media.mobile} {
     font-size: 4.3vw;

@@ -5,6 +5,8 @@
   "version": "0.1.0",
   "author": "David Campbell",
   "dependencies": {
+    "@react-three/drei": "^7.26.1",
+    "@react-three/fiber": "^7.0.21",
     "@svgr/webpack": "^5.4.0",
     "@types/node": "^16.11.11",
     "@types/react": "^17.0.37",
@@ -12,6 +14,7 @@
     "@types/react-router-dom": "^5.3.2",
     "@types/styled-components": "^5.1.16",
     "@types/svgo": "^2.6.0",
+    "@types/three": "^0.135.0",
     "dotenv": "^10.0.0",
     "gatsby": "^4.2.0",
     "gatsby-plugin-alias-imports": "^1.0.5",
@@ -36,7 +39,8 @@
     "react-is": "^17.0.2",
     "react-router-dom": "^6.0.2",
     "react-share": "^4.4.0",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.3",
+    "three": "^0.135.0"
   },
   "devDependencies": {
     "prettier": "^2.4.1"

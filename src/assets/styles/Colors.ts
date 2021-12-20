@@ -5,6 +5,7 @@ const colors = {
   brightPurpleOpaque: "#ffcef802",
   coolWhite: "#E5FCFA",
   coolWhiteLight: "#E5FCFA67",
+  buttonGrey: "#6B6B6B30",
   beachBlue: "#E5FCFA00",
   storyBlue: "#50CAFF",
   activeTeal: "#00FACD",
@@ -13,6 +14,7 @@ const colors = {
   skyBlue: "#73D1EF",
   formSkinPurprle:
     "linear-gradient(128.33deg, #2C354B 10.06%, rgba(42, 19, 90, 0.41) 90.48%);",
-};
+  headlineWhite: "#FFFCF5",
+}
 
-export default colors;
+export default colors

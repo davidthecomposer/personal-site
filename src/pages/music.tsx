@@ -34,7 +34,7 @@ const Wrapper = styled.main`
 
 export default MusicPage
 
-export const query = graphql`
+export const announceQuery = graphql`
   {
     allContentfulAnnouncement {
       nodes {

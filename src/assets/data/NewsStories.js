@@ -16,8 +16,6 @@ import jennyM from "assets/images/jennySmileM.jpg"
 import { announceQuery } from "pages/music"
 import React from "react"
 
-console.log(announceQuery, "inJS")
-
 const newsItems = [
   {
     title: "Instagram Song Cycle",
