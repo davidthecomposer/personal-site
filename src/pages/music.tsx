@@ -21,7 +21,7 @@ const MusicPage: React.FC<data> = ({ data }) => {
       <Hero mobile={mobile} />
       <MediaMusic mobile={mobile} />
       <ConcertMusic mobile={mobile} />
-      <News mobile={mobile} />
+      <News data={data} />
       <About mobile={mobile} />
       <Connect mobile={mobile} />
     </Wrapper>

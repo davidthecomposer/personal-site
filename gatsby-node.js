@@ -56,16 +56,21 @@ exports.createPages = ({ graphql, actions }) => {
         }
 
         const pageData = result.data.allContentfulAnnouncement.nodes
-        console.log(pageData.contributors)
+        console.log(pageData)
 
-        pageData.forEach((speaker, index) => {
-          const pathName = `${speaker.title.split(" ").join("-")}`.toLowerCase()
+        pageData.forEach((newsItem, index) => {
+          const pathName = `${newsItem.title
+            .split(" ")
+            .join("-")}`.toLowerCase()
 
-          //   createPage({
-          //     path: `/${pathName}`,
-          //     component: SpeakerPage,
-          //     context: { speaker: speaker, allDiscussions: allDiscussions },
-          //   });
+          createPage({
+            path: `/news/${pathName}`,
+            component: Announcement,
+            context: {
+              newsItem: newsItem,
+              index,
+            },
+          })
         })
       })
     )

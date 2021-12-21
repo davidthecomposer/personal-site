@@ -4,17 +4,19 @@ import { PrimaryButtonStyle } from "styles/Buttons"
 import colors from "styles/Colors"
 import text from "styles/text"
 import media from "styles/media"
+import { graphql, navigate } from "gatsby"
 import gsap from "gsap"
 import { ReactComponent as NewsCard1BGSVG } from "assets/svg/news1BG.svg"
 import { ReactComponent as NewsCard2BGSVG } from "assets/svg/news2BG.svg"
 import { ReactComponent as NewsCard3BGSVG } from "assets/svg/news3BG.svg"
 import { ReactComponent as NewsCard4BGSVG } from "assets/svg/news4BG.svg"
-import NewsStories from "data/NewsStories"
 
-const News: React.FC<{ mobile: boolean }> = ({ mobile }) => {
+const News: React.FC<{ data: any }> = ({ data }) => {
   const header = useRef(null)
   const headerLine = useRef(null)
   const [openLink, setOpenLink] = useState("")
+
+  const NewsStories = data.allContentfulAnnouncement.nodes
 
   useEffect(() => {
     const tl = gsap.timeline({ scrollTrigger: headerLine.current })
@@ -44,20 +46,27 @@ const News: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   }, [])
 
   const allNewsItems = NewsStories.map((item, i) => {
-    const { title, paragraph } = item
-    console.log(item)
+    const { articleBlurb, paragraph } = item
+    const story = {
+      title: item.title,
+      blurb: articleBlurb.articleBlurb,
+    }
+    const pathName = `${story.title.split(" ").join("-")}`.toLowerCase()
+
+    console.log(pathName)
+
     return (
       <NewsCard key={`newsCard-${i}`}>
         <TitleContainer>
-          <NewsTitle>{title ? title : "no title"}</NewsTitle>
+          <NewsTitle>{story.title ? story.title : "no title"}</NewsTitle>
         </TitleContainer>
         <NewsRow>
-          <Text>{paragraph && <p>{paragraph}</p>}</Text>
+          <Text>{story.blurb}</Text>
           <ButtonRow>
             <MoreBtn onClick={() => handleMore(`.front-${i}`, `.more-${i}`)}>
               Link Out
             </MoreBtn>
-            <MoreBtn onClick={() => handleMore(`.front-${i}`, `.more-${i}`)}>
+            <MoreBtn onClick={() => navigate(`/news/${pathName}`)}>
               More
             </MoreBtn>
           </ButtonRow>
@@ -130,12 +139,12 @@ const Header = styled.h2`
 `
 
 const NewsCard1BG = styled(NewsCard1BGSVG)`
-position: absolute;
-z-index: 0;
-top: 0;
-left: 0;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-   height 17vw;
+  height: 17vw;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -144,12 +153,12 @@ left: 0;
   }
 `
 const NewsCard2BG = styled(NewsCard2BGSVG)`
-position: absolute;
-z-index: 0;
-top: 0;
-left: 0;
- width: 100%;
-   height 17vw;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 17vw;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -158,12 +167,12 @@ left: 0;
   }
 `
 const NewsCard3BG = styled(NewsCard3BGSVG)`
-position: absolute;
-z-index: 0;
-top: 0;
-left: 0;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-   height 17vw;
+  height: 17vw;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -172,12 +181,12 @@ left: 0;
   }
 `
 const NewsCard4BG = styled(NewsCard4BGSVG)`
-position: absolute;
-z-index: 0;
-top: 0;
-left: 0;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-   height 17vw;
+  height: 17vw;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -228,19 +237,17 @@ const HeaderWrapper = styled.div`
 `
 
 const NewsCard = styled.div`
-  width: 81.8vw;
+  width: 86.17vw;
   position: relative;
-  
-  height 17vw;
+
+  height: 17vw;
   padding: 0 2.25vw 1.25vw 2.25vw;
 
   margin-bottom: 6.25vw;
 
   ${media.mobile} {
-   
   }
   ${media.tabletPortrait} {
-    
   }
 `
 
@@ -340,7 +347,7 @@ const ButtonRow = styled.div`
 const Text = styled.div`
   display: flex;
   flex-direction: column;
-  width: 62.25vw;
+  width: 62.5vw;
   color: ${colors.coolWhite};
   ${text.desktop.bodyS};
   z-index: 1;
