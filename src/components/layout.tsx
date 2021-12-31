@@ -7,6 +7,7 @@ import SEO from "components/seo"
 import "fonts/reset.css"
 import "fonts/typography.css"
 import Header from "./Header"
+import Footer from "./Footer"
 export const DesktopContext = createContext(false)
 export const TabletContext = createContext(false)
 export const MobileContext = createContext(false)
@@ -41,6 +42,7 @@ export const Layout: React.FC<{}> = ({ children }) => {
           <Header />
           <SEO></SEO>
           <Main>{children}</Main>
+          <Footer />
         </MobileContext.Provider>
       </TabletContext.Provider>
     </DesktopContext.Provider>

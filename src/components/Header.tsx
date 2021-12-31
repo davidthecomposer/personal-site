@@ -10,15 +10,14 @@ import styled from "styled-components"
 import media from "styles/media"
 import colors from "styles/Colors"
 import gsap from "gsap"
-import { Heading1 } from "styles/text"
+import text from "styles/text"
 import { ReactComponent as DavidSigSVG } from "assets/svg/davidSig.svg"
 import { ReactComponent as DavidInitialsSVG } from "assets/svg/logoT.svg"
-import { useHistory } from "react-router-dom"
 
 const Header: React.FC<{}> = () => {
   const mobile = useContext(MobileContext)
   // const tablet = useContext(TabletContext);
-  const history = useHistory().location
+  const history = location.href
   const [role, setRole] = useState("")
 
   const name = useRef(null)
@@ -34,20 +33,21 @@ const Header: React.FC<{}> = () => {
   const pressed = useRef(false)
 
   useEffect(() => {
-    const pathname = location.pathname
-
+    const pathname = window.location.href
+    console.log(window.location.href)
     if (pathname) {
       if (pathname === "/") {
         setDisplay(true)
         setRole("composer")
       } else if (pathname === "/music") {
+        setDisplay(true)
         setRole("composer")
       } else {
         setDisplay(false)
         setRole("developer")
       }
     }
-  }, [history])
+  }, [window.location])
 
   useEffect(() => {
     if (mobile && !initial) {
@@ -468,7 +468,7 @@ const Wrapper = styled.nav<{ willDisplay: boolean; open: boolean }>`
 
 const TitleWrapper = styled.div`
   display: flex;
-  ${Heading1};
+  ${text.desktop.h1};
   color: ${colors.brightPurple};
   align-items: center;
   width: 58vw;
@@ -593,7 +593,7 @@ const DavidSig = styled(DavidSigSVG)`
 `
 
 const Link = styled.a<{ open: boolean }>`
-  ${Heading1}
+  ${text.desktop.h6}
   color: ${colors.coolWhite};
   font-size: 1.1vw;
   margin-right: 1.3vw;

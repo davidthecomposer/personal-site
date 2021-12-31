@@ -6,97 +6,184 @@ import media from "styles/media"
 import ContactForm from "components/ContactForm"
 import concertMusicBG from "assets/images/concertMusic.jpg"
 import concertMusicBGM from "assets/images/concertMusicM.jpg"
-import { PrimaryButtonStyle } from "styles/Buttons"
-import { ReactComponent as ButtonArrowSVG } from "assets/svg/buttonArrow.svg"
-import gsap from "gsap"
-import { concertPieces } from "data/ConcertPieces"
+import { navigate } from "gatsby"
 import { ReactComponent as TrebleUnderlaySVG } from "assets/svg/trebleUnderlay.svg"
 import { ReactComponent as AltoUnderlaySVG } from "assets/svg/altoUnderlay.svg"
 import { ReactComponent as BassUnderlaySVG } from "assets/svg/bassUnderlay.svg"
+import MainButton from "components/buttons/MainButton"
+import SectionHeaders from "components/textElements/SectionHeaders"
+import { gatsbyImageIsInstalled } from "gatsby-plugin-image/dist/src/components/hooks"
 
-const ConcertMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
+type props = {
+  mobile: boolean
+  data: any
+  tags: any
+}
+
+const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
   const [enter, setEnter] = useState(false)
-  const header = useRef(null)
-  const headerLine = useRef(null)
   const musicBook = useRef(null)
   const cta = useRef(null)
-  const page = useRef(0)
+  const [searchValue, setSearchValue] = useState("")
+  const [filterValue, setFilterValue] = useState("")
+  const lastSearchValue = useRef("")
+  const allTags = useRef([...tags, "All"])
 
-  useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: headerLine.current })
+  const filters = allTags.current.map((filter: string, i: number) => {
+    return (
+      <FilterButton onClick={() => setFilterValue(filter)} key={`filter-${i}`}>
+        {filter}
+      </FilterButton>
+    )
+  })
 
-    tl.to(headerLine.current, {
-      scale: 1,
-      duration: 1,
-      ease: "power1.inOut",
-    })
-      .to(header.current, { y: 0, duration: 0.6 }, 1)
-      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-  }, [])
+  // const allConcert = data.map((genre: any, index: number) => {
+  //   const { nexTitle, playList, allPieces, tabName } = genre
 
-  // const allButtons = concertPieces.map((piece: any, index: number) => {
-  //   const { tabName } = piece
-  //   if (index < concertPieces.length - 1) {
-  //     return (
-  //       <PageTab
-  //         key={`${tabName}-mobile-btn`}
-  //         activeTab={activePage === index}
-  //         className={`tab-${index}-front`}
-  //         onClick={() => {
-  //           handlePageTurn(index, concertPieces.length - index)
-  //         }}
-  //         yOffset={index}
-  //       >
-  //         {tabName}
-  //       </PageTab>
-  //     )
-  //   } else {
-  //     return null
-  //   }
+  //   const {
+  //     title,
+  //     year,
+  //     movements,
+  //     instrumentation,
+  //     duration,
+  //     key,
+  //     ensemble: { backgroundColor, button, ensembleName },
+  //   } = genre
+
+  //   const allInstrumentation = instrumentation.map((ins: any, i: any) => {
+  //     return <Instrument key={`${key}-inst-${i}`}>{ins}</Instrument>
+  //   })
+
+  //   return (
+  //     <PieceCard key={key} bGColor={backgroundColor}>
+  //       <PieceTitle>{title}</PieceTitle>
+  //       <Instrumentation>{allInstrumentation}</Instrumentation>
+  //       <Year>{year}</Year>
+  //       <Duration>{duration}</Duration>
+  //       <Movements>{movements.length}</Movements>
+  //       <MainButton backgroundColor={button} borderColor={button}>
+  //         More
+  //       </MainButton>
+  //       {index % 3 === 0 ? (
+  //         <BassUnderlay />
+  //       ) : index % 2 === 0 ? (
+  //         <AltoUnderlay />
+  //       ) : (
+  //         <TrebleUnderlay />
+  //       )}
+  //     </PieceCard>
+  //   )
   // })
 
-  const allConcert = concertPieces.map((genre: any, index: number) => {
-    const { nexTitle, playList, allPieces, tabName } = genre
-    console.log(genre)
-    const pieceTemplates =
-      allPieces &&
-      allPieces.map((piece: any, i: number) => {
-        const { title, year, movements, instrumentation, duration, key } = piece
+  const renderPieces = (data: any) => {
+    return data.map((genre: any, index: number) => {
+      const { nexTitle, playList, allPieces, tabName } = genre
 
-        const allInstrumentation = instrumentation.map((ins: any, i: any) => {
-          return <Instrument key={`${key}-inst-${i}`}>{ins}</Instrument>
-        })
+      const {
+        title,
+        year,
+        movements,
+        instrumentation,
+        duration,
+        key,
+        ensemble: { backgroundColor, button, ensembleName },
+      } = genre
 
-        return (
-          <PieceCard key={title} bGColor={genre.colors.background}>
-            <PieceTitle>{title}</PieceTitle>
-            <Instrumentation>{allInstrumentation}</Instrumentation>
-            <Year>{year}</Year>
-            <Duration>{duration}</Duration>
-            <Movements>{movements.length}</Movements>
-            <More borderColor={genre.colors.button}>More</More>
-            {i % 3 === 0 ? (
-              <BassUnderlay />
-            ) : i % 2 === 0 ? (
-              <AltoUnderlay />
-            ) : (
-              <TrebleUnderlay />
-            )}
-          </PieceCard>
-        )
+      const allInstrumentation = instrumentation.map((ins: any, i: any) => {
+        return <Instrument key={`${key}-inst-${i}`}>{ins}</Instrument>
       })
 
-    return pieceTemplates
-  })
+      return (
+        <PieceCard key={key} bGColor={backgroundColor}>
+          <PieceTitle>{title}</PieceTitle>
+          <Instrumentation>{allInstrumentation}</Instrumentation>
+          <Year>{year}</Year>
+          <Duration>{duration}</Duration>
+          <Movements>{movements.length}</Movements>
+          <MainButton
+            backgroundColor={button}
+            borderColor={button}
+            onClick={() => navigate(`/music/${key}`)}
+          >
+            More
+          </MainButton>
+          {index % 3 === 0 ? (
+            <BassUnderlay />
+          ) : index % 2 === 0 ? (
+            <AltoUnderlay />
+          ) : (
+            <TrebleUnderlay />
+          )}
+        </PieceCard>
+      )
+    })
+  }
+
+  const filterPieces = useCallback(
+    (pieces: any) => {
+      let newArticles = [...pieces]
+
+      if (searchValue && searchValue !== lastSearchValue.current) {
+        if (filterValue !== "All") {
+          setFilterValue("All")
+        }
+        lastSearchValue.current = searchValue
+        newArticles = pieces.filter((piece: any) => {
+          let myTags = piece?.instrumentation?.join(" ").toLowerCase()
+          console.log(myTags, "tags")
+          if (
+            piece.ensemble.ensembleName
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
+          ) {
+            return piece
+          }
+          if (piece.title.toLowerCase().includes(searchValue.toLowerCase())) {
+            return piece
+          }
+          if (piece.year.toLowerCase().includes(searchValue.toLowerCase())) {
+            return piece
+          }
+          if (myTags.includes(searchValue.toLowerCase())) {
+            return piece
+          }
+        })
+      } else if (filterValue) {
+        console.log("filtering")
+        newArticles = pieces.filter((piece: any) => {
+          if (filterValue === "All") {
+            return piece
+          } else {
+            return piece.ensemble.ensembleName === filterValue
+          }
+        })
+      }
+
+      return newArticles
+    },
+    [searchValue, filterValue]
+  )
+
+  let filteredPieces = filterPieces(data)
+  let renderedPieces = renderPieces(filteredPieces)
 
   return (
     <Wrapper id="Concert-Music">
-      <HeaderWrapper>
-        <Header ref={header}>Concert Music</Header>
-        <HeaderLine ref={headerLine} />
-      </HeaderWrapper>
+      <SectionHeaders text="Concert Music" classRoot="concert-header" />
 
       <MobileWrapper className="mobile__wrapper">
+        <SearchBar>
+          <Filters>{filters}</Filters>
+          <SearchWrapper>
+            <Label>Search:</Label>
+            <Search
+              value={searchValue}
+              onChange={e => {
+                setSearchValue(e.target.value)
+              }}
+            />
+          </SearchWrapper>
+        </SearchBar>
         <ConcertPiecesContainer ref={musicBook}>
           <TopLabels>
             <Label>Title</Label>
@@ -105,31 +192,35 @@ const ConcertMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
             <Label>Duration</Label>
             <Label>Movements</Label>
           </TopLabels>
-          {allConcert}
+          {renderedPieces}
         </ConcertPiecesContainer>
       </MobileWrapper>
       <BottomSection>
         <CTA ref={cta} enter={enter}>
-          <HeadLine>Want to Collaborate?</HeadLine>
+          <Row>
+            <HeadLine>Want to Collaborate?</HeadLine>
+            <MainButton
+              onClick={() => {
+                setEnter(mobile ? !enter : true)
+              }}
+              backgroundColor={colors.storyBlue}
+              borderColor={colors.coolWhiteLight}
+            >
+              GET IN <br /> TOUCH
+            </MainButton>
+          </Row>
           <Text>
             I am always on the lookout for passionate musicians, or music lovers
             who are looking to collaborate on or commission art music. If you
             are an author, musician or patron looking for new music send me a
             message and let's create something amazing!
           </Text>
-          <GetInTouch
-            onClick={() => {
-              setEnter(true)
-            }}
-          >
-            Get in Touch <Arrow />
-          </GetInTouch>
         </CTA>
         <ContactForm
           setEnter={setEnter}
           enter={enter}
           leftVal={mobile ? "100%" : "63.4vw"}
-          topVal={mobile ? "0" : "102.4vw"}
+          topVal={mobile ? "0" : "2vw"}
           leftValT={"40%"}
           topValT={"0"}
         />
@@ -163,70 +254,6 @@ const Wrapper = styled.section`
   }
 `
 
-const HeaderWrapper = styled.div`
-  position: relative;
-  flex-direction: column;
-  width: 88.1vw;
-  margin-left: 6.3vw;
-  height: 7vw;
-  overflow: hidden;
-  z-index: 5;
-
-  ${media.mobile} {
-    height: 29.7vw;
-  }
-  ${media.tabletPortrait} {
-    height: 75px;
-  }
-`
-
-const Header = styled.h2`
-  ${text.desktop.h1};
-  color: ${colors.headlineWhite};
-  transform: translate(-8vw, 110%);
-  position: absolute;
-  width: fit-content;
-  right: 0;
-  z-index: 2;
-
-  ${media.mobile} {
-    transform: translate(-8.5vw, 110%);
-    font-size: 13.3vw;
-    width: 59.9vw;
-    text-align: right;
-  }
-  ${media.tabletPortrait} {
-    transform: translate(-44px, 110%);
-    font-size: 69px;
-    width: 625px;
-  }
-`
-
-const HeaderLine = styled.div`
-  position: absolute;
-  width: 82.4vw;
-  height: 0.3vw;
-  right: 3.9vw;
-  bottom: 0;
-  background: ${colors.headlineWhite};
-  transform: scaleX(0);
-  transform-origin: 0%;
-  border-radius: 0.3vw;
-
-  ${media.mobile} {
-    height: 1vw;
-    border-radius: 1vw;
-    width: 88vw;
-    margin-right: 2vw;
-  }
-  ${media.tabletPortrait} {
-    height: 5px;
-    border-radius: 5px;
-    width: calc(100% - 10px);
-    margin-right: 10px;
-  }
-`
-
 const MobileWrapper = styled.div`
   ${media.mobile} {
     position: relative;
@@ -247,7 +274,7 @@ const MobileWrapper = styled.div`
 const Text = styled.div`
   ${text.desktop.bodyS};
   width: 19.3vw;
-
+  color: ${colors.coolWhite};
   ${media.mobile} {
     font-size: 3.9vw;
     width: 81.6vw;
@@ -260,14 +287,14 @@ const Text = styled.div`
 
 const CTA = styled.div<{ enter: boolean }>`
   position: absolute;
-  width: 46vw;
+  width: 36vw;
   height: 19.8vw;
   left: 6.3vw;
-  top: 106.4vw;
+  top: 2vw;
   z-index: 3;
 
   ${Text} {
-    width: 100%;
+    width: 36vw;
   }
   ${media.mobile} {
     top: 0;
@@ -285,8 +312,9 @@ const CTA = styled.div<{ enter: boolean }>`
 `
 
 const HeadLine = styled.h3`
-  ${text.desktop.h6};
-  width: 100%;
+  ${text.desktop.h3};
+  color: ${colors.coolWhite};
+  width: 26vw;
   margin-bottom: 1.7vw;
 
   ${media.mobile} {
@@ -297,77 +325,13 @@ const HeadLine = styled.h3`
   }
 `
 
-const Arrow = styled(ButtonArrowSVG)`
-  width: 2.5vw;
-  height: 1vw;
-  margin-left: 1.5vw;
-  z-index: 3;
-  color: ${colors.activeTeal};
-  transition: 0.5s;
-  path {
-    fill: currentColor;
-  }
-
-  ${media.mobile} {
-    width: 9.7vw;
-    height: 3.9vw;
-    margin-left: 5vw;
-  }
-  ${media.tabletPortrait} {
-    width: 50px;
-    height: 20px;
-    margin-left: 26px;
-  }
-`
-
 const BottomSection = styled.div`
   position: relative;
+  height: 31.25vw;
+  margin-bottom: 9.38vw;
   ${media.mobile} {
-    position: relative;
-    display: flex;
-    width: 100vw;
-    overflow: hidden;
-    height: 100vw;
-    margin-top: 25.4vw;
   }
   ${media.tabletPortrait} {
-    width: 750px;
-    height: 517px;
-    margin-top: 131px;
-  }
-`
-
-const GetInTouch = styled.button`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  ${PrimaryButtonStyle};
-  border-color: ${colors.activeTeal};
-  width: 12.5vw;
-
-  padding-left: 0.8vw;
-  ${media.hover} {
-    :hover {
-      ${Arrow} {
-        transform: translateX(0.4vw);
-
-        transition: 0.5s;
-      }
-    }
-  }
-
-  ${media.mobile} {
-    position: relative;
-    width: 46.1vw;
-    height: 9.7vw;
-    margin-top: 15.6vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 22px;
-    width: 239px;
-    height: 50px;
-    border-radius: 8px;
-    margin-top: 81px;
   }
 `
 
@@ -392,13 +356,30 @@ const PieceCard = styled.div<{ bGColor: string }>`
   position: relative;
   opacity: 1,
   z-index: 1,
-  transition: opacity 0.4s z-index 0.1s 0.5s;
   width: 100%;
   height: 8.75vw;
   display: flex;
   align-items: center;
   color: ${colors.coolWhite};
   background: ${props => props.bGColor};
+  opacity: 0.8;
+  transition: 0.4s;
+
+
+  ${media.hover} {
+    :hover {
+      opacity: 1;
+    svg {
+      path {
+          stroke-opacity: 0.2;
+          fill-opacity: 0.2;
+          transition: 0.4s;
+        }
+
+    }
+
+    }
+  }
 border-radius: 0.5vw;
   margin-bottom: 20px;
   padding: 0 2.19vw;
@@ -434,6 +415,9 @@ const TrebleUnderlay = styled(TrebleUnderlaySVG)`
   left: 0;
   top: 0.13vw;
   z-index: 0;
+  path {
+    transition: 0.4s;
+  }
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -448,7 +432,9 @@ const AltoUnderlay = styled(AltoUnderlaySVG)`
   left: 0;
   top: 0.13vw;
   z-index: 0;
-
+  path {
+    transition: 0.4s;
+  }
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -463,6 +449,9 @@ const BassUnderlay = styled(BassUnderlaySVG)`
   left: 0;
   top: 0.13vw;
   z-index: 0;
+  path {
+    transition: 0.4s;
+  }
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -586,10 +575,9 @@ const Label = styled.p`
   }
 `
 
-const More = styled.button<{ borderColor: string }>`
-  ${PrimaryButtonStyle};
-  color: ${colors.coolWhite};
-  border-color: ${props => props.borderColor};
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -598,4 +586,100 @@ const More = styled.button<{ borderColor: string }>`
   }
 `
 
+const SearchBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 87.5vw;
+  height: 4.38vw;
+  border: 0.31vw solid #344546;
+  box-sizing: border-box;
+  align-items: center;
+  border-radius: 0.25vw;
+  margin: 6.25vw auto 0;
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
+
+const Filters = styled.div`
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
+
+const Search = styled.input`
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #ffffff;
+  outline: none;
+  ${text.desktop.h6};
+  margin-right: 1.88vw;
+  height: 2.5vw;
+  caret-color: ${colors.coolWhiteLight};
+  color: ${colors.coolWhite};
+
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
+
+const SearchWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: fit-content;
+
+  ${Label} {
+    width: fit-content;
+    margin-right: 0.63vw;
+  }
+
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
+
+const FilterButton = styled.button`
+  position: relative;
+  width: auto;
+  margin-right: 1.88vw;
+  ${text.desktop.h6};
+  color: ${colors.coolWhite};
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+
+  border: none;
+
+  appearance: none;
+  transition: 0.4s;
+  transition-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
+  z-index: 8;
+
+  box-sizing: border-box;
+  cursor: pointer;
+  ${media.hover} {
+    :hover {
+      color: ${colors.storyBlue};
+    }
+  }
+
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
 export default ConcertMusic

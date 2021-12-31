@@ -84,5 +84,22 @@ module.exports = {
         accessToken: contentfulConfig.accessToken,
       },
     },
+    {
+      resolve: "gatsby-plugin-contentful-optional-fields",
+      options: {
+        optionalFields: {
+          ContentfulAnnouncement: {
+            order: "Int",
+          },
+        },
+      },
+    },
+    {
+      resolve: `gatsby-plugin-tsconfig-paths`,
+      options: {
+        configFile: `${__dirname}/tsconfig.json`,
+        silent: true,
+      },
+    },
   ],
 }

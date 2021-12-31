@@ -3,7 +3,7 @@ import styled from "styled-components"
 import media from "styles/media"
 import colors from "styles/Colors"
 import gsap from "gsap"
-import { SubHeader, Body1, FooterSubHeader } from "styles/text"
+import text from "styles/text"
 // import twitter from "assets/svg/twitterIcon.svg";
 import instagram from "assets/svg/instagramIcon.svg"
 import web from "assets/svg/webIcon.svg"
@@ -214,7 +214,7 @@ const BuildColumn = styled.div`
 `
 
 const Title = styled.h3`
-  ${SubHeader};
+  ${text.desktop.h3};
   margin-bottom: 3.1vw;
   ${media.tablet} {
   }
@@ -227,7 +227,7 @@ const Title = styled.h3`
 `
 
 const Text = styled.p`
-  ${Body1};
+  ${text.desktop.bodyS};
   position: relative;
   width: 100%;
   margin-bottom: 3.1vw;
@@ -244,7 +244,7 @@ const Text = styled.p`
 `
 
 const Email = styled.div`
-  ${Body1};
+  ${text.desktop.bodyS};
   text-decoration: none;
   color: ${colors.coolPurple};
   display: flex;
@@ -272,7 +272,7 @@ const Email = styled.div`
 `
 
 const FooterSub = styled.h4`
-  ${FooterSubHeader};
+  ${text.desktop.h6};
   text-align: right;
   color: ${colors.coolWhite};
   ${media.tablet} {
@@ -366,7 +366,7 @@ const SocialColumn = styled.div`
 `
 
 const OutBoundLink = styled.a`
-  ${Body1};
+  ${text.desktop.bodyS};
   color: ${colors.coolWhite};
   display: flex;
   margin-left: 9.9vw;

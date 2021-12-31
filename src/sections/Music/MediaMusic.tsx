@@ -9,41 +9,18 @@ import { PrimaryButtonStyle } from "styles/Buttons"
 import { mediaPieces } from "data/MediaPieces"
 
 import gsap from "gsap"
-import AudioPlayer from "components/AudioPlayer"
+import MainButton from "components/buttons/MainButton"
+import SectionHeaders from "components/textElements/SectionHeaders"
 
 const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
-  const header = useRef(null)
-  const headerLine = useRef(null)
   const screen = useRef(null)
   const cta = useRef(null)
-  const [playListEnter, setPlayListEnter] = useState(false)
   const [enter, setEnter] = useState(false)
-  const [mobileInfo, setMobileInfo] = useState(false)
-  const [activeScreen, setActiveScreen] = useState(0)
-
-  useEffect(() => {
-    if (headerLine.current) {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: headerLine.current, start: "top 90%" },
-      })
-
-      tl.to(headerLine.current, {
-        scale: 1,
-        duration: 1,
-        ease: "power1.inOut",
-      })
-        .to(".title_word", { stagger: 0.2, y: 0, duration: 0.6 }, 1)
-        .to(".title_word", { stagger: 0.2, x: 0, duration: 0.6 }, 1.6)
-    }
-  }, [])
 
   useEffect(() => {
     if (screen.current) {
       const tl = gsap.timeline({
         scrollTrigger: { trigger: screen.current, start: "top 90%" },
-        onStart: () => {
-          setPlayListEnter(true)
-        },
       })
 
       tl.to(
@@ -52,7 +29,7 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
           stagger: 0.12,
           opacity: 1,
           duration: 1,
-          ease: "power1.inOut",
+          ease: "power4.inOut",
         },
         0
       )
@@ -80,7 +57,9 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
       <MediaPiece key={`track-presentation-${i}`} className={`media_pieces`}>
         <ImageWrapper>
           <ControlPanel>
-            <Listen>LISTEN</Listen>
+            <MainButton bGOpacity={"20"} backgroundColor={colors.activeTeal}>
+              LISTEN
+            </MainButton>
           </ControlPanel>
           <img src={mobile ? track.img[1] : track.img[0]} alt={track.title} />
           <TextWrapper>
@@ -94,21 +73,25 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
 
   return (
     <Wrapper id="media-music">
-      <HeaderWrapper>
-        <Header ref={header}>
-          {" "}
-          <span className="title_word">Music</span>{" "}
-          <span className="title_word">for</span>{" "}
-          <span className="title_word">Media</span>
-        </Header>
-        <HeaderLine ref={headerLine} />
-      </HeaderWrapper>
+      <SectionHeaders left text="Music For Media" classRoot="media-header" />
 
       <MediaPieces ref={screen}>{allTracks}</MediaPieces>
 
       <BottomSection>
         <CTA ref={cta} enter={enter}>
-          <HeadLine>Have a Media Project?</HeadLine>
+          <Row>
+            <HeadLine>Have a Media Project?</HeadLine>
+            <MainButton
+              onClick={() => {
+                setEnter(mobile ? !enter : true)
+              }}
+              borderColor={colors.coolWhiteLight}
+              backgroundColor={colors.activeTeal}
+            >
+              GET IN <br /> TOUCH
+            </MainButton>
+          </Row>
+
           <Text>
             Quality music can add so much to any media project. I have access to
             world-class virtual instruments, live musicians, and knowledge that
@@ -116,13 +99,6 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
             artistic vision. Send me a message and let's talk more about what we
             can make together!
           </Text>
-          <GetInTouch
-            onClick={() => {
-              setEnter(mobile ? !enter : true)
-            }}
-          >
-            Get in Touch
-          </GetInTouch>
         </CTA>
         <ContactForm
           enter={enter}
@@ -153,68 +129,6 @@ const Wrapper = styled.section`
   ${media.tabletPortrait} {
     width: 100%;
     height: 1865px;
-  }
-`
-
-const Header = styled.h2`
-  ${text.desktop.h1};
-  color: ${colors.headlineWhite};
-
-  span {
-    display: inline-block;
-    transform: translate(8vw, 110%);
-  }
-  position: absolute;
-  width: fit-content;
-
-  ${media.mobile} {
-    transform: translate(8.5vw, 110%);
-    font-size: 13.3vw;
-  }
-  ${media.tabletPortrait} {
-    transform: translate(44px, 110%);
-    font-size: 69px;
-  }
-`
-
-const HeaderLine = styled.div`
-  width: 82.4vw;
-  height: 0.31vw;
-  margin-left: 5.6vw;
-  background: ${colors.headlineWhite};
-  position: absolute;
-  bottom: 0;
-  transform: scaleX(0);
-  transform-origin: 100%;
-  border-radius: 0.3vw;
-
-  ${media.mobile} {
-    height: 1vw;
-    border-radius: 1vw;
-    width: 82vw;
-    margin-left: 5vw;
-  }
-  ${media.tabletPortrait} {
-    height: 5px;
-    border-radius: 5px;
-    width: calc(100% - 26px);
-    margin-left: 26px;
-  }
-`
-
-const HeaderWrapper = styled.div`
-  position: relative;
-  width: 90vw;
-  height: 7vw;
-  margin-left: 5.6vw;
-  overflow: hidden;
-
-  ${media.mobile} {
-    height: 29.7vw;
-  }
-  ${media.tabletPortrait} {
-    margin-left: 15px;
-    height: 75px;
   }
 `
 
@@ -283,6 +197,34 @@ const TextWrapper = styled.div`
     width: 467px;
   }
 `
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 30.25vw;
+  height: 17.75vw;
+  img {
+    position: absolute;
+    object-fit: cover;
+    width: 30.25vw;
+    height: 17.75vw;
+    top: 0;
+    right: 0;
+    filter: grayscale(0%);
+    transition: 0.4s;
+  }
+
+  ${media.mobile} {
+    width: 90.3vw;
+    height: 54.3vw;
+    left: 4.8vw;
+    top: 25.6vw;
+  }
+  ${media.tabletPortrait} {
+    width: 467px;
+    height: 281px;
+    left: 25px;
+    top: 132px;
+  }
+`
 
 const MediaPiece = styled.div`
   position: relative;
@@ -310,6 +252,12 @@ const MediaPiece = styled.div`
         opacity: 1;
         transition: 0.3s;
       }
+
+      ${ImageWrapper} {
+        img {
+          filter: grayscale(80%);
+        }
+      }
     }
   }
 
@@ -335,25 +283,6 @@ const ControlPanel = styled.div`
   width: 7.5vw;
   height: 100%;
   z-index: 10;
-`
-
-const Listen = styled.button`
-  ${PrimaryButtonStyle};
-  position: relative;
-  color: ${colors.coolWhite};
-  transition: 0.2s;
-  ${media.hover} {
-    :hover {
-      transform: scale(1.03);
-      transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
-      transition: 0.2s;
-    }
-  }
-
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-  }
 `
 
 const Text = styled.div`
@@ -400,42 +329,16 @@ const Title = styled.h3`
   }
 `
 
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 30.25vw;
-  height: 17.75vw;
-  img {
-    position: absolute;
-    object-fit: cover;
-    width: 30.25vw;
-    height: 17.75vw;
-    top: 0;
-    right: 0;
-  }
-
-  ${media.mobile} {
-    width: 90.3vw;
-    height: 54.3vw;
-    left: 4.8vw;
-    top: 25.6vw;
-  }
-  ${media.tabletPortrait} {
-    width: 467px;
-    height: 281px;
-    left: 25px;
-    top: 132px;
-  }
-`
-
 const CTA = styled.div<{ enter: boolean }>`
   position: absolute;
-  width: 46vw;
+  width: 36vw;
   height: 19.8vw;
   left: 6.3vw;
-  top: 6.25vw;
+  top: 2vw;
   z-index: 3;
+
   ${Text} {
-    width: 100%;
+    width: 36vw;
   }
 
   ${media.mobile} {
@@ -455,8 +358,9 @@ const CTA = styled.div<{ enter: boolean }>`
 `
 
 const HeadLine = styled.h3`
-  ${text.desktop.h4};
-  width: 100%;
+  ${text.desktop.h3};
+  width: 26vw;
+
   margin-bottom: 1.7vw;
   color: ${colors.coolWhite};
   ${media.tablet} {
@@ -469,28 +373,14 @@ const HeadLine = styled.h3`
   }
 `
 
-const GetInTouch = styled.button`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  ${PrimaryButtonStyle};
-  border-color: ${colors.activeTeal};
-  color: ${colors.coolWhite};
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
   ${media.tablet} {
   }
   ${media.mobile} {
-    position: relative;
-    width: 46.1vw;
-    height: 9.7vw;
-
-    margin-top: 15.6vw;
   }
-  ${media.tabletPortrait} {
-    font-size: 22px;
-    width: 239px;
-    height: 50px;
-    border-radius: 8px;
-    margin-top: 81px;
+  ${media.fullWidth} {
   }
 `
 

@@ -5,6 +5,7 @@ exports.createPages = ({ graphql, actions }) => {
 
   return new Promise((resolve, reject) => {
     const Announcement = path.resolve("./src/templates/Announcement.tsx")
+    const ConcertPiece = path.resolve("./src/templates/ConcertPiece.tsx")
 
     resolve(
       graphql(
@@ -12,6 +13,8 @@ exports.createPages = ({ graphql, actions }) => {
           {
             allContentfulAnnouncement {
               nodes {
+                url
+                order
                 title
                 mainImages {
                   file {
@@ -22,9 +25,12 @@ exports.createPages = ({ graphql, actions }) => {
                 articleBlurb {
                   articleBlurb
                 }
+                articleText {
+                  raw
+                }
                 contributors {
                   bio {
-                    bio
+                    raw
                   }
                   mainImages {
                     file {
@@ -59,15 +65,74 @@ exports.createPages = ({ graphql, actions }) => {
         console.log(pageData)
 
         pageData.forEach((newsItem, index) => {
-          const pathName = `${newsItem.title
-            .split(" ")
-            .join("-")}`.toLowerCase()
+          const pathName = newsItem.url
 
           createPage({
             path: `/news/${pathName}`,
             component: Announcement,
             context: {
               newsItem: newsItem,
+              pathName: pathName,
+              index,
+            },
+          })
+        })
+      }),
+      graphql(
+        `
+          {
+            allContentfulConcertPiece {
+              nodes {
+                description {
+                  raw
+                }
+                instrumentation
+                id
+                duration
+                key
+                scoreSample {
+                  file {
+                    url
+                  }
+                }
+                title
+                year
+                movements {
+                  mvtNumber
+                  description {
+                    raw
+                  }
+                  title
+                  key
+                  time
+                }
+                backgroundImages {
+                  file {
+                    url
+                  }
+                }
+              }
+            }
+          }
+        `
+      ).then(result => {
+        if (result.errors) {
+          console.error(result.errors)
+          return reject(result.errors)
+        }
+
+        const pageData = result.data.allContentfulConcertPiece.nodes
+        console.log(pageData)
+
+        pageData.forEach((piece, index) => {
+          const pathName = piece.key
+
+          createPage({
+            path: `/music/${pathName}`,
+            component: ConcertPiece,
+            context: {
+              concertPiece: piece,
+              pathName: pathName,
               index,
             },
           })

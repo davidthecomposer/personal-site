@@ -15,6 +15,12 @@ const colors = {
   formSkinPurprle:
     "linear-gradient(128.33deg, #2C354B 10.06%, rgba(42, 19, 90, 0.41) 90.48%);",
   headlineWhite: "#FFFCF5",
+  inputTeal: `linear-gradient(
+    90.38deg,
+    #89c1b4 2.99%,
+    rgba(124, 146, 140, 0.81) 99.88%
+  );`,
+  borderTeal: "#0C756F",
 }
 
 export default colors

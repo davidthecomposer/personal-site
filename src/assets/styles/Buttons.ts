@@ -10,12 +10,7 @@ appearance: none;
 -webkit-appearance: none;
 ${text.desktop.bodyS};
 border: 1px solid ${colors.buttonGrey};
-border-width: min(1px);
-box-sizing: border-box;
-border-radius: 7.5vw;
- background: #00000050;
-text-align: center;
-cursor: pointer;
+
 ${media.mobile} {
     font-size: 4.3vw;
     width: 29vw;

@@ -105,6 +105,112 @@ const coda =
 const enterrement =
   require("assets/audio/concert-music/Chamber/enterrement-catholique.mp3").default
 
+export const concertPlaylists = [
+  {
+    key: "unfiltered",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "habit",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "3_songs_baud",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "copernicus_etudes",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "3_pieces_clarinet",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "3_christmas_songs",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "terminal",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "dialogues",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "etchings",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  {
+    key: "cinq_souvenirs",
+    playlist: [
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+      { key: "", audio: "" },
+    ],
+  },
+  { key: "", playlist: [{ key: "", audio: "" }] },
+  { key: "", playlist: [{ key: "", audio: "" }] },
+  { key: "", playlist: [{ key: "", audio: "" }] },
+]
+
 const vocalPieces = [
   {
     title: "#unfilt{her}ed",

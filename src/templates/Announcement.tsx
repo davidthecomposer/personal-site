@@ -8,14 +8,17 @@ import linkedin from "assets/svg/linkedIcon.svg"
 import facebook from "assets/svg/facebookIcon.svg"
 import media from "styles/media"
 import gsap from "gsap"
-import { ReactComponent as NewsCardBGSVG } from "assets/images/newsCardBG.svg"
-import { ReactComponent as SmallArrowSVG } from "assets/svg/smallArrow.svg"
-import NewsStories from "data/NewsStories"
+import { navigate } from "gatsby"
+import { BLOCKS, INLINES } from "@contentful/rich-text-types"
+import { renderRichText } from "gatsby-source-contentful/rich-text"
+
 import {
   FacebookShareButton,
   TwitterShareButton,
   LinkedinShareButton,
 } from "react-share"
+import MainButton from "components/buttons/MainButton"
+import SectionHeaders from "components/textElements/SectionHeaders"
 
 type props = {
   mobile: boolean
@@ -23,21 +26,62 @@ type props = {
 }
 
 const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
-  const header = useRef(null)
   const mainText = useRef<HTMLDivElement>(null)
   const [contentHeight, setActiveContentHeight] = useState(0)
   const [activeCard, setActiveCard] = useState(-1)
   const [textHeight, setTextHeight] = useState(0)
-  const { articleBlurb, contributors, mainImages, title } = pageContext.newsItem
+  const { contributors, mainImages, title, url, order, articleText } =
+    pageContext.newsItem
   const shareButtons = [
     FacebookShareButton,
     TwitterShareButton,
     LinkedinShareButton,
   ]
 
+  console.log(pageContext)
+
+  const options = {
+    renderNode: {
+      [BLOCKS.HEADING_1]: (n: any, children: any) => (
+        <Heading1>{children}</Heading1>
+      ),
+      [BLOCKS.HEADING_2]: (n: any, children: any) => (
+        <Heading2>{children}</Heading2>
+      ),
+      [BLOCKS.HEADING_3]: (n: any, children: any) => (
+        <Heading3>{children}</Heading3>
+      ),
+      [BLOCKS.HEADING_4]: (n: any, children: any) => (
+        <Heading4>{children}</Heading4>
+      ),
+      [BLOCKS.HEADING_5]: (n: any, children: any) => (
+        <Heading5>{children}</Heading5>
+      ),
+      [BLOCKS.HEADING_6]: (n: any, children: any) => (
+        <Heading6>{children}</Heading6>
+      ),
+      [BLOCKS.PARAGRAPH]: (n: any, children: any) => (
+        <Paragraph>{children}</Paragraph>
+      ),
+      [INLINES.HYPERLINK]: (n: any, children: any) => (
+        <ExternalLink
+          href={n.data.uri}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {children}
+        </ExternalLink>
+      ),
+    },
+  }
+
   const shareLinks = [facebook, twitter, linkedin]
 
   const handleExpandCard = (number: number, className: string) => {
+    gsap.to(window, {
+      duration: 0.4,
+      scrollTo: { y: `#${pageContext.pathName}-bottom` },
+    })
     const el = document.querySelector(`.${className}`)
     if (el) {
       setActiveContentHeight(el.clientHeight)
@@ -87,13 +131,17 @@ const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
             </LinkInner>
           </Links>
 
-          <MoreBtn onClick={() => handleExpandCard(i, `content-${i}`)}>
+          <MainButton
+            onClick={() => handleExpandCard(i, `content-${i}`)}
+            borderColor={colors.coolWhiteLight}
+            backgroundColor={colors.activeTeal}
+          >
             {activeCard === i ? "BACK" : "ABOUT"}
-          </MoreBtn>
+          </MainButton>
         </MainCard>
         <Content activeCard={activeCard === i} className={`content-${i}`}>
           <ContributorTitle>{name}</ContributorTitle>
-          <ContributorBio>{bio.bio}</ContributorBio>
+          <ContributorBio> {renderRichText(bio, options)}</ContributorBio>
         </Content>
       </Contributor>
     )
@@ -101,27 +149,30 @@ const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
 
   return (
     <NewsStory>
-      <TitleContainer>
-        <Header>{title}</Header>
-        <HeaderLine />
-      </TitleContainer>
+      <SectionHeaders text={title} classRoot={`${url}-header`} />
       <MainImage
         src={mobile ? mainImages[1].file.url : mainImages[0].file.url}
         alt={mobile ? mainImages[1].file.fileName : mainImages[0].file.fileName}
       />
       <BottomContainer>
-        <Sticky>
-          <MoreBtn
+        <Sticky className={"sticky"}>
+          <MainButton
             onClick={() => {
-              console.log("yeah")
+              navigate("/music")
             }}
+            borderColor={colors.coolWhiteLight}
+            backgroundColor={colors.activeTeal}
           >
-            Back
-          </MoreBtn>
+            {activeCard === -1 ? "BACK" : "HOME"}
+          </MainButton>
           <Links>
             {shareButtons.map((link, i) => {
               return (
-                <a key={`half-link-${i}`} href={"/"} className="share_links">
+                <a
+                  key={`half-link-${i}`}
+                  href={"/music"}
+                  className="share_links"
+                >
                   <img src={shareLinks[i]} alt="link name" />
                 </a>
               )
@@ -130,9 +181,9 @@ const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
           <Line />
           <ShareText>Share</ShareText>
         </Sticky>
-        <Column>
+        <Column id={`${pageContext.pathName}-bottom`}>
           <Text ref={mainText} collapse={activeCard !== -1}>
-            {articleBlurb.articleBlurb}
+            {renderRichText(articleText, options)}
           </Text>
           <Contributors>{allContributors}</Contributors>
         </Column>
@@ -141,57 +192,13 @@ const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
   )
 }
 
-const Header = styled.h2`
-  ${text.desktop.h1};
-  color: ${colors.headlineWhite};
-
-  position: absolute;
-  width: 100%;
-  text-align: right;
-
-  ${media.mobile} {
-    transform: translate(8.5vw, 110%);
-    font-size: 13.3vw;
-  }
-  ${media.tabletPortrait} {
-    transform: translate(44px, 110%);
-    font-size: 69px;
-  }
-`
-
-const HeaderLine = styled.div`
-  width: 82.4vw;
-  height: 0.3vw;
-  margin-left: 5.6vw;
-  background: ${colors.headlineWhite};
-  position: absolute;
-  bottom: 0;
-  transform: scaleX(0);
-  transform-origin: 100%;
-  border-radius: 0.3vw;
-
-  ${media.mobile} {
-    height: 1vw;
-    border-radius: 1vw;
-    width: 82vw;
-    margin-left: 5vw;
-  }
-  ${media.tabletPortrait} {
-    height: 5px;
-    border-radius: 5px;
-    width: calc(100% - 26px);
-    margin-left: 26px;
-  }
-`
-
 const NewsStory = styled.section`
   width: 100%;
   position: relative;
-  overflow: hidden;
   height: auto;
   min-height: 100vh;
   background: ${colors.deepPurple};
-  padding: 6.25vw 7.75vw;
+  padding: 6.25vw 0;
   ${media.mobile} {
     width: 100%;
     height: 146.1vw;
@@ -204,28 +211,13 @@ const NewsStory = styled.section`
   }
 `
 
-const TitleContainer = styled.div`
-  width: 100%;
-  height: 7vw;
-  position: relative;
-  margin-top: 0;
-  margin-bottom: 1.9vw;
-
-  ${media.mobile} {
-    margin-bottom: 6vw;
-  }
-  ${media.tabletPortrait} {
-    margin-bottom: 31px;
-  }
-`
-
 const Text = styled.p<{ collapse: boolean }>`
   width: 100%;
   ${text.desktop.bodyM};
   color: ${colors.coolWhite};
   transform: scaleY(${props => (props.collapse ? 0 : 1)});
   transition: 0.5s;
-  opacity: ${props => (props.collapse ? 0 : 1)};
+  /* opacity: ${props => (props.collapse ? 0 : 1)}; */
 
   ${media.mobile} {
   }
@@ -234,10 +226,13 @@ const Text = styled.p<{ collapse: boolean }>`
 `
 
 const MainImage = styled.img`
-  width: 100%;
+  width: 84.56vw;
   height: 29.56vw;
   object-fit: cover;
-  margin-bottom: 6.25vw;
+  display: inline-block;
+  position: relative;
+  margin: 3.125vw 0 6.25vw 7.25vw;
+
   ${media.mobile} {
     width: 94.4vw;
     height: 57.2vw;
@@ -248,63 +243,9 @@ const MainImage = styled.img`
   }
 `
 
-const Back = styled.button<{ layout?: boolean }>`
-  ${PrimaryButtonStyle};
-  padding: 0 0.7vw;
-  width: 11.9vw;
-  border-color: #73d1ef;
-  z-index: 5;
-  position: absolute;
-  top: 0.5vw;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  span {
-    width: fit-content;
-  }
-
-  ${media.mobile} {
-    top: 9.3vw;
-    left: auto;
-    right: 3vw;
-    width: 29vw;
-    text-align: right;
-  }
-  ${media.tabletPortrait} {
-    top: 49px;
-    width: 150px;
-    height: 50px;
-    font-size: 22px;
-    right: 40px;
-  }
-`
-
-const More = styled.div<{ layout: boolean }>`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 100%;
-  top: 0;
-  ${Back} {
-    right: ${props => (props.layout ? "auto" : "0")};
-  }
-
-  ${media.mobile} {
-    ${Back} {
-      right: 3vw;
-    }
-  }
-  ${media.tabletPortrait} {
-    ${Back} {
-      right: 40px;
-    }
-  }
-`
-
 const Sticky = styled.div`
-  display: inline-block;
   position: sticky;
-  top: 50vw;
+  top: 12.5vw;
   left: 0;
   width: 11.63vw;
   height: 14.38vw;
@@ -323,32 +264,6 @@ const Sticky = styled.div`
   ${media.mobile} {
   }
   ${media.fullWidth} {
-  }
-`
-
-const MoreBtn = styled.button`
-  ${PrimaryButtonStyle};
-  width: 7.5vw;
-  height: 7.5vw;
-  border-color: ${colors.headlineWhite};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: ${colors.coolWhite};
-  background: rgba(231, 216, 164, 0.19);
-  ${media.mobile} {
-    padding: 0 1vw;
-    left: 0;
-    margin-right: 0;
-    position: absolute;
-  }
-  ${media.tabletPortrait} {
-    width: 150px;
-    height: 50px;
-    font-size: 22px;
-    padding: 0 5px;
-    left: 0;
-    margin-right: 0;
   }
 `
 
@@ -416,7 +331,8 @@ const Links = styled.div`
 const BottomContainer = styled.div`
   display: flex;
   position: relative;
-
+  /* height: 1000px; */
+  padding: 0 7.25vw;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -428,8 +344,8 @@ const BottomContainer = styled.div`
 const Column = styled.div`
   margin-left: 5vw;
   width: 71vw;
+  border: 1px solid redl ${media.tablet} {
 
-  ${media.tablet} {
   }
   ${media.mobile} {
   }
@@ -606,6 +522,33 @@ const ContributorBio = styled.div`
   }
   ${media.fullWidth} {
   }
+`
+
+const Heading1 = styled.h1`
+  ${text.fullWidth.h1};
+`
+const Heading2 = styled.h2`
+  ${text.fullWidth.h2};
+`
+const Heading3 = styled.h3`
+  ${text.fullWidth.h3};
+`
+const Heading4 = styled.h4`
+  ${text.fullWidth.h4};
+`
+const Heading5 = styled.h5`
+  ${text.fullWidth.h5};
+`
+const Heading6 = styled.h6`
+  ${text.fullWidth.h6};
+`
+const Paragraph = styled.p`
+  ${text.fullWidth.bodyM};
+`
+const ExternalLink = styled.a`
+  ${text.fullWidth.bodyM};
+  text-decoration: none;
+  color: ${colors.activeTeal};
 `
 
 export default NewsExpanded

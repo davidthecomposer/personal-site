@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
-import { Heading1, Body1, SubHeader } from "styles/text"
+import text from "styles/text"
 import colors from "styles/Colors"
 import media from "styles/media"
 import connectBG from "assets/images/connectBG.jpg"
 import connectBGM from "assets/images/connectBGM.jpg"
 import ContactForm from "components/ContactForm"
 import gsap from "gsap"
+import SectionHeaders from "components/textElements/SectionHeaders"
 
 const Connect: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   const header = useRef(null)
@@ -25,30 +26,13 @@ const Connect: React.FC<{ mobile: boolean }> = ({ mobile }) => {
       opacity: 0,
       duration: 1,
       ease: "power1.inOut",
+      onComplete: () => setEnter(true),
     })
   }, [])
 
-  useEffect(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: headerLine.current,
-      onComplete: () => setEnter(true),
-    })
-
-    tl.to(headerLine.current, {
-      scale: 1,
-      duration: 1,
-      ease: "power1.inOut",
-    })
-      .to(header.current, { y: 0, duration: 0.6 }, 1)
-      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-  }, [mobile])
-
   return (
     <Wrapper id="connect">
-      <HeaderWrapper>
-        <Header ref={header}>Connect</Header>
-        <HeaderLine ref={headerLine} />
-      </HeaderWrapper>
+      <SectionHeaders left text="Connect" classRoot="connect-header" />
       <Collaborate ref={collaborate}>
         <SubTitle>Let’s Connect</SubTitle>
         <Text>
@@ -75,13 +59,13 @@ const Connect: React.FC<{ mobile: boolean }> = ({ mobile }) => {
 
 const Wrapper = styled.section`
   height: 90.4vw;
-  padding: 10.3vw 6.3vw;
+  padding: 10.3vw 0;
   background-size: cover;
   position: relative;
   box-sizing: border-box;
   background-image: url(${connectBG});
   overflow: hidden;
-
+  color: ${colors.coolWhite};
   ${media.mobile} {
     width: 100%;
     height: 310.6vw;
@@ -96,7 +80,7 @@ const Wrapper = styled.section`
 `
 
 const Text = styled.p`
-  ${Body1};
+  ${text.desktop.bodyM};
   position: relative;
   width: 100%;
 
@@ -105,63 +89,6 @@ const Text = styled.p`
   }
   ${media.tabletPortrait} {
     font-size: 20px;
-  }
-`
-
-const Header = styled.h2`
-  ${Heading1};
-  color: ${colors.brightPurple};
-  transform: translate(5.6vw, 100%);
-  position: absolute;
-  width: fit-content;
-  ${media.mobile} {
-    transform: translate(8.5vw, 110%);
-    font-size: 13.3vw;
-  }
-  ${media.tabletPortrait} {
-    transform: translate(44px, 110%);
-    font-size: 69px;
-  }
-`
-
-const HeaderLine = styled.div`
-  width: 82.4vw;
-  height: 0.3vw;
-  margin-left: 5.6vw;
-  background: ${colors.brightPurple};
-  position: absolute;
-  bottom: 0;
-  transform: scaleX(0);
-  transform-origin: 100%;
-  border-radius: 0.3vw;
-
-  ${media.mobile} {
-    height: 1vw;
-    border-radius: 1vw;
-    width: 82vw;
-    margin-left: 5vw;
-  }
-  ${media.tabletPortrait} {
-    height: 5px;
-    border-radius: 5px;
-    width: calc(100% - 26px);
-    margin-left: 26px;
-  }
-`
-
-const HeaderWrapper = styled.div`
-  position: relative;
-  width: 90vw;
-  height: 5vw;
-  margin-left: 0;
-  overflow: hidden;
-
-  ${media.mobile} {
-    height: 14.9vw;
-  }
-  ${media.tabletPortrait} {
-    margin-left: 3vw;
-    height: 75px;
   }
 `
 const Collaborate = styled.div`
@@ -186,7 +113,7 @@ const Collaborate = styled.div`
 `
 
 const SubTitle = styled.h3`
-  ${SubHeader};
+  ${text.desktop.h3};
   margin-bottom: 1.9vw;
 
   ${media.mobile} {

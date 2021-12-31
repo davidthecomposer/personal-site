@@ -15,13 +15,15 @@ type data = {
 
 const MusicPage: React.FC<data> = ({ data }) => {
   const mobile = useContext(MobileContext)
-  console.log(data.allContentfulAnnouncement.nodes[0])
+  const newsData = data.allContentfulAnnouncement.nodes
+  const concertData = data.allContentfulConcertPiece.nodes
+  const uniqueConcert = data.allContentfulEnsemble.distinct
   return (
     <Wrapper>
       <Hero mobile={mobile} />
       <MediaMusic mobile={mobile} />
-      <ConcertMusic mobile={mobile} />
-      <News data={data} />
+      <ConcertMusic tags={uniqueConcert} data={concertData} mobile={mobile} />
+      <News data={newsData} />
       <About mobile={mobile} />
       <Connect mobile={mobile} />
     </Wrapper>
@@ -38,6 +40,8 @@ export const announceQuery = graphql`
   {
     allContentfulAnnouncement {
       nodes {
+        url
+        order
         title
         mainImages {
           file {
@@ -48,9 +52,12 @@ export const announceQuery = graphql`
         articleBlurb {
           articleBlurb
         }
+        articleText {
+          raw
+        }
         contributors {
           bio {
-            bio
+            raw
           }
           mainImages {
             file {
@@ -72,6 +79,27 @@ export const announceQuery = graphql`
         }
       }
       totalCount
+    }
+    allContentfulEnsemble {
+      distinct(field: ensembleName)
+    }
+    allContentfulConcertPiece(sort: { fields: ensemble___ensembleName }) {
+      nodes {
+        instrumentation
+        id
+        duration
+        key
+        title
+        year
+        movements {
+          mvtNumber
+        }
+        ensemble {
+          backgroundColor
+          button
+          ensembleName
+        }
+      }
     }
   }
 `

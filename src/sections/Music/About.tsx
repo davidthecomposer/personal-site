@@ -11,6 +11,7 @@ import davidAboutM from "images/davidAboutM.jpg"
 // import { ReactComponent as ButtonArrowSVG } from "assets/svg/buttonArrow.svg";
 // import { ReactComponent as ScoreIconSVG } from "assets/svg/scoreIcon.svg";
 import gsap from "gsap"
+import SectionHeaders from "components/textElements/SectionHeaders"
 
 const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   const header = useRef(null)
@@ -20,20 +21,9 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   const grey = useRef(null)
 
   useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: headerLine.current })
+    const tl = gsap.timeline({ scrollTrigger: "#about" })
 
-    tl.to(
-      headerLine.current,
-      {
-        scale: 1,
-        duration: 1,
-        ease: "power1.inOut",
-      },
-      0
-    )
-      .to(header.current, { y: 0, duration: 0.6 }, 1)
-      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-      .to(".about-bg-cover", { opacity: 0, duration: 2 }, 1)
+    tl.to(".about-bg-cover", { opacity: 0, duration: 2 }, 1)
       .to(
         ".about-images",
         { opacity: 1, stagger: mobile ? 0.1 : 0.5, duration: mobile ? 0.3 : 4 },
@@ -119,10 +109,8 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
 
   return (
     <Wrapper id="about">
-      <HeaderWrapper>
-        <Header ref={header}>About</Header>
-        <HeaderLine ref={headerLine} />
-      </HeaderWrapper>
+      <SectionHeaders text="About" classRoot="about-header" />
+
       <DavidImage
         src={mobile ? davidAboutM : davidAbout}
         alt="David Campbell image"
@@ -226,69 +214,6 @@ const Wrapper = styled.section`
     width: 100%;
     height: 3967px;
     padding: 0 12px 310px;
-  }
-`
-const HeaderWrapper = styled.div`
-  position: relative;
-  flex-direction: column;
-  width: 88.1vw;
-  margin-left: 6.3vw;
-  height: 5vw;
-  overflow: hidden;
-
-  ${media.mobile} {
-    height: 14vw;
-  }
-  ${media.tabletPortrait} {
-    height: 75px;
-  }
-`
-
-const Header = styled.h2`
-  ${text.desktop.h1};
-  color: ${colors.brightPurple};
-  transform: translate(-5.6vw, 100%);
-  position: absolute;
-  width: fit-content;
-  right: 0;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-    transform: translate(-8.5vw, 110%);
-    font-size: 13.3vw;
-    width: 59.9vw;
-    text-align: right;
-  }
-  ${media.tabletPortrait} {
-    transform: translate(-44px, 110%);
-    font-size: 69px;
-    width: 625px;
-  }
-`
-
-const HeaderLine = styled.div`
-  position: absolute;
-  width: 82.4vw;
-  height: 0.3vw;
-  right: 3.9vw;
-  bottom: 0;
-  background: ${colors.brightPurple};
-  transform: scaleX(0);
-  transform-origin: 0%;
-  border-radius: 0.3vw;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-    height: 1vw;
-    border-radius: 1vw;
-    width: 88vw;
-    margin-right: 2vw;
-  }
-  ${media.tabletPortrait} {
-    height: 5px;
-    border-radius: 5px;
-    width: calc(100% - 10px);
-    margin-right: 10px;
   }
 `
 

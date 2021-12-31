@@ -6,12 +6,12 @@ import React, {
   useState,
 } from "react"
 import styled from "styled-components"
-import { FormLabel, SubHeader2 } from "styles/text"
-import { PrimaryButtonStyle } from "styles/Buttons"
+import text from "assets/styles/text"
+import { PrimaryButtonStyle } from "assets/styles/Buttons"
 import { MobileContext } from "components/layout"
-import colors from "styles/Colors"
-import media from "styles/media"
-
+import colors from "assets/styles/Colors"
+import media from "assets/styles/media"
+import MainButton from "./buttons/MainButton"
 import gsap from "gsap"
 
 const ContactForm: React.FC<{
@@ -147,7 +147,16 @@ const ContactForm: React.FC<{
         </FormRow>
         {mobile && !close && <Close onClick={closeModal}>Close</Close>}
         <input type="hidden" name="form-name" value="connect-form" />
-        <SendMessage>Send Message</SendMessage>
+        <MainButton
+          onClick={() => {
+            setEnter(mobile ? !enter : true)
+          }}
+          borderColor={colors.dullTeal}
+          backgroundColor={colors.inputTeal}
+          bGOpacity={"20"}
+        >
+          Send <br /> message
+        </MainButton>
       </Wrapper>
       <SuccessMessage success={success}>
         Thanks for reaching out. <br /> I'll be in touch soon.
@@ -168,7 +177,7 @@ const FormModal = styled.form<{
   height: 26vw;
   left: ${props => props.leftVal};
   top: ${props => props.topVal};
-  padding: 3.4vw;
+  padding: 2vw;
   background: ${colors.formSkinPurprle};
   border-radius: 0.5vw;
   opacity: 0;
@@ -193,7 +202,7 @@ const FormModal = styled.form<{
 
 const FormRow = styled.div`
   display: flex;
-  ${FormLabel};
+  ${text.desktop.bodyS}
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -201,16 +210,15 @@ const FormRow = styled.div`
   margin-bottom: 1vw;
 
   ${media.mobile} {
-    font-size: clamp(16px, 3.6vw, 4vw);
-    margin-bottom: 4vw;
   }
   ${media.tabletPortrait} {
-    font-size: 18px;
-    margin-bottom: 20px;
   }
 `
 
 const FormText = styled.label`
+  margin-right: 2vw;
+  margin-left: 0.6vw;
+  color: ${colors.coolWhite};
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -221,12 +229,8 @@ const FormText = styled.label`
 
 const TextInput = styled.input`
   height: 2.5vw;
-  width: 16.5vw;
-  background: linear-gradient(
-    90.38deg,
-    #89c1b4 2.99%,
-    rgba(124, 146, 140, 0.81) 99.88%
-  );
+  width: 20vw;
+  background: ${colors.inputTeal};
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 0.3vw;
   padding-left: 1vw;
@@ -234,18 +238,14 @@ const TextInput = styled.input`
   ${media.tablet} {
   }
   ${media.mobile} {
-    width: 60.4vw;
-    height: 9.7vw;
   }
   ${media.tabletPortrait} {
-    width: 250px;
-    height: 40px;
   }
 `
 
 const TextArea = styled.textarea`
-  height: 7.5vw;
-  width: 16.5vw;
+  height: 6vw;
+  width: 20vw;
   background: linear-gradient(
     90.38deg,
     #89c1b4 2.99%,
@@ -254,7 +254,7 @@ const TextArea = styled.textarea`
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 0.3vw;
   padding-left: 1vw;
-  ${FormLabel};
+  ${text.desktop.bodyS}
   color: black;
   ${media.tablet} {
   }
@@ -267,40 +267,6 @@ const TextArea = styled.textarea`
   ${media.tabletPortrait} {
     width: 250px;
     height: 120px;
-  }
-`
-
-const SendMessage = styled.button`
-  ${PrimaryButtonStyle};
-  border-color: ${colors.activeTeal};
-  width: 12.5vw;
-
-  padding-left: 0.8vw;
-  position: relative;
-  margin-left: 12.1vw;
-
-  ${media.mobile} {
-    width: 48.3vw;
-    height: 9.7vw;
-    margin-left: 34vw;
-    margin-top: 2vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 18px;
-    width: 200px;
-    height: 40px;
-    margin-left: 141px;
-    border-radius: 6px;
-  }
-  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  transition: 0.3s;
-
-  ${media.hover} {
-    :hover {
-      transform: scale(0.9);
-      transition-timing-function: ease-in-out;
-      transition: 0.3s;
-    }
   }
 `
 
@@ -323,7 +289,7 @@ const Close = styled.button`
 `
 
 const SuccessMessage = styled.div<{ success: boolean }>`
-  ${SubHeader2}
+  ${text.desktop.bodyS}
 
   position: absolute;
   transform: scale(${props => (props.success ? 1 : 0)});
@@ -332,7 +298,7 @@ const SuccessMessage = styled.div<{ success: boolean }>`
 `
 
 const Wrapper = styled.div<{ success: boolean }>`
-  ${SubHeader2}
+  ${text.desktop.bodyS}
 
   position: absolute;
   transform: scale(${props => (props.success ? 0 : 1)});
