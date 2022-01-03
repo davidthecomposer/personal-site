@@ -1,7 +1,7 @@
 import React from "react"
 
 import styled from "styled-components"
-import colors from "styles/Colors"
+import colors from "assets/styles/Colors"
 
 const IndexPage: React.FC = () => {
   return <Wrapper></Wrapper>

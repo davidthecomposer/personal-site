@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import styled from "styled-components"
-import { MobileContext } from "components/layout"
+import Layout, { MobileContext } from "components/layout"
 import Hero from "sections/Music/Hero"
 import MediaMusic from "sections/Music/MediaMusic"
 import { graphql } from "gatsby"
@@ -8,7 +8,7 @@ import ConcertMusic from "sections/Music/ConcertMusic"
 import About from "sections/Music/About"
 import News from "sections/Music/News"
 import Connect from "sections/Music/Connect"
-
+import AudioPlayer from "components/AudioPlayer"
 type data = {
   data: any
 }
@@ -18,10 +18,13 @@ const MusicPage: React.FC<data> = ({ data }) => {
   const newsData = data.allContentfulAnnouncement.nodes
   const concertData = data.allContentfulConcertPiece.nodes
   const uniqueConcert = data.allContentfulEnsemble.distinct
+  const mediaData = data.allContentfulMediaPiece.nodes
+
   return (
     <Wrapper>
+      {/* <AudioPlayer /> */}
       <Hero mobile={mobile} />
-      <MediaMusic mobile={mobile} />
+      <MediaMusic data={mediaData} mobile={mobile} />
       <ConcertMusic tags={uniqueConcert} data={concertData} mobile={mobile} />
       <News data={newsData} />
       <About mobile={mobile} />
@@ -98,6 +101,54 @@ export const announceQuery = graphql`
           backgroundColor
           button
           ensembleName
+        }
+        audio {
+          file {
+            fileName
+            url
+            contentType
+          }
+        }
+      }
+    }
+    allContentfulMovement {
+      nodes {
+        parent {
+          id
+        }
+        audio {
+          file {
+            fileName
+            url
+            contentType
+          }
+        }
+        key
+        mvtNumber
+        title
+      }
+    }
+    allContentfulMediaPiece {
+      nodes {
+        storyBlurb {
+          storyBlurb
+        }
+        musicBlurb {
+          musicBlurb
+        }
+        audio {
+          file {
+            url
+            contentType
+          }
+        }
+        key
+        tags
+        title
+        images {
+          file {
+            url
+          }
         }
       }
     }

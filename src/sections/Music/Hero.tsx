@@ -1,31 +1,12 @@
 import React, { useEffect, useState, useRef } from "react"
 import styled from "styled-components"
 // import { ButtonRegularStyles } from "components/Buttons";
-import { SlideHeading, MetroHeading32 } from "styles/text"
+import text from "styles/text"
 // import colors from "styles/Colors";
-import ReactDOM from "react-dom"
+
 import { Canvas, useFrame } from "@react-three/fiber"
 import gsap from "gsap"
-import filmTeaser from "assets/images/davidFilmTeaser.jpg"
-import davidSerious from "assets/images/davidSerious.jpg"
-import Liz1 from "assets/images/Liz1.jpg"
-import mandi1 from "assets/images/mandi1.jpg"
 import media from "styles/media"
-import davidSkeptic from "assets/images/davidSkeptic.jpg"
-import jennyCampbell from "assets/images/jennyTop.jpg"
-import oCTLogo from "assets/images/oCTLogo.jpg"
-import davidSmile1 from "assets/images/davidSmile1.jpg"
-import oCTSeason from "assets/images/oCTSeason.jpg"
-import filmTeaserM from "assets/images/davidFilmTeaserM.jpg"
-import davidSeriousM from "assets/images/davidSeriousM.jpg"
-import Liz1M from "assets/images/Liz1M.jpg"
-import mandi1M from "assets/images/mandi1M.jpg"
-import davidSkepticM from "assets/images/davidSkepticM.jpg"
-import jennyCampbellM from "assets/images/jennyCampbellM.jpg"
-import oCTLogoM from "assets/images/oCTLogoM.jpg"
-import davidSmile1M from "assets/images/davidSmile1M.jpg"
-import oCTSeasonM from "assets/images/oCTSeasonM.jpg"
-import { useRectGlow } from "components/Blurs"
 
 import { shaderMaterial } from "@react-three/drei"
 import { extend } from "@react-three/fiber"
@@ -223,48 +204,6 @@ const Wrapper = styled.section`
   ${media.tabletPortrait} {
     padding: 10vw 0 39.2vw 0;
   }
-`
-
-const Header = styled.h2`
-  ${SlideHeading};
-  position: absolute;
-  opacity: 0;
-`
-
-const Counter = styled.div`
-  width: 120px;
-  height: 16px;
-  border: 1px solid #8d458620;
-  box-sizing: border-box;
-  border-radius: 6px;
-  bottom: 8.9vw;
-  left: 9.2vw;
-  position: absolute;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  opacity: 0;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-    bottom: 52vw;
-    left: 5vw;
-  }
-  ${media.tabletPortrait} {
-    bottom: 35vw;
-    left: 3.4vw;
-  }
-  ${media.fullWidth} {
-    bottom: 100px;
-    left: 147px;
-    z-index: 10;
-  }
-`
-
-const Metro36 = styled.h3`
-  ${MetroHeading32};
-  position: absolute;
-  opacity: 0;
 `
 
 export default Hero

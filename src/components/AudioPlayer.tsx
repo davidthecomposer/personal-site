@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react"
 import styled from "styled-components"
-import { Body1 } from "styles/text"
+import text from "styles/text"
 import colors from "styles/Colors"
 import media from "styles/media"
 import gsap from "gsap"
@@ -16,19 +16,10 @@ import { ReactComponent as PlayButtonSVG } from "svg/playButton.svg"
 import { ReactComponent as PauseButtonSVG } from "svg/pauseButton.svg"
 
 type Props = {
-  setActiveScreen: any
-  introAni: boolean
-  setMobileInfo: any
-  mobileInfo: any
-  mediaPieces: {
-    title: string
-    img: string[]
-    video: boolean
-    music: string
-    story: string
-    audio: string
-    id: number
-  }[]
+  activeTracks?: string[]
+  allTracks?: [
+    { audio: string; name: string; playlistKey?: string | null; key: string }
+  ]
 }
 
 type AudioElementProps = {
@@ -194,13 +185,7 @@ const AudioElement: React.FC<AudioElementProps> = ({
   )
 }
 
-const AudioPlayer: React.FC<Props> = ({
-  setActiveScreen,
-  introAni,
-  setMobileInfo,
-  mobileInfo,
-  mediaPieces,
-}) => {
+const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
   const playList = useRef(null)
   const [playPushed, setPlayPushed] = useState(false)
   const [activeTrack, setActiveTrack] = useState<number>(0)
@@ -221,24 +206,23 @@ const AudioPlayer: React.FC<Props> = ({
     trackArray.current[activeTrack].currentTime = 0
     //@ts-ignore
     trackArray.current[activeTrack].pause()
-    setActiveTrack(activeTrack === mediaPieces.length - 1 ? 0 : activeTrack + 1)
 
     if (!shouldAutoPlay.current) {
       setPlayPushed(false)
     }
-  }, [setActiveTrack, activeTrack, mediaPieces])
+  }, [activeTrack])
 
-  useEffect(() => {
-    if (introAni) {
-      gsap.from(playList.current, {
-        x: "-=3vw",
-        y: "+=3vw",
-        duration: 1,
-        opacity: 0,
-        ease: "power1.inOut",
-      })
-    }
-  }, [introAni])
+  // useEffect(() => {
+  //   if (introAni) {
+  //     gsap.from(playList.current, {
+  //       x: "-=3vw",
+  //       y: "+=3vw",
+  //       duration: 1,
+  //       opacity: 0,
+  //       ease: "power1.inOut",
+  //     })
+  //   }
+  // }, [introAni])
 
   const handleTrackClick = useCallback(
     (trackNum: number) => {
@@ -253,55 +237,25 @@ const AudioPlayer: React.FC<Props> = ({
     [activeTrack]
   )
 
-  const [trackOrder, setTrackOrder] = useState(
-    mediaPieces.map((track, i) => {
-      return (
-        <AudioWrapper key={track.id} onClick={() => handleTrackClick(track.id)}>
-          <AudioElement
-            activeTrack={activeTrack}
-            setActiveTrack={setActiveTrack}
-            track={mediaPieces[track.id]}
-            playPushed={playPushed}
-            addRef={addRef}
-            trackRefs={trackArray}
-            handleEnd={handleEnd}
-          />
-        </AudioWrapper>
-      )
-    })
-  )
+  // useEffect(() => {
+  //   const theTracks = allTracks.filter(track => track)
 
-  useEffect(() => {
-    const trackList = mediaPieces.map((track, i) => {
-      return (
-        <AudioWrapper key={track.id} onClick={() => handleTrackClick(track.id)}>
-          <AudioElement
-            activeTrack={activeTrack}
-            setActiveTrack={setActiveTrack}
-            track={mediaPieces[track.id]}
-            playPushed={playPushed}
-            addRef={addRef}
-            trackRefs={trackArray}
-            handleEnd={handleEnd}
-          />
-        </AudioWrapper>
-      )
-    })
-
-    const trackListOrdered = [
-      ...trackList.slice(activeTrack, trackList.length),
-      ...trackList.slice(0, activeTrack),
-    ]
-    setActiveScreen(activeTrack)
-    setTrackOrder(trackListOrdered)
-  }, [
-    activeTrack,
-    setActiveScreen,
-    playPushed,
-    mediaPieces,
-    handleEnd,
-    handleTrackClick,
-  ])
+  //   const trackList = theTracks.map((track, i) => {
+  //     return (
+  //       <AudioWrapper key={track.id} onClick={() => handleTrackClick(track.id)}>
+  //         <AudioElement
+  //           activeTrack={activeTrack}
+  //           setActiveTrack={setActiveTrack}
+  //           track={theTracks[track.key]}
+  //           playPushed={playPushed}
+  //           addRef={addRef}
+  //           trackRefs={trackArray}
+  //           handleEnd={handleEnd}
+  //         />
+  //       </AudioWrapper>
+  //     )
+  //   })
+  // }, [activeTrack, playPushed, activeTracks, handleEnd, handleTrackClick])
 
   const handleClick = (e: any) => {
     setPlayPushed(!playPushed)
@@ -323,10 +277,6 @@ const AudioPlayer: React.FC<Props> = ({
     }
   }, [autoPlay])
 
-  const handleInfo = () => {
-    setMobileInfo(!mobileInfo)
-  }
-
   return (
     <Playlist ref={playList}>
       <PlayBack>
@@ -339,32 +289,27 @@ const AudioPlayer: React.FC<Props> = ({
           <PauseButton />
           <PlayButton />
         </Play>
-        {mobile && <Info onClick={handleInfo}>Info</Info>}
-        <AutoPlay onClick={() => setAutoPlay(!autoPlay)} active={autoPlay}>
-          <Text>Auto-play</Text>
-        </AutoPlay>
       </PlayBack>
-
-      <Inner>{trackOrder}</Inner>
     </Playlist>
   )
 }
 
 const Playlist = styled.div`
-  position: absolute;
+  position: fixed;
   width: 22.5vw;
-  height: 31.3vw;
-  left: 6.3vw;
-  top: 40.9vw;
-
+  height: auto;
+  min-height: 8vw;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
   border: 0.1vw solid rgba(219, 219, 219, 0.15);
   /* card Shadow */
   background: radial-gradient(
     87.7% 87.7% at 14.86% 8.6%,
-    rgba(0, 186, 227, 0.1) 0%,
-    rgba(9, 45, 56, 0.1) 32.81%,
-    rgba(21, 111, 131, 0.1) 78.1%,
-    rgba(2, 209, 255, 0.1) 100%
+    rgba(0, 186, 227, 0.6) 0%,
+    rgba(9, 45, 56, 0.65) 32.81%,
+    rgba(21, 111, 131, 0.7) 78.1%,
+    rgba(2, 209, 255, 0.75) 100%
   );
   border: 1px solid #000000;
   box-sizing: border-box;
@@ -440,7 +385,7 @@ const Info = styled.button`
 `
 
 const Text = styled.div`
-  ${Body1};
+  ${text.desktop.bodyS};
   width: 19.3vw;
   position: relative;
   z-index: 3;
@@ -643,7 +588,7 @@ const ProgressInner = styled.div<{ active: boolean }>`
 `
 
 const Track = styled.div<{ selected: boolean }>`
-  ${Body1};
+  ${text.desktop.bodyS};
   width: 100%;
   height: 2.6vw;
   cursor: pointer;

@@ -10,9 +10,10 @@ type props = {
   left?: boolean
   text: string
   classRoot: string
+  small?: boolean
 }
 
-const SectionHeaders: React.FC<props> = ({ left, text, classRoot }) => {
+const SectionHeaders: React.FC<props> = ({ left, text, classRoot, small }) => {
   const headerWrapper = useRef<HTMLDivElement>(null)
 
   const textArray = text.split(" ").map((word, i) => {
@@ -30,7 +31,7 @@ const SectionHeaders: React.FC<props> = ({ left, text, classRoot }) => {
       const tl = gsap.timeline({
         scrollTrigger: { trigger: headerWrapper.current, start: "top 90%" },
       })
-
+      const xOffset = "8vw"
       tl.to(`.${classRoot}-line`, {
         scale: 1,
         duration: 1,
@@ -45,21 +46,17 @@ const SectionHeaders: React.FC<props> = ({ left, text, classRoot }) => {
           },
           1
         )
-        .to(
-          `.${classRoot}_title_word`,
-          {
-            stagger: { each: 0.2, from: left ? "start" : "end" },
-            x: 0,
-            duration: 0.6,
-          },
-          1.6
-        )
+        .to(`.${classRoot}_title_word`, {
+          stagger: { each: 0.2, from: left ? "start" : "end" },
+          x: left ? `-=${xOffset}` : `+=${xOffset}`,
+          duration: 0.6,
+        })
     }
   }, [])
 
   return (
     <HeaderWrapper ref={headerWrapper}>
-      <Header left={left} className={classRoot}>
+      <Header left={left} className={classRoot} small={small}>
         {textArray}
       </Header>
       <HeaderLine left={left} className={`${classRoot}-line`} />
@@ -85,12 +82,16 @@ const HeaderWrapper = styled.div`
   }
 `
 
-const Header = styled.h2<{ left?: boolean }>`
-  ${text.desktop.h1};
+const Header = styled.h2<{ left?: boolean; small?: boolean }>`
+  ${props => (props.small ? text.desktop.h2 : text.desktop.h1)};
+
   color: ${colors.headlineWhite};
-  white-space: pre;
+
   span {
-    transform: translate(${props => (props.left ? "8vw" : "-8vw")}, 115%);
+    transform: translate(
+      ${props => (props.left ? "8vw" : "-8vw")},
+      ${props => (props.small ? "140%" : "115%")}
+    );
     display: inline-block;
     margin-right: 1.25vw;
   }

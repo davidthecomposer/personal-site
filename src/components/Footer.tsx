@@ -173,7 +173,7 @@ const Wrapper = styled.footer`
   justify-content: space-between;
   box-sizing: border-box;
   padding: 4.1vw 2.3vw;
-  z-index: 1000;
+  z-index: 999;
   right: 0;
   background: linear-gradient(
     128.33deg,
@@ -214,8 +214,9 @@ const BuildColumn = styled.div`
 `
 
 const Title = styled.h3`
-  ${text.desktop.h3};
+  ${text.desktop.h2};
   margin-bottom: 3.1vw;
+  color: ${colors.coolWhite};
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -228,6 +229,7 @@ const Title = styled.h3`
 
 const Text = styled.p`
   ${text.desktop.bodyS};
+  color: ${colors.coolWhite};
   position: relative;
   width: 100%;
   margin-bottom: 3.1vw;

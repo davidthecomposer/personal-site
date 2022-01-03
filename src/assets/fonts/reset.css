@@ -592,3 +592,7 @@ pre tt:before,
 pre tt:after {
   content: "";
 }
+
+html {
+  background-color: #000;
+}

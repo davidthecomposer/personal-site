@@ -86,6 +86,7 @@ exports.createPages = ({ graphql, actions }) => {
                 description {
                   raw
                 }
+                small
                 instrumentation
                 id
                 duration
@@ -105,6 +106,13 @@ exports.createPages = ({ graphql, actions }) => {
                   title
                   key
                   time
+                  audio {
+                    file {
+                      fileName
+                      url
+                      contentType
+                    }
+                  }
                 }
                 backgroundImages {
                   file {

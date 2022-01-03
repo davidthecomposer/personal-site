@@ -17,6 +17,12 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-styled-components`,
+    {
+      resolve: `gatsby-plugin-layout`,
+      options: {
+        component: require.resolve(`./src/components/layout.tsx`),
+      },
+    },
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-typescript`,
@@ -90,6 +96,9 @@ module.exports = {
         optionalFields: {
           ContentfulAnnouncement: {
             order: "Int",
+          },
+          ContentfulConcertPiece: {
+            audio: {},
           },
         },
       },

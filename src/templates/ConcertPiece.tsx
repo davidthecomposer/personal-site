@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback } from "react"
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useContext,
+} from "react"
 import styled from "styled-components"
 import { PrimaryButtonStyle } from "styles/Buttons"
 import colors from "styles/Colors"
@@ -8,10 +14,12 @@ import linkedin from "assets/svg/linkedIcon.svg"
 import facebook from "assets/svg/facebookIcon.svg"
 import media from "styles/media"
 import gsap from "gsap"
-import { navigate } from "gatsby"
+import Compositions from "pages/compositions"
+
+import { navigate, graphql } from "gatsby"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
 import { renderRichText } from "gatsby-source-contentful/rich-text"
-
+import Layout, { AudioPlayerContext } from "components/layout"
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -23,13 +31,15 @@ import SectionHeaders from "components/textElements/SectionHeaders"
 type props = {
   mobile: boolean
   pageContext: any
+  data: any
 }
 
-const ConcertPiece: React.FC<props> = ({ pageContext, mobile }) => {
+const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
   const mainText = useRef<HTMLDivElement>(null)
   const [mvtInfo, setMvtInfo] = useState([])
   const [activeCard, setActiveCard] = useState(1)
-
+  const setActiveTrack = useContext(AudioPlayerContext)
+  console.log(setActiveTrack)
   const {
     movements,
     scoreSample,
@@ -38,7 +48,9 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile }) => {
     key,
     description,
     instrumentation,
+    duration,
     backgroundImages,
+    small,
   } = pageContext.concertPiece
 
   const options = {
@@ -85,42 +97,67 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile }) => {
       )
     }
   )
+  const parsedMovements = movements
+    ? movements
+    : [
+        {
+          mvtNumber: "",
+          description: "",
+          title: title,
+          key: key,
+          time: duration,
+        },
+      ]
+  const allMovements =
+    parsedMovements.length > 1 &&
+    parsedMovements.map((con: any, i: number, arr: any) => {
+      const { mvtNumber, description, title, key, time } = con
 
-  const allMovements = movements.map((con: any, i: number) => {
-    const { mvtNumber, description, title, key, time } = con
-
-    return (
-      <Movement
-        className="mvt_info"
-        activeCard={activeCard === mvtNumber}
-        key={key}
-      >
-        <MvtTitle>{title}</MvtTitle>
-        <MvtSummary> {renderRichText(description, options)}</MvtSummary>
-        <MvtTime>{time}</MvtTime>
-      </Movement>
-    )
-  })
-
-  const playList = movements
-    .sort((a: any, b: any) => {
-      return a.mvtNumber - b.mvtNumber
-    })
-    .map((mvt: any, i: number) => {
       return (
-        <Playlist
-          key={`playlist-item-${i}`}
-          onMouseEnter={() => setActiveCard(mvt.mvtNumber)}
+        <Movement
+          className="mvt_info"
+          activeCard={activeCard === mvtNumber}
+          key={key}
         >
-          <div>
-            <MainButton>PLAY</MainButton>
-          </div>
-          <MvtName>{`${mvt.mvtNumber ? mvt.mvtNumber + "." : ""}  ${
-            mvt.title
-          }`}</MvtName>
-        </Playlist>
+          <MvtTitle>{title}</MvtTitle>
+          <MvtSummary>
+            {arr.length > 1
+              ? renderRichText(description, options)
+              : description}
+          </MvtSummary>
+          <MvtTime>{time}</MvtTime>
+        </Movement>
       )
     })
+
+  const sortedPlayList =
+    allMovements.length > 1
+      ? parsedMovements.sort((a: any, b: any) => {
+          return a.mvtNumber - b.mvtNumber
+        })
+      : parsedMovements
+
+  const handleClick = (arr: any) => {
+    setActiveTrack(arr)
+  }
+
+  const playList = sortedPlayList.map((mvt: any, i: number) => {
+    console.log(mvt)
+    return (
+      <Playlist
+        key={`playlist-item-${i}`}
+        onMouseEnter={() => setActiveCard(mvt.mvtNumber)}
+      >
+        <ButtonContainer visible={mvt.audio}>
+          <MainButton onClick={() => handleClick([mvt.key])}>PLAY</MainButton>
+        </ButtonContainer>
+
+        <MvtName>{`${mvt.mvtNumber ? mvt.mvtNumber + "." : ""}  ${
+          mvt.title
+        }`}</MvtName>
+      </Playlist>
+    )
+  })
 
   const renderActiveMvt = useCallback(
     (arr: any) => {
@@ -136,12 +173,14 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile }) => {
   )
 
   useEffect(() => {
-    const newArr = renderActiveMvt(allMovements)
-    gsap.to(".mvt_info", {
-      opacity: 0,
-      duration: 0.5,
-      onComplete: () => setMvtInfo(newArr),
-    })
+    if (parsedMovements.length > 1) {
+      const newArr = renderActiveMvt(allMovements)
+      gsap.to(".mvt_info", {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: () => setMvtInfo(newArr),
+      })
+    }
   }, [renderActiveMvt])
 
   useEffect(() => {
@@ -157,7 +196,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile }) => {
         backgroundImages ? backgroundImages[0].file.url : colors.deepPurple
       }
     >
-      <SectionHeaders text={title} classRoot={`${key}-header`} />
+      <SectionHeaders text={title} classRoot={`${key}-header`} small={small} />
       <Row>
         <Date>{year}</Date>
         <Instrumentation>{allInstruments}</Instrumentation>
@@ -182,15 +221,17 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile }) => {
                   </MainButton>
                 </a>
               )}
-              <MainButton
-                onClick={() => {
-                  console.log("add all mvts to playlist")
-                }}
-                borderColor={colors.coolWhiteLight}
-                backgroundColor={colors.activeTeal}
-              >
-                PLAY ALL
-              </MainButton>
+              {parsedMovements.length > 1 && (
+                <MainButton
+                  onClick={() => {
+                    console.log("add all mvts to playlist")
+                  }}
+                  borderColor={colors.coolWhiteLight}
+                  backgroundColor={colors.activeTeal}
+                >
+                  PLAY ALL
+                </MainButton>
+              )}
               <MainButton
                 onClick={() => {
                   navigate("/music")
@@ -255,7 +296,7 @@ const BottomContainer = styled.div`
 
 const PlaylistColumn = styled.div`
   width: fit-content;
-
+  max-width: 30vw;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -268,7 +309,7 @@ const Movement = styled.div<{
   activeCard: boolean
 }>`
   position: relative;
-  width: 48.81vw;
+  width: 100%;
 
   transition: 0.5s;
   opacity: 0;
@@ -283,6 +324,7 @@ const Movement = styled.div<{
 const MovementDescription = styled.div`
   position: relative;
 
+  width: 40vw;
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -300,7 +342,7 @@ const MvtTitle = styled.h3`
   position: relative;
   :after {
     content: "";
-    width: 45vw;
+    width: 37vw;
     position: absolute;
     bottom: -10%;
     left: 5%;
@@ -332,7 +374,6 @@ const MvtName = styled.p`
   width: 100%;
   ${text.desktop.h6};
   color: ${colors.coolWhite};
-
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -349,6 +390,8 @@ const MvtTime = styled.div`
   text-align: center;
   opacity: 0.33;
   margin-top: 2.81vw;
+  position: relative;
+
   ${media.tablet} {
   }
   ${media.mobile} {
@@ -409,25 +452,36 @@ const BigRow = styled.div`
   }
 `
 
-const Playlist = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: fit-content;
-  cursor: pointer;
-  transition: 0.4s;
-  div {
+const ButtonContainer = styled.div<{ visible: boolean }>`
+  width: 3vw;
+  height: 3vw;
+  margin-right: 2vw;
+  position: relative;
+  button {
+    position: absolute;
     width: 3vw;
     height: 3vw;
-
-    margin-right: 3vw;
-    button {
-      position: absolute;
-      width: 3vw;
-      height: 3vw;
-      ${text.desktop.bodyXS};
-    }
+    ${text.desktop.bodyXS};
+    left: 0;
+    top: 0;
+    transform: scale(${props => (props.visible ? 1 : 0)});
   }
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
+
+const Playlist = styled.div`
+  display: flex;
+
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.4s;
+
   padding: 0.25vw 0;
   ${media.hover} {
     :hover {
@@ -523,3 +577,52 @@ const Column = styled.div`
 `
 
 export default ConcertPiece
+
+export const announceQuery = graphql`
+  {
+    allContentfulConcertPiece(sort: { fields: ensemble___ensembleName }) {
+      nodes {
+        key
+        title
+        audio {
+          file {
+            fileName
+            url
+            contentType
+          }
+        }
+      }
+    }
+    allContentfulMovement {
+      nodes {
+        parent {
+          ... on ContentfulConcertPiece {
+            key
+          }
+        }
+        audio {
+          file {
+            fileName
+            url
+            contentType
+          }
+        }
+        key
+        mvtNumber
+        title
+      }
+    }
+    allContentfulMediaPiece {
+      nodes {
+        audio {
+          file {
+            url
+            contentType
+          }
+        }
+        key
+        title
+      }
+    }
+  }
+`

@@ -12,7 +12,12 @@ import gsap from "gsap"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
-const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
+type props = {
+  mobile: boolean
+  data: any
+}
+
+const MediaMusic: React.FC<props> = ({ mobile, data }) => {
   const screen = useRef(null)
   const cta = useRef(null)
   const [enter, setEnter] = useState(false)
@@ -52,7 +57,8 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
     }
   }, [])
 
-  const allTracks = mediaPieces.map((track: any, i: number) => {
+  const allTracks = data.map((track: any, i: number) => {
+    console.log(track)
     return (
       <MediaPiece key={`track-presentation-${i}`} className={`media_pieces`}>
         <ImageWrapper>
@@ -61,7 +67,7 @@ const MediaMusic: React.FC<{ mobile: boolean }> = ({ mobile }) => {
               LISTEN
             </MainButton>
           </ControlPanel>
-          <img src={mobile ? track.img[1] : track.img[0]} alt={track.title} />
+          <img src={track.images[0].file.url} alt={track.title} />
           <TextWrapper>
             <TrackText>{track.story}</TrackText>
           </TextWrapper>

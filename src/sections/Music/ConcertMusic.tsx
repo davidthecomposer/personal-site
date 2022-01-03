@@ -92,6 +92,7 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
       const allInstrumentation = instrumentation.map((ins: any, i: any) => {
         return <Instrument key={`${key}-inst-${i}`}>{ins}</Instrument>
       })
+      const movementNumber = movements ? movements.length : 1
 
       return (
         <PieceCard key={key} bGColor={backgroundColor}>
@@ -99,7 +100,7 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
           <Instrumentation>{allInstrumentation}</Instrumentation>
           <Year>{year}</Year>
           <Duration>{duration}</Duration>
-          <Movements>{movements.length}</Movements>
+          <Movements>{movementNumber}</Movements>
           <MainButton
             backgroundColor={button}
             borderColor={button}

@@ -1,18 +1,27 @@
-import React, { createContext, useState, useEffect } from "react"
+import React, { createContext, useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import media from "styles/media"
 import text from "styles/text"
 import colors from "styles/colors"
 import SEO from "components/seo"
+import { graphql } from "gatsby"
 import "fonts/reset.css"
 import "fonts/typography.css"
 import Header from "./Header"
 import Footer from "./Footer"
+import AudioPlayer from "./AudioPlayer"
 export const DesktopContext = createContext(false)
 export const TabletContext = createContext(false)
 export const MobileContext = createContext(false)
+export const AudioPlayerContext = createContext([])
+import { Dispatch, SetStateAction } from "react"
 
-export const Layout: React.FC<{}> = ({ children }) => {
+type Props = {
+  children: any
+  data: any
+}
+
+export const Layout: React.FC<Props> = ({ children, data }) => {
   const [desktop, setDesktop] = useState(window.innerWidth > 1024)
   const [tablet, setTablet] = useState(
     window.innerWidth >= 767 && window.innerWidth <= 1024
@@ -23,7 +32,26 @@ export const Layout: React.FC<{}> = ({ children }) => {
         window.innerWidth <= 1200 &&
         window.innerHeight > window.innerWidth)
   )
+  const [activeTracks, setActiveTracks] =
+    useState<Dispatch<SetStateAction<string[]>>>()
+  const combinedTracks = useRef([
+    ...data.allContentfulConcertPiece.nodes,
+    ...data.allContentfulMovement.nodes,
+    ...data.allContentfulMediaPiece.nodes,
+  ])
+  const [parsedTracks, setParsedTracks] = useState<any[] | null>(null)
 
+  const parseTracks = (trackArray: any[]) => {
+    console.log(trackArray, "tracks")
+  }
+
+  useEffect(() => {
+    const tracks = combinedTracks.current.filter(track => {
+      return track.audio !== null
+    })
+    console.log(tracks, "parsed")
+    setParsedTracks(tracks)
+  }, [])
   useEffect(() => {
     window.addEventListener("resize", () => {
       setDesktop(window.innerWidth > 1024)
@@ -39,10 +67,13 @@ export const Layout: React.FC<{}> = ({ children }) => {
     <DesktopContext.Provider value={desktop}>
       <TabletContext.Provider value={tablet}>
         <MobileContext.Provider value={mobile}>
-          <Header />
-          <SEO></SEO>
-          <Main>{children}</Main>
-          <Footer />
+          <AudioPlayerContext.Provider value={setActiveTracks}>
+            <Header />
+            <AudioPlayer allTracks={parsedTracks} activeTracks={activeTracks} />
+            <SEO></SEO>
+            <Main>{children}</Main>
+            <Footer />
+          </AudioPlayerContext.Provider>
         </MobileContext.Provider>
       </TabletContext.Provider>
     </DesktopContext.Provider>
