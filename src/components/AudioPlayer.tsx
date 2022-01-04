@@ -212,18 +212,6 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
     }
   }, [activeTrack])
 
-  // useEffect(() => {
-  //   if (introAni) {
-  //     gsap.from(playList.current, {
-  //       x: "-=3vw",
-  //       y: "+=3vw",
-  //       duration: 1,
-  //       opacity: 0,
-  //       ease: "power1.inOut",
-  //     })
-  //   }
-  // }, [introAni])
-
   const handleTrackClick = useCallback(
     (trackNum: number) => {
       if (trackNum !== activeTrack) {
@@ -333,57 +321,6 @@ const Playlist = styled.div`
   }
 `
 
-const Inner = styled.div`
-  position: absolute;
-  width: 21vw;
-  height: 25.8vw;
-  left: 0.7vw;
-  top: 4.2vw;
-  padding: 0.5vw;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.95) 100%
-  );
-  border-radius: 0.3vw;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-    width: 77vw;
-    height: 102vw;
-    top: 28vw;
-    left: 3vw;
-    padding: 5vw;
-  }
-  ${media.tabletPortrait} {
-    width: 399px;
-    height: 527px;
-    top: 145px;
-    left: 15px;
-    padding: 26px;
-  }
-`
-
-const Info = styled.button`
-  ${PrimaryButtonStyle};
-  width: 29vw;
-  height: 9.7vw;
-  border-radius: 2.4vw;
-  border-color: ${colors.formSkinPurprle};
-  position: absolute;
-  right: 4vw;
-  bottom: 1vw;
-
-  ${media.tabletPortrait} {
-    font-size: 22px;
-    width: 150px;
-    height: 50px;
-    border-radius: 8px;
-    right: 21px;
-    bottom: 5px;
-  }
-`
-
 const Text = styled.div`
   ${text.desktop.bodyS};
   width: 19.3vw;
@@ -449,9 +386,6 @@ const PlayButton = styled(PlayButtonSVG)`
   }
 `
 
-const AudioWrapper = styled.div`
-  position: relative;
-`
 
 const PauseButton = styled(PauseButtonSVG)`
   opacity: 1;
@@ -518,57 +452,6 @@ const Play = styled.button<{ play: boolean }>`
   }
 `
 
-const AutoPlay = styled.button<{ active: boolean }>`
-  width: 7.5vw;
-  height: 2.5vw;
-  border-radius: 0.6vw;
-  background: ${colors.formSkinPurprle};
-  appearance: none;
-  --webkit-appearance: none;
-  border: none;
-  padding: 0.2vw;
-  ${media.hover} {
-    :hover {
-      ${Text} {
-        color: ${colors.coolWhiteLight};
-        transition: 0.4s;
-      }
-    }
-  }
-  ${Text} {
-    color: ${props => (props.active ? colors.activeTeal : colors.dullTeal)};
-    background: black;
-    width: 100%;
-    height: 100%;
-    line-height: 2vw;
-    border-radius: 0.4vw;
-    transition: 0.4s;
-  }
-
-  ${media.mobile} {
-    width: 29vw;
-    height: 9.7vw;
-    border-radius: 1.4vw;
-    margin-top: 0.5vw;
-    ${Text} {
-      line-height: 8vw;
-
-      width: 94%;
-      height: 86%;
-      margin-left: 3%;
-    }
-  }
-  ${media.tabletPortrait} {
-    width: 150px;
-    height: 50px;
-    border-radius: 8px;
-    margin-top: 2px;
-    ${Text} {
-      line-height: 41px;
-      border-radius: 6px;
-    }
-  }
-`
 
 const ProgressInner = styled.div<{ active: boolean }>`
   width: 100%;
