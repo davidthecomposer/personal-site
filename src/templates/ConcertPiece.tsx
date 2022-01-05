@@ -38,8 +38,10 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
   const mainText = useRef<HTMLDivElement>(null)
   const [mvtInfo, setMvtInfo] = useState([])
   const [activeCard, setActiveCard] = useState(1)
-  const setActiveTrack = useContext(AudioPlayerContext)
-  console.log(setActiveTrack)
+  const value = useContext(AudioPlayerContext)
+
+  console.log(value)
+
   const {
     movements,
     scoreSample,
@@ -138,8 +140,16 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
       : parsedMovements
 
   const handleClick = (arr: any) => {
-    setActiveTrack(arr)
+    if (value.setActiveTracks) {
+      value.setActiveTracks(arr)
+    }
   }
+
+  useEffect(() => {
+    if (value.activeTrack) {
+      console.log(value.activeTrack, "reading")
+    }
+  }, [value?.activeTrack])
 
   const playList = sortedPlayList.map((mvt: any, i: number) => {
     console.log(mvt)
@@ -464,7 +474,8 @@ const ButtonContainer = styled.div<{ visible: boolean }>`
     ${text.desktop.bodyXS};
     left: 0;
     top: 0;
-    transform: scale(${props => (props.visible ? 1 : 0)});
+    opacity: ${props => (props.visible ? 1 : 0.1)};
+    /* transform: scale(${props => (props.visible ? 1 : 0)}); */
   }
   ${media.tablet} {
   }

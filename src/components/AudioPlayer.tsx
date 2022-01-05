@@ -15,38 +15,15 @@ import { MobileContext } from "components/layout"
 import { ReactComponent as PlayButtonSVG } from "svg/playButton.svg"
 import { ReactComponent as PauseButtonSVG } from "svg/pauseButton.svg"
 
-type Props = {
-  activeTracks?: string[]
-  allTracks?: [
-    { audio: string; name: string; playlistKey?: string | null; key: string }
-  ]
-}
-
 type AudioElementProps = {
-  track: {
-    title: string
-    img: string[]
-    video: boolean
-    music: string
-    story: string
-    audio: string
-    id: number
-  }
-  activeTrack: number
+  activeTrack: string
   setActiveTrack: React.Dispatch<React.SetStateAction<number>>
-  playPushed: boolean
-  addRef: any
-  trackRefs: any
   handleEnd: any
 }
 
 const AudioElement: React.FC<AudioElementProps> = ({
-  track,
   activeTrack,
   setActiveTrack,
-  playPushed,
-  addRef,
-  trackRefs,
   handleEnd,
 }) => {
   const player = useRef<HTMLAudioElement>(null)
@@ -126,7 +103,7 @@ const AudioElement: React.FC<AudioElementProps> = ({
   useEffect(() => {
     if (player.current) {
       if (activeTrack === track.id && playPushed) {
-        trackRefs.current[activeTrack].play()
+        allTracks[activeTrack].play()
         setCanProgress(true)
       } else {
         setCanProgress(false)
@@ -135,19 +112,8 @@ const AudioElement: React.FC<AudioElementProps> = ({
   }, [activeTrack, track, playPushed, trackRefs])
 
   const handleRowClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (activeTrack !== track.id) {
-      setActiveTrack(track.id)
-    } else {
-      handleProgress(e)
-    }
+    handleProgress(e)
   }
-
-  useEffect(() => {
-    if (player.current && !loaded.current) {
-      addRef(player.current)
-      loaded.current = true
-    }
-  }, [addRef])
 
   return (
     <Track
@@ -159,7 +125,7 @@ const AudioElement: React.FC<AudioElementProps> = ({
         onDurationChange={getDuration}
         onTimeUpdate={getDuration}
         onEnded={handleEnd}
-        src={track.audio}
+        src={activeTrack}
         ref={player}
         preload="metadata"
         playsInline
@@ -185,21 +151,20 @@ const AudioElement: React.FC<AudioElementProps> = ({
   )
 }
 
-const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
+type Props = {
+  activeTracks?: string[]
+  allTracks?: any[]
+}
+
+const AudioPlayer: React.FC<Props> = ({ activeTracks, allTracks }) => {
   const playList = useRef(null)
   const [playPushed, setPlayPushed] = useState(false)
-  const [activeTrack, setActiveTrack] = useState<number>(0)
+  const [activeTrack, setActiveTrack] = useState<string>("")
   const mobile = useContext(MobileContext)
   const [autoPlay, setAutoPlay] = useState(false)
   const shouldAutoPlay = useRef(false)
   const trackArray = useRef([])
   const playTrack = useRef(false)
-
-  const addRef = (audioElement: HTMLAudioElement) => {
-    let newTrackArr: any[] = trackArray.current
-
-    newTrackArr.push(audioElement)
-  }
 
   const handleEnd = useCallback(() => {
     //@ts-ignore
@@ -212,38 +177,9 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
     }
   }, [activeTrack])
 
-  const handleTrackClick = useCallback(
-    (trackNum: number) => {
-      if (trackNum !== activeTrack) {
-        //@ts-ignore
-        trackArray.current[activeTrack].pause()
-        //@ts-ignore
-        trackArray.current[trackNum].play()
-        setActiveTrack(trackNum)
-      }
-    },
-    [activeTrack]
-  )
-
-  // useEffect(() => {
-  //   const theTracks = allTracks.filter(track => track)
-
-  //   const trackList = theTracks.map((track, i) => {
-  //     return (
-  //       <AudioWrapper key={track.id} onClick={() => handleTrackClick(track.id)}>
-  //         <AudioElement
-  //           activeTrack={activeTrack}
-  //           setActiveTrack={setActiveTrack}
-  //           track={theTracks[track.key]}
-  //           playPushed={playPushed}
-  //           addRef={addRef}
-  //           trackRefs={trackArray}
-  //           handleEnd={handleEnd}
-  //         />
-  //       </AudioWrapper>
-  //     )
-  //   })
-  // }, [activeTrack, playPushed, activeTracks, handleEnd, handleTrackClick])
+  useEffect(() => {
+    console.log(allTracks, "tracks")
+  }, [activeTrack])
 
   const handleClick = (e: any) => {
     setPlayPushed(!playPushed)
@@ -278,6 +214,7 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
           <PlayButton />
         </Play>
       </PlayBack>
+      <AudioElement activeTrack={activeTrack} handleEnd={handleEnd} />
     </Playlist>
   )
 }
@@ -386,7 +323,6 @@ const PlayButton = styled(PlayButtonSVG)`
   }
 `
 
-
 const PauseButton = styled(PauseButtonSVG)`
   opacity: 1;
   position: absolute;
@@ -451,7 +387,6 @@ const Play = styled.button<{ play: boolean }>`
     margin-left: 5px;
   }
 `
-
 
 const ProgressInner = styled.div<{ active: boolean }>`
   width: 100%;

@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useRef } from "react"
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react"
 import styled from "styled-components"
 import media from "styles/media"
 import text from "styles/text"
@@ -13,7 +19,10 @@ import AudioPlayer from "./AudioPlayer"
 export const DesktopContext = createContext(false)
 export const TabletContext = createContext(false)
 export const MobileContext = createContext(false)
-export const AudioPlayerContext = createContext([])
+export const AudioPlayerContext = createContext<{
+  activeTrack: number[]
+  setActiveTracks: React.Dispatch<React.SetStateAction<number[]>> | null
+}>({ activeTrack: [-1], setActiveTracks: null })
 import { Dispatch, SetStateAction } from "react"
 
 type Props = {
@@ -32,14 +41,20 @@ export const Layout: React.FC<Props> = ({ children, data }) => {
         window.innerWidth <= 1200 &&
         window.innerHeight > window.innerWidth)
   )
-  const [activeTracks, setActiveTracks] =
-    useState<Dispatch<SetStateAction<string[]>>>()
+  const [activeTracks, setActiveTracks] = useState<string[]>(["-1"])
   const combinedTracks = useRef([
     ...data.allContentfulConcertPiece.nodes,
     ...data.allContentfulMovement.nodes,
     ...data.allContentfulMediaPiece.nodes,
   ])
-  const [parsedTracks, setParsedTracks] = useState<any[] | null>(null)
+  const [parsedTracks, setParsedTracks] = useState<any[] | undefined>(undefined)
+  const value = useMemo(
+    () => ({
+      activeTracks,
+      setActiveTracks,
+    }),
+    [activeTracks]
+  )
 
   const parseTracks = (trackArray: any[]) => {
     console.log(trackArray, "tracks")
@@ -67,7 +82,7 @@ export const Layout: React.FC<Props> = ({ children, data }) => {
     <DesktopContext.Provider value={desktop}>
       <TabletContext.Provider value={tablet}>
         <MobileContext.Provider value={mobile}>
-          <AudioPlayerContext.Provider value={setActiveTracks}>
+          <AudioPlayerContext.Provider value={value}>
             <Header />
             <AudioPlayer allTracks={parsedTracks} activeTracks={activeTracks} />
             <SEO></SEO>
