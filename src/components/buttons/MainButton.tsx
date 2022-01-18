@@ -12,6 +12,7 @@ type props = {
   borderColor?: string
   backgroundColor?: string
   bGOpacity?: number | string
+  limit?: boolean | undefined
 }
 
 const MainButton: React.FC<props> = ({
@@ -20,12 +21,14 @@ const MainButton: React.FC<props> = ({
   borderColor,
   backgroundColor,
   bGOpacity,
+  limit,
 }) => {
   return (
     <Button
       borderColor={borderColor}
       onClick={onClick}
       bGOpacity={bGOpacity || "00"}
+      limit={limit}
     >
       <span>{children}</span>
       <BG bGColor={backgroundColor ? backgroundColor : colors.buttonGrey} />
@@ -57,7 +60,11 @@ const BG = styled.div<{ bGColor: string }>`
   }
 `
 
-const Button = styled.button<{ borderColor?: string; bGOpacity: any }>`
+const Button = styled.button<{
+  borderColor?: string
+  bGOpacity: any
+  limit: boolean | undefined
+}>`
   position: relative;
   width: 7.5vw;
   height: 7.5vw;
@@ -96,8 +103,18 @@ const Button = styled.button<{ borderColor?: string; bGOpacity: any }>`
 
   ${media.tablet} {
   }
-  ${media.mobile} {
-  }
+
   ${media.fullWidth} {
+    ${props =>
+      props.limit &&
+      `
+          width: 120px;
+  height: 120px;
+    `};
+  }
+  ${media.mobile} {
+    width: 12vw;
+    height: 12vw;
+    ${text.mobile.bodyS};
   }
 `

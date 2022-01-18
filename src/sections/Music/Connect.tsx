@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 import text from "styles/text"
-import colors from "styles/Colors"
+import colors from "styles/colors"
 import media from "styles/media"
 import connectBG from "assets/images/connectBG.jpg"
 import connectBGM from "assets/images/connectBGM.jpg"
@@ -49,8 +49,8 @@ const Connect: React.FC<{ mobile: boolean }> = ({ mobile }) => {
         enter={enter}
         leftVal={mobile ? "100%" : "12.8vw"}
         topVal={mobile ? "60vw" : "43.1vw"}
-        leftValT={"40%"}
-        topValT={"248px"}
+        leftValT={"55%"}
+        topValT={"25vw"}
         close={true}
       />
     </Wrapper>
@@ -73,9 +73,9 @@ const Wrapper = styled.section`
     background-image: url(${connectBGM});
   }
 
-  ${media.tabletPortrait} {
-    width: 100%;
-    height: 1607px;
+  ${media.fullWidth} {
+    height: 1446.4px;
+    padding: 164.8px 0;
   }
 `
 
@@ -87,15 +87,16 @@ const Text = styled.p`
   ${media.mobile} {
     font-size: 3.9vw;
   }
-  ${media.tabletPortrait} {
-    font-size: 20px;
+
+  ${media.fullWidth} {
+    ${text.fullWidth.bodyM};
   }
 `
 const Collaborate = styled.div`
   position: absolute;
   width: 37.4vw;
   height: 31.4vw;
-  left: 55.4vw;
+  right: 12.4vw;
   top: 26.5vw;
 
   ${media.mobile} {
@@ -104,11 +105,17 @@ const Collaborate = styled.div`
     left: 2.4vw;
     top: 208.4vw;
   }
-  ${media.tabletPortrait} {
-    width: 492px;
-    height: 395px;
-    left: 30px;
-    top: 900px;
+
+  ${media.tablet} {
+    right: 55%;
+    top: 52vw;
+  }
+
+  ${media.fullWidth} {
+    width: 598.4px;
+    height: 502.4px;
+    right: 192px;
+    top: 424px;
   }
 `
 
@@ -120,8 +127,10 @@ const SubTitle = styled.h3`
     font-size: 8.7vw;
     text-align: right;
   }
-  ${media.tabletPortrait} {
-    font-size: 45px;
+
+  ${media.fullWidth} {
+    ${text.fullWidth.h3};
+    margin-bottom: 30.4px;
   }
 `
 

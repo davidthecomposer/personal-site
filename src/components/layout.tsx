@@ -10,7 +10,7 @@ import media from "styles/media"
 import text from "styles/text"
 import colors from "styles/colors"
 import SEO from "components/seo"
-import { graphql } from "gatsby"
+import { graphql, StaticQuery } from "gatsby"
 import "fonts/reset.css"
 import "fonts/typography.css"
 import Header from "./Header"
@@ -19,11 +19,17 @@ import AudioPlayer from "./AudioPlayer"
 export const DesktopContext = createContext(false)
 export const TabletContext = createContext(false)
 export const MobileContext = createContext(false)
+export const IntroAnimationContext = createContext<boolean>(true)
 export const AudioPlayerContext = createContext<{
-  activeTrack: number[]
-  setActiveTracks: React.Dispatch<React.SetStateAction<number[]>> | null
-}>({ activeTrack: [-1], setActiveTracks: null })
-import { Dispatch, SetStateAction } from "react"
+  activeTracks: HTMLAudioElement | null
+  setActiveTracks: React.Dispatch<ActiveTrack> | null
+}>({ activeTracks: null, setActiveTracks: () => {} })
+
+type ActiveTrack = {
+  audioRef: React.SetStateAction<HTMLAudioElement | null>
+  title: string
+  year: string
+}
 
 type Props = {
   children: any
@@ -41,13 +47,13 @@ export const Layout: React.FC<Props> = ({ children, data }) => {
         window.innerWidth <= 1200 &&
         window.innerHeight > window.innerWidth)
   )
-  const [activeTracks, setActiveTracks] = useState<string[]>(["-1"])
-  const combinedTracks = useRef([
-    ...data.allContentfulConcertPiece.nodes,
-    ...data.allContentfulMovement.nodes,
-    ...data.allContentfulMediaPiece.nodes,
-  ])
-  const [parsedTracks, setParsedTracks] = useState<any[] | undefined>(undefined)
+  const [activeTracks, setActiveTracks] = useState<ActiveTrack | null>({
+    audioRef: null,
+    title: "none",
+    year: "2022",
+  })
+  const [intro, setIntro] = useState<boolean>(true)
+
   const value = useMemo(
     () => ({
       activeTracks,
@@ -56,17 +62,10 @@ export const Layout: React.FC<Props> = ({ children, data }) => {
     [activeTracks]
   )
 
-  const parseTracks = (trackArray: any[]) => {
-    console.log(trackArray, "tracks")
-  }
-
   useEffect(() => {
-    const tracks = combinedTracks.current.filter(track => {
-      return track.audio !== null
-    })
-    console.log(tracks, "parsed")
-    setParsedTracks(tracks)
-  }, [])
+    console.log(activeTracks, "in layout")
+  }, [activeTracks])
+
   useEffect(() => {
     window.addEventListener("resize", () => {
       setDesktop(window.innerWidth > 1024)
@@ -79,19 +78,98 @@ export const Layout: React.FC<Props> = ({ children, data }) => {
   }, [])
 
   return (
-    <DesktopContext.Provider value={desktop}>
-      <TabletContext.Provider value={tablet}>
-        <MobileContext.Provider value={mobile}>
-          <AudioPlayerContext.Provider value={value}>
-            <Header />
-            <AudioPlayer allTracks={parsedTracks} activeTracks={activeTracks} />
-            <SEO></SEO>
-            <Main>{children}</Main>
-            <Footer />
-          </AudioPlayerContext.Provider>
-        </MobileContext.Provider>
-      </TabletContext.Provider>
-    </DesktopContext.Provider>
+    <StaticQuery
+      query={graphql`
+        query AudioQuery {
+          allContentfulEnsemble {
+            distinct(field: ensembleName)
+          }
+          allContentfulConcertPiece(sort: { fields: ensemble___ensembleName }) {
+            nodes {
+              instrumentation
+              id
+              duration
+              key
+              title
+              year
+              movements {
+                mvtNumber
+              }
+              ensemble {
+                backgroundColor
+                button
+                ensembleName
+              }
+              audio {
+                file {
+                  fileName
+                  url
+                  contentType
+                }
+              }
+            }
+          }
+          allContentfulMovement {
+            nodes {
+              parent {
+                id
+              }
+              audio {
+                file {
+                  fileName
+                  url
+                  contentType
+                }
+              }
+              key
+              mvtNumber
+              title
+            }
+          }
+          allContentfulMediaPiece {
+            nodes {
+              storyBlurb {
+                storyBlurb
+              }
+              musicBlurb {
+                musicBlurb
+              }
+              audio {
+                file {
+                  url
+                  contentType
+                }
+              }
+              key
+              tags
+              title
+              images {
+                file {
+                  url
+                }
+              }
+            }
+          }
+        }
+      `}
+      render={data => (
+        <DesktopContext.Provider value={desktop}>
+          <TabletContext.Provider value={tablet}>
+            <MobileContext.Provider value={mobile}>
+              <AudioPlayerContext.Provider value={value}>
+                <IntroAnimationContext.Provider value={intro}>
+                  <Header setIntro={setIntro} />
+                  <AudioPlayer data={data} activeTracks={activeTracks} />
+                  <SEO></SEO>
+                  <Main>{children}</Main>
+                  <Footer />
+                </IntroAnimationContext.Provider>
+              </AudioPlayerContext.Provider>
+            </MobileContext.Provider>
+          </TabletContext.Provider>
+        </DesktopContext.Provider>
+      )}
+    />
   )
 }
 

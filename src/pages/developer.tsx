@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
-import colors from "assets/styles/Colors"
+import colors from "assets/styles/colors"
 import media from "assets/styles/media"
 
 const MusicPage: React.FC = () => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import { PrimaryButtonStyle } from "styles/Buttons"
-import colors from "styles/Colors"
+import { PrimaryButtonStyle } from "styles/buttons"
+import colors from "styles/colors"
 import text from "styles/text"
 import media from "styles/media"
 import { graphql, navigate } from "gatsby"
@@ -226,16 +226,6 @@ const NewsTitle = styled.h3`
     }
   }
   ${media.tabletPortrait} {
-    font-size: 37px;
-    :after {
-      content: "";
-      position: absolute;
-      width: 446px;
-      height: 2px;
-      top: 35px;
-      background: #e5fcfa;
-      border-radius: 1px;
-    }
   }
 `
 const TitleContainer = styled.div`
@@ -243,14 +233,7 @@ const TitleContainer = styled.div`
   height: 6.25vw;
   padding: 0.75vw 0 0 0;
   position: relative;
-
   color: ${colors.coolWhite};
-  ${media.mobile} {
-    margin-bottom: 6vw;
-  }
-  ${media.tabletPortrait} {
-    margin-bottom: 31px;
-  }
 `
 
 const NewsRow = styled.div`
@@ -308,16 +291,6 @@ const ButtonRow = styled.div`
   z-index: 1;
   display: flex;
   justify-content: space-between;
-  ${media.mobile} {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 9.7vw;
-    margin: 0;
-  }
-  ${media.tabletPortrait} {
-    height: 50px;
-  }
 `
 
 const Text = styled.div`
@@ -330,11 +303,6 @@ const Text = styled.div`
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
   overflow: hidden;
-
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-  }
 `
 
 const NewsItemsWrapper = styled.div`

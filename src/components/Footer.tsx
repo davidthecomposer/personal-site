@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import styled from "styled-components"
 import media from "styles/media"
-import colors from "styles/Colors"
+import colors from "styles/colors"
 import gsap from "gsap"
 import text from "styles/text"
 // import twitter from "assets/svg/twitterIcon.svg";
@@ -175,6 +175,7 @@ const Wrapper = styled.footer`
   padding: 4.1vw 2.3vw;
   z-index: 999;
   right: 0;
+  box-sizing: border-box;
   background: linear-gradient(
     128.33deg,
     #2c354b 11.05%,
@@ -184,12 +185,6 @@ const Wrapper = styled.footer`
   ${media.mobile} {
     height: auto;
     padding: 12.6vw 2.4vw 6vw;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  ${media.tabletPortrait} {
-    height: auto;
-    padding: 65px 36px 31px;
     flex-direction: column;
     justify-content: flex-start;
   }
@@ -206,11 +201,6 @@ const BuildColumn = styled.div`
     margin-left: 3vw;
     margin-bottom: 12vw;
   }
-  ${media.tabletPortrait} {
-    width: 90%;
-    margin-left: 15px;
-    margin-bottom: 82px;
-  }
 `
 
 const Title = styled.h3`
@@ -221,9 +211,6 @@ const Title = styled.h3`
   }
   ${media.mobile} {
     font-size: 8.7vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 45px;
   }
 `
 
@@ -238,10 +225,6 @@ const Text = styled.p`
   ${media.mobile} {
     font-size: 3.9vw;
     width: 86vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 20px;
-    width: 100%;
   }
 `
 
@@ -268,9 +251,6 @@ const Email = styled.div`
       margin-top: 3vw;
     }
   }
-  ${media.tabletPortrait} {
-    font-size: 20px;
-  }
 `
 
 const FooterSub = styled.h4`
@@ -281,9 +261,6 @@ const FooterSub = styled.h4`
   }
   ${media.mobile} {
     font-size: 7.2vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 37px;
   }
 `
 
@@ -317,16 +294,6 @@ const Socials = styled.div`
       }
     }
   }
-  ${media.tabletPortrait} {
-    margin-bottom: 82px;
-    a {
-      margin-right: 44px;
-      img {
-        width: 40px;
-        height: 40px;
-      }
-    }
-  }
 `
 
 const HeaderLine = styled.div`
@@ -342,11 +309,6 @@ const HeaderLine = styled.div`
     width: 91.3vw;
     height: 0.5vw;
     margin: 0.5vw 3.9vw 7.2vw 0;
-  }
-  ${media.tabletPortrait} {
-    width: calc(100% - 57px);
-    height: 2px;
-    margin: 2px 20px 37px 0;
   }
 `
 
@@ -399,14 +361,6 @@ const OutBoundLink = styled.a`
     img {
       width: 6.3vw;
       height: 4.8vw;
-    }
-  }
-  ${media.tabletPortrait} {
-    font-size: 20px;
-    margin-bottom: 25px;
-    img {
-      width: 30px;
-      height: 23px;
     }
   }
 `

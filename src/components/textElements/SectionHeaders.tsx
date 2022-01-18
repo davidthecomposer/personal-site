@@ -76,9 +76,9 @@ const HeaderWrapper = styled.div`
   ${media.mobile} {
     height: 29.7vw;
   }
-  ${media.tabletPortrait} {
-    margin-left: 15px;
-    height: 75px;
+  ${media.tablet} {
+    margin-left: 1.95vw;
+    height: 7.5vw;
   }
 `
 
@@ -103,7 +103,8 @@ const Header = styled.h2<{ left?: boolean; small?: boolean }>`
 
   ${media.mobile} {
   }
-  ${media.tabletPortrait} {
+  ${media.tablet} {
+    ${props => (props.small ? text.tablet.h4 : text.tablet.h3)};
   }
 `
 const HeaderLine = styled.div<{ left?: boolean }>`
@@ -124,10 +125,10 @@ const HeaderLine = styled.div<{ left?: boolean }>`
     width: 82vw;
     margin-left: 5vw;
   }
-  ${media.tabletPortrait} {
-    height: 5px;
-    border-radius: 5px;
-    width: calc(100% - 26px);
-    margin-left: 26px;
+  ${media.tablet} {
+    height: 0.49vw;
+    border-radius: 0.49vw;
+    width: calc(100% - 7vw);
+    margin-left: ${props => (props.left ? "0" : "3vw")};
   }
 `

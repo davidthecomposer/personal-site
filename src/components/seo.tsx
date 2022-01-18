@@ -92,23 +92,6 @@ const SEO: React.FC<SEOProps> = ({
   )
 }
 
-// SEO.defaultProps = {
-//   lang: `en`,
-//   meta: [],
-//   description: ``,
-//   title: "",
-//   image: "",
-// };
-
-// SEO.propTypes = {
-//   description: PropTypes.string,
-//   lang: PropTypes.string,
-//   meta: PropTypes.arrayOf(PropTypes.object),
-//   title: PropTypes.string.isRequired,
-//   image: PropTypes.string,
-//   url: PropTypes.string,
-// };
-
 type PropertyMetaObj = {
   property: string
   content: string

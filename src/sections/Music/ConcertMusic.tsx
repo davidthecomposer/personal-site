@@ -1,18 +1,21 @@
-import React, { useRef, useEffect, useState, useCallback } from "react"
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+} from "react"
 import styled from "styled-components"
-import text from "styles/text"
-import colors from "styles/Colors"
-import media from "styles/media"
+import text from "assets/styles/text"
+import colors from "assets/styles/colors"
+import media from "assets/styles/media"
 import ContactForm from "components/ContactForm"
 import concertMusicBG from "assets/images/concertMusic.jpg"
 import concertMusicBGM from "assets/images/concertMusicM.jpg"
-import { navigate } from "gatsby"
-import { ReactComponent as TrebleUnderlaySVG } from "assets/svg/trebleUnderlay.svg"
-import { ReactComponent as AltoUnderlaySVG } from "assets/svg/altoUnderlay.svg"
-import { ReactComponent as BassUnderlaySVG } from "assets/svg/bassUnderlay.svg"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
-import { gatsbyImageIsInstalled } from "gatsby-plugin-image/dist/src/components/hooks"
+
+import PieceCard from "components/elements/PieceCard"
 
 type props = {
   mobile: boolean
@@ -37,87 +40,41 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
     )
   })
 
-  // const allConcert = data.map((genre: any, index: number) => {
-  //   const { nexTitle, playList, allPieces, tabName } = genre
-
-  //   const {
-  //     title,
-  //     year,
-  //     movements,
-  //     instrumentation,
-  //     duration,
-  //     key,
-  //     ensemble: { backgroundColor, button, ensembleName },
-  //   } = genre
-
-  //   const allInstrumentation = instrumentation.map((ins: any, i: any) => {
-  //     return <Instrument key={`${key}-inst-${i}`}>{ins}</Instrument>
-  //   })
-
-  //   return (
-  //     <PieceCard key={key} bGColor={backgroundColor}>
-  //       <PieceTitle>{title}</PieceTitle>
-  //       <Instrumentation>{allInstrumentation}</Instrumentation>
-  //       <Year>{year}</Year>
-  //       <Duration>{duration}</Duration>
-  //       <Movements>{movements.length}</Movements>
-  //       <MainButton backgroundColor={button} borderColor={button}>
-  //         More
-  //       </MainButton>
-  //       {index % 3 === 0 ? (
-  //         <BassUnderlay />
-  //       ) : index % 2 === 0 ? (
-  //         <AltoUnderlay />
-  //       ) : (
-  //         <TrebleUnderlay />
-  //       )}
-  //     </PieceCard>
-  //   )
-  // })
-
   const renderPieces = (data: any) => {
-    return data.map((genre: any, index: number) => {
-      const { nexTitle, playList, allPieces, tabName } = genre
+    return data
+      .sort((a: any, b: any) => b.year - a.year)
+      .map((genre: any, index: number) => {
+        const {
+          title,
+          year,
+          movements,
+          instrumentation,
+          duration,
+          key,
+          audio,
+          ensemble: { backgroundColor, button, ensembleName },
+        } = genre
 
-      const {
-        title,
-        year,
-        movements,
-        instrumentation,
-        duration,
-        key,
-        ensemble: { backgroundColor, button, ensembleName },
-      } = genre
+        const allInstrumentation = instrumentation.map((ins: any, i: any) => {
+          return <Instrument key={`${key}-inst-${i}`}>{ins}</Instrument>
+        })
+        const movementNumber = movements ? movements.length : 1
 
-      const allInstrumentation = instrumentation.map((ins: any, i: any) => {
-        return <Instrument key={`${key}-inst-${i}`}>{ins}</Instrument>
+        return (
+          <PieceCard
+            myKey={key}
+            title={title}
+            allInstrumentation={allInstrumentation}
+            year={year}
+            duration={duration}
+            movementNumber={movementNumber}
+            button={button}
+            audio={audio?.file.url}
+            backgroundColor={backgroundColor}
+            index={index}
+          />
+        )
       })
-      const movementNumber = movements ? movements.length : 1
-
-      return (
-        <PieceCard key={key} bGColor={backgroundColor}>
-          <PieceTitle>{title}</PieceTitle>
-          <Instrumentation>{allInstrumentation}</Instrumentation>
-          <Year>{year}</Year>
-          <Duration>{duration}</Duration>
-          <Movements>{movementNumber}</Movements>
-          <MainButton
-            backgroundColor={button}
-            borderColor={button}
-            onClick={() => navigate(`/music/${key}`)}
-          >
-            More
-          </MainButton>
-          {index % 3 === 0 ? (
-            <BassUnderlay />
-          ) : index % 2 === 0 ? (
-            <AltoUnderlay />
-          ) : (
-            <TrebleUnderlay />
-          )}
-        </PieceCard>
-      )
-    })
   }
 
   const filterPieces = useCallback(
@@ -150,7 +107,6 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
           }
         })
       } else if (filterValue) {
-        console.log("filtering")
         newArticles = pieces.filter((piece: any) => {
           if (filterValue === "All") {
             return piece
@@ -206,6 +162,7 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
               }}
               backgroundColor={colors.storyBlue}
               borderColor={colors.coolWhiteLight}
+              limit
             >
               GET IN <br /> TOUCH
             </MainButton>
@@ -218,11 +175,11 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
           </Text>
         </CTA>
         <ContactForm
-          setEnter={setEnter}
           enter={enter}
           leftVal={mobile ? "100%" : "63.4vw"}
-          topVal={mobile ? "0" : "2vw"}
-          leftValT={"40%"}
+          topVal={"0"}
+          setEnter={setEnter}
+          leftValT={"55%"}
           topValT={"0"}
         />
       </BottomSection>
@@ -241,17 +198,8 @@ const Wrapper = styled.section`
   -webkit-transform-style: preserve-3d;
   -webkit-backface-visibility: hidden; */
 
-  ${media.mobile} {
-    width: 100%;
-    height: 410.6vw;
-    padding: 0;
-    background-image: url(${concertMusicBGM});
-  }
-  ${media.tabletPortrait} {
-    width: 100%;
-    height: 2125px;
-    padding: 0;
-    background-image: url(${concertMusicBGM});
+  ${media.fullWidth} {
+    padding: 246px 0 0 0;
   }
 `
 
@@ -264,12 +212,6 @@ const MobileWrapper = styled.div`
     margin-top: 7vw;
     padding-top: 1vw;
   }
-  ${media.tabletPortrait} {
-    height: 674px;
-    width: 100%;
-    margin-top: 36px;
-    padding-top: 5px;
-  }
 `
 
 const Text = styled.div`
@@ -280,9 +222,10 @@ const Text = styled.div`
     font-size: 3.9vw;
     width: 81.6vw;
   }
-  ${media.tabletPortrait} {
-    font-size: 20px;
-    width: 422px;
+
+  ${media.fullWidth} {
+    ${text.fullWidth.bodyS};
+    width: 309px;
   }
 `
 
@@ -297,18 +240,17 @@ const CTA = styled.div<{ enter: boolean }>`
   ${Text} {
     width: 36vw;
   }
-  ${media.mobile} {
-    top: 0;
-    width: 82.1vw;
-    left: ${props => (props.enter ? "-100vw" : "4.1vw")};
-    transition: 0.5s;
-    height: 100vw;
-  }
-  ${media.tabletPortrait} {
-    width: 425px;
-    left: ${props => (props.enter ? "-517px" : "21px")};
 
-    height: 517px;
+  ${media.fullWidth} {
+    width: 576px;
+    height: 317px;
+    left: 101px;
+    top: 32px;
+    z-index: 3;
+
+    ${Text} {
+      width: 576px;
+    }
   }
 `
 
@@ -318,11 +260,10 @@ const HeadLine = styled.h3`
   width: 26vw;
   margin-bottom: 1.7vw;
 
-  ${media.mobile} {
-    font-size: 8.7vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 45px;
+  ${media.fullWidth} {
+    ${text.fullWidth.h3};
+    width: 416px;
+    margin-bottom: 27.2px;
   }
 `
 
@@ -330,9 +271,10 @@ const BottomSection = styled.div`
   position: relative;
   height: 31.25vw;
   margin-bottom: 9.38vw;
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
+
+  ${media.fullWidth} {
+    height: 500px;
+    margin-bottom: 150px;
   }
 `
 
@@ -343,168 +285,14 @@ const ConcertPiecesContainer = styled.div`
   background: rgba(23, 27, 28, 0.73);
   border-radius: 0.25vw;
   margin: 3.38vw auto 19.44vw;
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-    left: 467px;
-    width: 450px;
-    height: 657px;
-    margin-right: 36px;
-  }
-`
 
-const PieceCard = styled.div<{ bGColor: string }>`
-  position: relative;
-  opacity: 1,
-  z-index: 1,
-  width: 100%;
-  height: 8.75vw;
-  display: flex;
-  align-items: center;
-  color: ${colors.coolWhite};
-  background: ${props => props.bGColor};
-  opacity: 0.8;
-  transition: 0.4s;
-
-
-  ${media.hover} {
-    :hover {
-      opacity: 1;
-    svg {
-      path {
-          stroke-opacity: 0.2;
-          fill-opacity: 0.2;
-          transition: 0.4s;
-        }
-
-    }
-
-    }
-  }
-border-radius: 0.5vw;
-  margin-bottom: 20px;
-  padding: 0 2.19vw;
-  ${media.mobile} {
-    width: calc(100% - 8.8vw);
-    height: calc(100% - 2vw);
-    padding: 2vw 4.8vw 0 0;
-    top: 0;
-  }
-  ${media.tabletPortrait} {
-    width: calc(100% - 45px);
-    height: calc(100% - 10px);
-    padding: 10px 25px 0 0;
-    top: 0;
-  }
-`
-const PieceTitle = styled.h3`
-  ${text.desktop.h5};
-  width: 18.06vw;
-  text-align: left;
-
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-    font-size: 26px;
-  }
-`
-
-const TrebleUnderlay = styled(TrebleUnderlaySVG)`
-  position: absolute;
-  width: 82.88vw;
-  height: 8.63vw;
-  left: 0;
-  top: 0.13vw;
-  z-index: 0;
-  path {
-    transition: 0.4s;
-  }
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
   ${media.fullWidth} {
+    width: 1400px;
+    padding: 36px;
+    background: rgba(23, 27, 28, 0.73);
+    border-radius: 4px;
+    margin: 54px auto 311px;
   }
-`
-const AltoUnderlay = styled(AltoUnderlaySVG)`
-  position: absolute;
-  width: 82.88vw;
-  height: 8.63vw;
-  left: 0;
-  top: 0.13vw;
-  z-index: 0;
-  path {
-    transition: 0.4s;
-  }
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
-  ${media.fullWidth} {
-  }
-`
-const BassUnderlay = styled(BassUnderlaySVG)`
-  position: absolute;
-  width: 82.88vw;
-  height: 8.63vw;
-  left: 0;
-  top: 0.13vw;
-  z-index: 0;
-  path {
-    transition: 0.4s;
-  }
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
-  ${media.fullWidth} {
-  }
-`
-
-const Year = styled.h4`
-  ${text.desktop.bodyM};
-  width: 9.19vw;
-  text-align: left;
-  margin-left: 1.88vw;
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-  }
-`
-
-const Movements = styled.div`
-  ${text.desktop.bodyL};
-  width: 16vw;
-  padding-left: 1.25vw;
-  ${media.mobile} {
-    font-size: 4vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 20px;
-  }
-`
-
-const Duration = styled.div`
-  ${text.desktop.bodyL};
-  width: 9.25vw;
-  padding-left: 1.25vw;
-  ${media.mobile} {
-    font-size: 4.3vw;
-    right: 5vw;
-    bottom: 5vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 24px;
-    right: 20px;
-    bottom: 20px;
-  }
-`
-
-const Instrumentation = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 17.75vw;
-  margin-left: 1.25vw;
 `
 
 const Instrument = styled.div`
@@ -516,15 +304,13 @@ const Instrument = styled.div`
   padding: 0.1vw 0.4vw;
   margin-right: 0.63vw;
   margin-bottom: 0.63vw;
-  ${media.mobile} {
-    font-size: 2.9vw;
-    border-radius: 2.4vw;
-    padding: 0.8vw 1vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 15px;
+
+  ${media.fullWidth} {
+    ${text.fullWidth.bodyS};
     border-radius: 8px;
-    padding: 4px 5px;
+    padding: 1.6px 6.4px;
+    margin-right: 10.08px;
+    margin-bottom: 10.08px;
   }
 `
 
@@ -535,11 +321,11 @@ const TopLabels = styled.div`
   align-items: center;
   margin-bottom: 1.25vw;
   padding: 0 1.88vw;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
+
   ${media.fullWidth} {
+    height: 36px;
+    margin-bottom: 20px;
+    padding: 0 30.08px;
   }
 `
 
@@ -558,7 +344,6 @@ const Label = styled.p`
   :nth-of-type(3) {
     //Year
     width: 9.19vw;
-    margin-left: 1.88vw;
   }
   :nth-of-type(4) {
     //Duration
@@ -573,6 +358,25 @@ const Label = styled.p`
   ${media.mobile} {
   }
   ${media.fullWidth} {
+    :nth-of-type(1) {
+      //Title
+      width: 256px;
+    }
+    :nth-of-type(2) {
+      //Instruments
+      width: 284px;
+    }
+    :nth-of-type(3) {
+      //Year
+      width: 147.04px;
+    }
+    :nth-of-type(4) {
+      //Duration
+      width: 148px;
+    }
+    :nth-of-type(5) {
+      //Movements
+    }
   }
 `
 
@@ -597,11 +401,14 @@ const SearchBar = styled.div`
   align-items: center;
   border-radius: 0.25vw;
   margin: 6.25vw auto 0;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
+
   ${media.fullWidth} {
+    width: 1400px;
+    height: 70px;
+    border: 5px solid #344546;
+
+    border-radius: 4px;
+    margin: 100px auto 0;
   }
 `
 
@@ -630,6 +437,9 @@ const Search = styled.input`
   ${media.mobile} {
   }
   ${media.fullWidth} {
+    ${text.fullWidth.h6};
+    margin-right: 30.08px;
+    height: 40px;
   }
 `
 
@@ -676,11 +486,10 @@ const FilterButton = styled.button`
     }
   }
 
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
   ${media.fullWidth} {
+    ${text.fullWidth.h6};
+    margin-right: 30.08px;
   }
 `
+
 export default ConcertMusic

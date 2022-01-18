@@ -1,5 +1,5 @@
 import media from "./media"
-import colors from "./Colors"
+import colors from "./colors"
 
 const mainStyles = {
   headings: `font-family: "Nixie One";
@@ -101,8 +101,90 @@ const text = {
        font-size: 0.75vw;
        `,
   },
-  tablet: {},
-  mobile: {},
+  tablet: {
+    h1: `
+      ${mainStyles.headings};
+      font-size: 9.38vw;
+      `,
+    h2: `
+      ${mainStyles.headings};
+      font-size: 7.81vw;
+      `,
+    h3: `
+      ${mainStyles.headings};
+      font-size: 6.25vw;
+      `,
+    h4: `
+      ${mainStyles.headings};
+      font-size: 4.69vw;
+      `,
+    h5: `
+      ${mainStyles.headings};
+      font-size: 3.52vw;
+      `,
+    h6: `
+      ${mainStyles.headings};
+      font-size: 2.34vw;
+      `,
+    bodyL: `
+      ${mainStyles.body};
+      font-size: 3.52vw;
+      `,
+    bodyM: `
+      ${mainStyles.body};
+      font-size: 2.34vw;
+      `,
+    bodyS: `
+      ${mainStyles.body};
+      font-size: 1.76vw;
+      `,
+    bodyXS: `
+      ${mainStyles.body};
+      font-size: 1.17vw;
+      `,
+  },
+  mobile: {
+    h1: `
+      ${mainStyles.headings};
+      font-size: 11.21vw;
+      `,
+    h2: `
+      ${mainStyles.headings};
+      font-size: 9.35vw;
+      `,
+    h3: `
+      ${mainStyles.headings};
+      font-size: 7.48vw;
+      `,
+    h4: `
+      ${mainStyles.headings};
+      font-size: 5.61vw;
+      `,
+    h5: `
+      ${mainStyles.headings};
+      font-size: 4.21vw;
+      `,
+    h6: `
+      ${mainStyles.headings};
+      font-size: 2.8vw;
+      `,
+    bodyL: `
+      ${mainStyles.body};
+      font-size: 4.21vw;
+      `,
+    bodyM: `
+      ${mainStyles.body};
+      font-size: 2.8vw;
+      `,
+    bodyS: `
+      ${mainStyles.body};
+      font-size: 2.1vw;
+      `,
+    bodyXS: `
+      ${mainStyles.body};
+      font-size: 1.87vw;
+      `,
+  },
 }
 
 export default text

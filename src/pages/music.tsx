@@ -8,7 +8,7 @@ import ConcertMusic from "sections/Music/ConcertMusic"
 import About from "sections/Music/About"
 import News from "sections/Music/News"
 import Connect from "sections/Music/Connect"
-import AudioPlayer from "components/AudioPlayer"
+
 type data = {
   data: any
 }
@@ -23,7 +23,7 @@ const MusicPage: React.FC<data> = ({ data }) => {
   return (
     <Wrapper>
       {/* <AudioPlayer /> */}
-      <Hero mobile={mobile} />
+      <Hero data={newsData} mobile={mobile} />
       <MediaMusic data={mediaData} mobile={mobile} />
       <ConcertMusic tags={uniqueConcert} data={concertData} mobile={mobile} />
       <News data={newsData} />

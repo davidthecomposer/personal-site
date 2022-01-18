@@ -7,9 +7,9 @@ import React, {
 } from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
-import { PrimaryButtonStyle } from "assets/styles/Buttons"
+import { PrimaryButtonStyle } from "assets/styles/buttons"
 import { MobileContext } from "components/layout"
-import colors from "assets/styles/Colors"
+import colors from "assets/styles/colors"
 import media from "assets/styles/media"
 import MainButton from "./buttons/MainButton"
 import gsap from "gsap"
@@ -47,6 +47,7 @@ const ContactForm: React.FC<{
 
   useEffect(() => {
     if (form.current) {
+      console.log(enter)
       const tl = gsap.timeline()
       if (enter) {
         tl.to(form.current, { scale: 1, duration: 0 }, 0).to(
@@ -145,7 +146,7 @@ const ContactForm: React.FC<{
             onChange={(e: any) => updateFormState(e)}
           />
         </FormRow>
-        {mobile && !close && <Close onClick={closeModal}>Close</Close>}
+
         <input type="hidden" name="form-name" value="connect-form" />
         <MainButton
           onClick={() => {
@@ -182,21 +183,17 @@ const FormModal = styled.form<{
   border-radius: 0.5vw;
   opacity: 0;
   transform: scale(0);
+  box-sizing: border-box;
 
   ${media.mobile} {
-    width: 100%;
-    box-sizing: border-box;
-    height: 100.5vw;
-    transform: scale(1);
-    left: ${props => (props.enter ? 0 : props.leftVal)};
-    padding: 10vw 10vw 10vw 6.3vw;
   }
-  ${media.tabletPortrait} {
-    width: 345px;
-    height: 333px;
+  ${media.tablet} {
+    width: 33.69vw;
+    height: 32.52vw;
     left: ${props => props.leftValT};
     top: ${props => props.topValT};
-    padding: 55px 43px 53px 26px;
+
+    ${text.tablet.bodyS};
   }
 `
 
@@ -204,12 +201,13 @@ const FormRow = styled.div`
   display: flex;
   ${text.desktop.bodyS}
   width: 100%;
-  display: flex;
+
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1vw;
 
-  ${media.mobile} {
+  ${media.tablet} {
+    ${text.tablet.bodyXS}
   }
   ${media.tabletPortrait} {
   }
@@ -220,6 +218,7 @@ const FormText = styled.label`
   margin-left: 0.6vw;
   color: ${colors.coolWhite};
   ${media.tablet} {
+    margin-right: 0;
   }
   ${media.mobile} {
   }
@@ -231,11 +230,14 @@ const TextInput = styled.input`
   height: 2.5vw;
   width: 20vw;
   background: ${colors.inputTeal};
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  border: none;
+
   border-radius: 0.3vw;
   padding-left: 1vw;
 
   ${media.tablet} {
+    height: 3vw;
   }
   ${media.mobile} {
   }
@@ -257,35 +259,14 @@ const TextArea = styled.textarea`
   ${text.desktop.bodyS}
   color: black;
   ${media.tablet} {
+   
+    height: 9vw;
+
   }
   ${media.mobile} {
-    width: 60.4vw;
-    height: 30vw;
-
-    font-size: clamp(16px, 3.6vw, 4vw);
+]
   }
-  ${media.tabletPortrait} {
-    width: 250px;
-    height: 120px;
-  }
-`
-
-const Close = styled.button`
-  ${media.mobile} {
-    ${PrimaryButtonStyle};
-    position: absolute;
-    width: 30.3vw;
-    height: 9.7vw;
-    bottom: 0;
-    z-index: 5;
-  }
-  ${media.tabletPortrait} {
-    font-size: 18px;
-    width: 125px;
-    height: 40px;
-    border-radius: 6px;
-    bottom: 0;
-  }
+ 
 `
 
 const SuccessMessage = styled.div<{ success: boolean }>`
@@ -299,11 +280,15 @@ const SuccessMessage = styled.div<{ success: boolean }>`
 
 const Wrapper = styled.div<{ success: boolean }>`
   ${text.desktop.bodyS}
-
   position: absolute;
   transform: scale(${props => (props.success ? 0 : 1)});
   opacity: (${props => (props.success ? 0 : 1)});
   transition: 0.5s;
+
+  ${media.tablet} {
+    ${text.tablet.bodyS};
+    width: 85%;
+  }
 `
 
 export default ContactForm

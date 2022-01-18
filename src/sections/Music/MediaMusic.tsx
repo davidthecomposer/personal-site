@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react"
 import ContactForm from "components/ContactForm"
 import styled from "styled-components"
 import text from "styles/text"
-import colors from "styles/Colors"
+import colors from "styles/colors"
 import media from "styles/media"
 import mediaMusicBG from "assets/images/mediaMusicBG.jpg"
-import { PrimaryButtonStyle } from "styles/Buttons"
+import { PrimaryButtonStyle } from "styles/buttons"
 import { mediaPieces } from "data/MediaPieces"
 
 import gsap from "gsap"
@@ -57,25 +57,36 @@ const MediaMusic: React.FC<props> = ({ mobile, data }) => {
     }
   }, [])
 
+  const playMedia = () => {}
+
   const allTracks = data.map((track: any, i: number) => {
     console.log(track)
     return (
       <MediaPiece key={`track-presentation-${i}`} className={`media_pieces`}>
         <ImageWrapper>
           <ControlPanel>
-            <MainButton bGOpacity={"20"} backgroundColor={colors.activeTeal}>
+            <MainButton
+              limit
+              bGOpacity={"20"}
+              backgroundColor={colors.activeTeal}
+              // onClick={() => playMedia(track.key)}
+            >
               LISTEN
             </MainButton>
           </ControlPanel>
           <img src={track.images[0].file.url} alt={track.title} />
           <TextWrapper>
-            <TrackText>{track.story}</TrackText>
+            <TrackText>{track.storyBlurb.storyBlurb}</TrackText>
           </TextWrapper>
         </ImageWrapper>
         <Title>{track.title}</Title>
       </MediaPiece>
     )
   })
+
+  const handleEnter = () => {
+    setEnter(mobile ? !enter : true)
+  }
 
   return (
     <Wrapper id="media-music">
@@ -88,11 +99,10 @@ const MediaMusic: React.FC<props> = ({ mobile, data }) => {
           <Row>
             <HeadLine>Have a Media Project?</HeadLine>
             <MainButton
-              onClick={() => {
-                setEnter(mobile ? !enter : true)
-              }}
+              onClick={handleEnter}
               borderColor={colors.coolWhiteLight}
               backgroundColor={colors.activeTeal}
+              limit
             >
               GET IN <br /> TOUCH
             </MainButton>
@@ -109,9 +119,9 @@ const MediaMusic: React.FC<props> = ({ mobile, data }) => {
         <ContactForm
           enter={enter}
           leftVal={mobile ? "100%" : "63.4vw"}
-          topVal={mobile ? "0" : "92.3vw"}
+          topVal={"0"}
           setEnter={setEnter}
-          leftValT={"33%"}
+          leftValT={"55%"}
           topValT={"0"}
         />
       </BottomSection>
@@ -127,56 +137,50 @@ const Wrapper = styled.section`
   box-sizing: border-box;
 
   ${media.mobile} {
-    width: 100%;
-    height: 360.5vw;
-    padding: 0;
-    background-position: 50% 50%;
+    padding: 22vw 2vw 0 2vw;
   }
-  ${media.tabletPortrait} {
-    width: 100%;
-    height: 1865px;
+  ${media.tablet} {
+  }
+  ${media.fullWidth} {
+    padding: 342px 0 0 0;
   }
 `
 
 const BottomSection = styled.div`
   position: relative;
-  height: 1000px;
+  height: 45.5vw;
+  width: 100%;
+  margin-top: 16.4vw;
   ${media.tablet} {
   }
   ${media.mobile} {
-    position: relative;
-    display: flex;
-    width: 100vw;
-    overflow: hidden;
-    height: 100vw;
-    margin-top: 16.4vw;
   }
   ${media.tabletPortrait} {
-    width: 90%;
-    height: 875px;
-    margin-top: 150px;
+  }
+  ${media.fullWidth} {
+    height: 728px;
   }
 `
 
 const MediaPieces = styled.div`
   position: relative;
   width: 96vw;
-  margin: 6.25vw auto;
+  margin: 6.25vw auto 10vw auto;
   height: auto;
   display: flex;
   flex-wrap: wrap;
 
   ${media.tablet} {
+    width: 85vw;
   }
   ${media.mobile} {
-    left: 100vw;
-    top: 0;
-    height: 100%;
-    width: 100vw;
+    width: 96vw;
   }
   ${media.tabletPortrait} {
-    left: 517px;
-    width: 517px;
+  }
+  ${media.fullWidth} {
+    width: 1536px;
+    margin: 100px auto;
   }
 `
 
@@ -188,19 +192,18 @@ const TextWrapper = styled.div`
   z-index: 3;
   padding: 1.25vw 0.5vw 1.25vw 9vw;
   position: absolute;
-  background: #00000090;
+  background: #00000050;
   color: ${colors.coolWhite};
   opacity: 0;
   transition: 0.3s;
   ${media.tablet} {
   }
   ${media.mobile} {
-    top: 85vw;
-    width: 90.3vw;
+    padding-left: 20%;
   }
-  ${media.tabletPortrait} {
-    top: 440px;
-    width: 467px;
+
+  ${media.fullWidth} {
+    padding: 20px 8px 20px 144px;
   }
 `
 const ImageWrapper = styled.div`
@@ -218,17 +221,35 @@ const ImageWrapper = styled.div`
     transition: 0.4s;
   }
 
-  ${media.mobile} {
-    width: 90.3vw;
-    height: 54.3vw;
-    left: 4.8vw;
-    top: 25.6vw;
+  ${media.tablet} {
+    width: 37.76vw;
+    height: 22.14vw;
+    img {
+      width: 37.76vw;
+      height: 22.14vw;
+      top: 0;
+      right: 0;
+      filter: grayscale(0%);
+      transition: 0.4s;
+    }
   }
-  ${media.tabletPortrait} {
-    width: 467px;
-    height: 281px;
-    left: 25px;
-    top: 132px;
+
+  ${media.mobile} {
+    width: 98.13vw;
+    height: 58.41vw;
+
+    img {
+      width: 100%;
+      height: 58.41vw;
+    }
+  }
+  ${media.fullWidth} {
+    width: 484px;
+    height: 284px;
+    img {
+      width: 484px;
+      height: 284px;
+    }
   }
 `
 
@@ -245,6 +266,9 @@ const MediaPiece = styled.div`
   margin-bottom: 1.88vw;
   margin-right: 1.25vw;
   padding: 0;
+  img {
+    filter: grayscale(100%);
+  }
 
   background: linear-gradient(
     94.3deg,
@@ -252,8 +276,20 @@ const MediaPiece = styled.div`
     rgba(7, 10, 1, 0.5) 0.1%,
     rgba(16, 17, 16, 0.38) 99.67%
   );
+  -webkit-box-shadow: 5px 5px 5px 0px #00000000,
+    inset 4px 4px 15px 0px #00000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+  box-shadow: 5px 5px 5px 0px #00000000, inset 4px 4px 15px 0px #00000000,
+    5px 5px 15px 5px rgba(0, 0, 0, 0);
+
   ${media.hover} {
     :hover {
+      -webkit-box-shadow: 5px 5px 5px 0px ${colors.dullerTeal},
+        inset 4px 4px 15px 0px ${colors.dullerTeal},
+        5px 5px 15px 5px rgba(0, 0, 0, 0);
+      box-shadow: 5px 5px 5px 0px ${colors.dullerTeal},
+        inset 4px 4px 15px 0px ${colors.dullerTeal},
+        5px 5px 15px 5px rgba(0, 0, 0, 0);
+
       ${TextWrapper} {
         opacity: 1;
         transition: 0.3s;
@@ -261,21 +297,29 @@ const MediaPiece = styled.div`
 
       ${ImageWrapper} {
         img {
-          filter: grayscale(80%);
+          filter: grayscale(0);
+          opacity: 1;
         }
       }
     }
   }
 
   ${media.tablet} {
+    width: 37.76vw;
+    height: 26.17vw;
+    margin-right: 4vw;
   }
   ${media.mobile} {
-    width: 97vw;
-    height: 120.8vw;
+    width: 96%;
+    height: 67.76vw;
+    margin-right: 0;
+    margin-bottom: 5vw;
   }
-  ${media.tabletPortrait} {
-    width: 502px;
-    height: 625px;
+
+  ${media.fullWidth} {
+    width: 484px;
+    height: 335px;
+    border-radius: 6px;
   }
 `
 
@@ -289,6 +333,20 @@ const ControlPanel = styled.div`
   width: 7.5vw;
   height: 100%;
   z-index: 10;
+
+  ${media.mobile} {
+    width: 20%;
+    align-items: center;
+    button {
+      width: 16vw;
+      height: 16vw;
+      border-radius: 16vw;
+    }
+  }
+  ${media.fullWidth} {
+    left: 5.6px;
+    width: 120px;
+  }
 `
 
 const Text = styled.div`
@@ -298,8 +356,17 @@ const Text = styled.div`
   ${media.mobile} {
     font-size: 4.3vw;
   }
-  ${media.tabletPortrait} {
-    font-size: 22px;
+  ${media.tablet} {
+    ${text.tablet.bodyXS};
+    width: 37.24vw;
+  }
+
+  ${media.mobile} {
+    ${text.mobile.bodyXS};
+  }
+  ${media.fullWidth} {
+    ${text.fullWidth.bodyS};
+    width: 272px;
   }
 `
 
@@ -309,15 +376,19 @@ const TrackText = styled.p`
   opacity: 1;
   position: relative;
 
-  ${media.mobile} {
-    font-size: 3.9vw;
-    width: 90.3vw;
-    left: 4.8vw;
+  ${media.tablet} {
+    ${text.tablet.bodyXS};
+    font-size: 1.3vw;
+    width: 25vw;
   }
-  ${media.tabletPortrait} {
-    font-size: 20px;
-    width: 467px;
-    left: 25px;
+
+  ${media.mobile} {
+    ${text.mobile.bodyM};
+    width: 90%;
+  }
+  ${media.fullWidth} {
+    ${text.fullWidth.bodyXS};
+    font-size: 16px;
   }
 `
 
@@ -329,9 +400,17 @@ const Title = styled.h3`
   color: ${colors.coolWhite};
   margin-top: 0.63vw;
   padding-right: 0.63vw;
-  ${media.mobile} {
+
+  ${media.tablet} {
+    font-size: 2.86vw;
   }
-  ${media.tabletPortrait} {
+  ${media.mobile} {
+    font-size: 4.6vw;
+  }
+  ${media.fullWidth} {
+    ${text.fullWidth.h5};
+    margin-top: 10.08px;
+    padding-right: 10.08px;
   }
 `
 
@@ -356,10 +435,15 @@ const CTA = styled.div<{ enter: boolean }>`
   }
 
   ${media.tabletPortrait} {
-    width: 475px;
-    left: ${props => (props.enter ? "-517px" : "21px")};
-
-    height: 517px;
+  }
+  ${media.fullWidth} {
+    width: 576px;
+    height: 316.8px;
+    left: 100.8px;
+    top: 32px;
+    ${Text} {
+      width: 576px;
+    }
   }
 `
 
@@ -375,7 +459,12 @@ const HeadLine = styled.h3`
     font-size: 8.7vw;
   }
   ${media.tabletPortrait} {
-    font-size: 36px;
+  }
+  ${media.fullWidth} {
+    ${text.fullWidth.h3};
+    width: 416px;
+
+    margin-bottom: 27.2px;
   }
 `
 
@@ -385,6 +474,8 @@ const Row = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
+  }
+  ${media.fullWidth} {
   }
   ${media.fullWidth} {
   }

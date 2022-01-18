@@ -3,36 +3,131 @@ import React, {
   useRef,
   useState,
   useContext,
+  forwardRef,
   useCallback,
 } from "react"
 import styled from "styled-components"
-import text from "styles/text"
-import colors from "styles/Colors"
-import media from "styles/media"
+import text from "assets/styles/text"
+import colors from "assets/styles/colors"
 import gsap from "gsap"
-import { PrimaryButtonStyle } from "styles/Buttons"
-import { MobileContext } from "components/layout"
-import { ReactComponent as PlayButtonSVG } from "svg/playButton.svg"
-import { ReactComponent as PauseButtonSVG } from "svg/pauseButton.svg"
+import media from "assets/styles/media"
+import { MobileContext, AudioPlayerContext } from "components/layout"
+import { StaticQuery, graphql } from "gatsby"
+import { ReactComponent as PlayButtonSVG } from "assets/svg/playButton.svg"
+import { ReactComponent as PauseButtonSVG } from "assets/svg/pauseButton.svg"
 
 type AudioElementProps = {
-  activeTrack: string
-  setActiveTrack: React.Dispatch<React.SetStateAction<number>>
-  handleEnd: any
+  audio: string
+  myKey: string
+  getRef: any
 }
 
-const AudioElement: React.FC<AudioElementProps> = ({
-  activeTrack,
-  setActiveTrack,
-  handleEnd,
+export const AudioPlayerElement: React.FC<AudioElementProps> = ({
+  audio,
+  myKey,
+  getRef,
 }) => {
   const player = useRef<HTMLAudioElement>(null)
-  const [timeRemaining, setTimeRemaining] = useState("0:00")
-  const progress = useRef<HTMLDivElement | null>(null)
-  const row = useRef<HTMLDivElement | null>(null)
+  const [check, setCheck] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (player.current) {
+      getRef(player.current)
+    }
+  }, [myKey, check])
+
+  return (
+    <Player
+      className={`audio_${myKey}`}
+      src={audio}
+      ref={player}
+      onLoadedMetadata={() => setCheck(!check)}
+      preload="metadata"
+      playsInline
+      controls
+    />
+  )
+}
+
+type Props = {}
+type ActiveTrack = {
+  audioRef: React.SetStateAction<HTMLAudioElement | null>
+  title: string
+  year: string
+}
+const AudioPlayer: React.FC<Props> = () => {
+  const playList = useRef(null)
+  const [playPushed, setPlayPushed] = useState(false)
+  const mobile = useContext(MobileContext)
   const [canProgress, setCanProgress] = useState<boolean>(false)
+  const shouldAutoPlay = useRef(false)
+  const playTrack = useRef(true)
+  const [player, setPlayer] = useState<HTMLAudioElement | null>(null)
+  const importedRef = useContext(AudioPlayerContext).activeTracks?.audioRef
+  const title = useContext(AudioPlayerContext).activeTracks?.title
+  const year = useContext(AudioPlayerContext).activeTracks?.year
+  const setActiveTracks = useContext(AudioPlayerContext).setActiveTracks
+  const row = useRef<HTMLDivElement | null>(null)
+  const [timeRemaining, setTimeRemaining] = useState("0:00")
   const [progressCheck, setProgressCheck] = useState<number>(0)
-  const loaded = useRef(false)
+  const progress = useRef<HTMLDivElement | null>(null)
+  const progressChecked = useRef<number>(1)
+
+  useEffect(() => {
+    if (player) {
+      player.addEventListener("durationchange", getDuration)
+      player.addEventListener("timeupdate", getDuration)
+      player.addEventListener("ended", handleEnd)
+      setCanProgress(true)
+      setPlayPushed(true)
+      progressChecked.current = 1
+      return () => {
+        player.removeEventListener("durationchange", getDuration)
+        player.removeEventListener("timeupdate", getDuration)
+        player.removeEventListener("ended", handleEnd)
+      }
+    }
+  }, [player])
+
+  useEffect(() => {
+    setPlayer(importedRef)
+
+    return () => {
+      setPlayer(null)
+    }
+  }, [importedRef])
+
+  const getDuration = () => {
+    if (player) {
+      const time =
+        //@ts-ignore
+        Math.floor(player.duration) -
+        //@ts-ignore
+        Math.floor(player.currentTime)
+      const timeRemainingFormat = returnTimeString(time)
+      setTimeRemaining(timeRemainingFormat)
+      progressChecked.current = progressChecked.current + 1
+
+      if (progressChecked.current < 4) {
+        console.log("wth", progressChecked.current)
+        setProgressCheck(time)
+      }
+    }
+  }
+
+  const handleClick = (e: any) => {
+    setPlayPushed(!playPushed)
+    playTrack.current = !playTrack.current
+    if (playTrack.current) {
+      //@ts-ignore
+      player.play()
+      setCanProgress(true)
+    } else {
+      //@ts-ignore
+      player.pause()
+      setCanProgress(false)
+    }
+  }
 
   const returnTimeString = (time: number) => {
     return `${Math.floor(time / 60)}:${
@@ -45,164 +140,60 @@ const AudioElement: React.FC<AudioElementProps> = ({
         : "00"
     }`
   }
-
-  const getDuration = () => {
-    if (player.current) {
-      const time =
-        //@ts-ignore
-        Math.floor(player.current.duration) -
-        //@ts-ignore
-        Math.floor(player.current.currentTime)
-      const timeRemainingFormat = returnTimeString(time)
-      setTimeRemaining(timeRemainingFormat)
-    }
+  const handleRowClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    handleProgress(e)
   }
 
   const handleProgress = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (row.current && player.current) {
+    if (row.current && player) {
       const width = row.current.getBoundingClientRect().width
       const x = e.clientX - row.current.getBoundingClientRect().left
 
-      const newTime = Math.floor((x / width) * player.current.duration)
+      const newTime = Math.floor((x / width) * player.duration)
 
-      player.current.currentTime = newTime
+      player.currentTime = newTime
 
       setProgressCheck(newTime)
     }
   }
 
   useEffect(() => {
-    if (player.current) {
+    if (player) {
+      console.log("jumping here")
       const tl = gsap.timeline({
         paused: true,
 
         onUpdate: () => {
-          if (player.current) {
-            const time = player.current.currentTime
-            const duration = player.current.duration
+          if (player) {
+            const time = player.currentTime
+            const duration = player.duration
             const percentage = `${(time / duration).toFixed(4)}`
 
             gsap.set(progress.current, { scaleX: percentage, ease: "none" })
           }
         },
       })
-      tl.to(progress.current, { duration: player?.current.duration }, 0)
+      tl.to(progress.current, { duration: player.duration }, 0)
 
       if (canProgress) {
         tl.play()
       } else {
-        const time = player.current.currentTime
-        const duration = player.current.duration
+        const time = player.currentTime
+        const duration = player.duration
         const percentage = `${(time / duration).toFixed(4)}`
         gsap.set(progress.current, { scaleX: percentage, ease: "none" })
         tl.pause()
       }
     }
   }, [canProgress, progressCheck])
-
-  useEffect(() => {
-    if (player.current) {
-      if (activeTrack === track.id && playPushed) {
-        allTracks[activeTrack].play()
-        setCanProgress(true)
-      } else {
-        setCanProgress(false)
-      }
-    }
-  }, [activeTrack, track, playPushed, trackRefs])
-
-  const handleRowClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    handleProgress(e)
-  }
-
-  return (
-    <Track
-      selected={activeTrack === track.id}
-      key={track.id}
-      data-id={track.id}
-    >
-      <Player
-        onDurationChange={getDuration}
-        onTimeUpdate={getDuration}
-        onEnded={handleEnd}
-        src={activeTrack}
-        ref={player}
-        preload="metadata"
-        playsInline
-        controls
-      />
-      <Row1
-        className={`media-track_row${track.id}`}
-        active={activeTrack === track.id}
-        ref={row}
-        onClick={e => {
-          handleRowClick(e)
-        }}
-      >
-        <Text>{track.title}</Text>
-        <Text>{timeRemaining}</Text>
-        <ProgressInner
-          active={activeTrack === track.id}
-          className={`media__progress${track.id}`}
-          ref={progress}
-        />
-      </Row1>
-    </Track>
-  )
-}
-
-type Props = {
-  activeTracks?: string[]
-  allTracks?: any[]
-}
-
-const AudioPlayer: React.FC<Props> = ({ activeTracks, allTracks }) => {
-  const playList = useRef(null)
-  const [playPushed, setPlayPushed] = useState(false)
-  const [activeTrack, setActiveTrack] = useState<string>("")
-  const mobile = useContext(MobileContext)
-  const [autoPlay, setAutoPlay] = useState(false)
-  const shouldAutoPlay = useRef(false)
-  const trackArray = useRef([])
-  const playTrack = useRef(false)
-
-  const handleEnd = useCallback(() => {
-    //@ts-ignore
-    trackArray.current[activeTrack].currentTime = 0
-    //@ts-ignore
-    trackArray.current[activeTrack].pause()
-
-    if (!shouldAutoPlay.current) {
-      setPlayPushed(false)
-    }
-  }, [activeTrack])
-
-  useEffect(() => {
-    console.log(allTracks, "tracks")
-  }, [activeTrack])
-
-  const handleClick = (e: any) => {
-    setPlayPushed(!playPushed)
-    playTrack.current = !playTrack.current
-    if (playTrack.current) {
-      //@ts-ignore
-      trackArray.current[activeTrack].play()
-    } else {
-      //@ts-ignore
-      trackArray.current[activeTrack].pause()
+  const handleEnd = () => {
+    if (setActiveTracks) {
+      setActiveTracks({ audioRef: null, title: "", year: "" })
     }
   }
 
-  useEffect(() => {
-    if (autoPlay) {
-      shouldAutoPlay.current = true
-    } else {
-      shouldAutoPlay.current = false
-    }
-  }, [autoPlay])
-
   return (
-    <Playlist ref={playList}>
+    <Playlist activeTrack={player ? true : false} ref={playList}>
       <PlayBack>
         <Play
           aria-label="play and pause button"
@@ -214,19 +205,34 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks, allTracks }) => {
           <PlayButton />
         </Play>
       </PlayBack>
-      <AudioElement activeTrack={activeTrack} handleEnd={handleEnd} />
+      <Track activeTrack={player ? true : false}>
+        <Row1
+          className={`media-track_row`}
+          ref={row}
+          onClick={e => {
+            handleRowClick(e)
+          }}
+        >
+          <Text>
+            {title} ({year})
+          </Text>
+          <Text>{timeRemaining}</Text>
+          <ProgressInner className={`media__progress`} ref={progress} />
+        </Row1>
+      </Track>
     </Playlist>
   )
 }
 
-const Playlist = styled.div`
+const Playlist = styled.div<{ activeTrack: boolean }>`
   position: fixed;
   width: 22.5vw;
-  height: auto;
+  height: 8vw;
   min-height: 8vw;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  opacity: 1;
+  z-index: 10000;
   border: 0.1vw solid rgba(219, 219, 219, 0.15);
   /* card Shadow */
   background: radial-gradient(
@@ -241,7 +247,8 @@ const Playlist = styled.div`
   border-radius: 5px;
   box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25);
   border-radius: 0.3vw;
-
+  transform: scaleY(${({ activeTrack }) => (activeTrack ? 1 : 0)});
+  transition: transform 0.3s;
   ${media.mobile} {
     position: absolute;
     width: 94vw;
@@ -388,7 +395,7 @@ const Play = styled.button<{ play: boolean }>`
   }
 `
 
-const ProgressInner = styled.div<{ active: boolean }>`
+const ProgressInner = styled.div`
   width: 100%;
   height: 100%;
 
@@ -405,17 +412,15 @@ const ProgressInner = styled.div<{ active: boolean }>`
   transform-origin: 0% 0%;
 `
 
-const Track = styled.div<{ selected: boolean }>`
+const Track = styled.div<{ activeTrack: boolean }>`
   ${text.desktop.bodyS};
-  width: 100%;
-  height: 2.6vw;
+  width: 94%;
+  height: 2vw;
   cursor: pointer;
   transition: 0.3s;
-
-  ${ProgressInner} {
-    opacity: ${props => (props.selected ? 0.6 : 0.07)};
-  }
-
+  margin: 4.5vw auto 0;
+  opacity: ${({ activeTrack }) => (activeTrack ? 1 : 0.01)};
+  transition: 0.3s;
   ${media.hover} {
     :hover {
       ${Text} {
@@ -433,23 +438,25 @@ const Track = styled.div<{ selected: boolean }>`
   }
 `
 
-const Row1 = styled.div<{ active: boolean }>`
+const Row1 = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
   z-index: 1;
+  background: #00000090;
+  padding: 0 0.6vw 0;
   ${Text} {
     width: fit-content;
     transition: 0.3s;
-    color: ${props =>
-      props.active ? colors.coolWhite : colors.coolWhiteLight};
+    color: ${colors.coolWhite};
+    line-height: 200%;
   }
 `
 
 const Player = styled.audio`
   height: 0;
   width: 0;
-  position: relative;
+  position: absolute;
   padding: 0;
   display: none;
 `

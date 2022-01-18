@@ -6,8 +6,8 @@ import React, {
   useContext,
 } from "react"
 import styled from "styled-components"
-import { PrimaryButtonStyle } from "styles/Buttons"
-import colors from "styles/Colors"
+import { PrimaryButtonStyle } from "styles/buttons"
+import colors from "styles/colors"
 import text from "styles/text"
 import twitter from "assets/svg/twitterIcon.svg"
 import linkedin from "assets/svg/linkedIcon.svg"
@@ -20,14 +20,9 @@ import { navigate, graphql } from "gatsby"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
 import { renderRichText } from "gatsby-source-contentful/rich-text"
 import Layout, { AudioPlayerContext } from "components/layout"
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  LinkedinShareButton,
-} from "react-share"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
-
+import { AudioPlayerElement } from "components/AudioPlayer"
 type props = {
   mobile: boolean
   pageContext: any
@@ -39,8 +34,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
   const [mvtInfo, setMvtInfo] = useState([])
   const [activeCard, setActiveCard] = useState(1)
   const value = useContext(AudioPlayerContext)
-
-  console.log(value)
+  const lastTrack = useRef(0)
 
   const {
     movements,
@@ -144,24 +138,48 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
       value.setActiveTracks(arr)
     }
   }
+  const audioRefs = useRef([])
+  const [audioRef, setAudioRef] = useState<HTMLAudioElement | null>(null)
 
-  useEffect(() => {
-    if (value.activeTrack) {
-      console.log(value.activeTrack, "reading")
+  const handlePlay = (i: number, title: string, year: string) => {
+    if (value.setActiveTracks && audioRefs.current) {
+      audioRefs.current[lastTrack.current].pause()
+      audioRefs.current[lastTrack.current].currentTime = 0
+      lastTrack.current = i
+      audioRefs.current[i].play()
+      value.setActiveTracks({
+        audioRef: audioRefs.current[i],
+        title: title,
+        year: year,
+      })
+      //going to need to send in an object with anmy nmeeded Data (title image audioRef, composer etc)
     }
-  }, [value?.activeTrack])
+  }
+  const handleGetAudioRef = (ref: any) => {
+    const newArr = audioRefs.current
+    newArr.push(ref)
+
+    audioRefs.current = newArr
+  }
 
   const playList = sortedPlayList.map((mvt: any, i: number) => {
-    console.log(mvt)
     return (
       <Playlist
         key={`playlist-item-${i}`}
         onMouseEnter={() => setActiveCard(mvt.mvtNumber)}
       >
         <ButtonContainer visible={mvt.audio}>
-          <MainButton onClick={() => handleClick([mvt.key])}>PLAY</MainButton>
+          <MainButton
+            onClick={() => handlePlay(mvt.mvtNumber - 1, mvt.title, year || "")}
+          >
+            PLAY
+          </MainButton>
         </ButtonContainer>
-
+        <AudioPlayerElement
+          myKey={mvt.key}
+          getRef={handleGetAudioRef}
+          audio={mvt.audio ? mvt.audio.file.url : ""}
+        />
         <MvtName>{`${mvt.mvtNumber ? mvt.mvtNumber + "." : ""}  ${
           mvt.title
         }`}</MvtName>
@@ -231,17 +249,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
                   </MainButton>
                 </a>
               )}
-              {parsedMovements.length > 1 && (
-                <MainButton
-                  onClick={() => {
-                    console.log("add all mvts to playlist")
-                  }}
-                  borderColor={colors.coolWhiteLight}
-                  backgroundColor={colors.activeTeal}
-                >
-                  PLAY ALL
-                </MainButton>
-              )}
+              å
               <MainButton
                 onClick={() => {
                   navigate("/music")

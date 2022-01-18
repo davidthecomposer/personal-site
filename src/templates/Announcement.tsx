@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { PrimaryButtonStyle } from "styles/Buttons"
-import colors from "styles/Colors"
+import colors from "styles/colors"
 import text from "styles/text"
 import twitter from "assets/svg/twitterIcon.svg"
 import linkedin from "assets/svg/linkedIcon.svg"
@@ -199,15 +199,9 @@ const NewsStory = styled.section`
   min-height: 100vh;
   background: ${colors.deepPurple};
   padding: 6.25vw 0;
-  ${media.mobile} {
-    width: 100%;
-    height: 146.1vw;
-    margin-bottom: 30vw;
-  }
-  ${media.tabletPortrait} {
-    width: 517px;
-    height: 756px;
-    margin-bottom: 155px;
+  ${media.tablet} {
+    min-height: calc(100vh - 38vw);
+    padding: 6.25vw 0 0 0;
   }
 `
 
@@ -218,11 +212,6 @@ const Text = styled.p<{ collapse: boolean }>`
   transform: scaleY(${props => (props.collapse ? 0 : 1)});
   transition: 0.5s;
   /* opacity: ${props => (props.collapse ? 0 : 1)}; */
-
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-  }
 `
 
 const MainImage = styled.img`
@@ -232,15 +221,6 @@ const MainImage = styled.img`
   display: inline-block;
   position: relative;
   margin: 3.125vw 0 6.25vw 7.25vw;
-
-  ${media.mobile} {
-    width: 94.4vw;
-    height: 57.2vw;
-  }
-  ${media.tabletPortrait} {
-    width: 492px;
-    height: 298px;
-  }
 `
 
 const Sticky = styled.div`
@@ -259,10 +239,7 @@ const Sticky = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
+
   ${media.fullWidth} {
   }
 `
@@ -526,29 +503,54 @@ const ContributorBio = styled.div`
 
 const Heading1 = styled.h1`
   ${text.fullWidth.h1};
+  ${media.tablet} {
+    ${text.tablet.h1};
+  }
 `
 const Heading2 = styled.h2`
   ${text.fullWidth.h2};
+  ${media.tablet} {
+    ${text.tablet.h2};
+  }
 `
 const Heading3 = styled.h3`
   ${text.fullWidth.h3};
+  ${media.tablet} {
+    ${text.tablet.h3};
+  }
 `
 const Heading4 = styled.h4`
   ${text.fullWidth.h4};
+  ${media.tablet} {
+    ${text.tablet.h4};
+  }
 `
 const Heading5 = styled.h5`
   ${text.fullWidth.h5};
+  ${media.tablet} {
+    ${text.tablet.h5};
+  }
 `
 const Heading6 = styled.h6`
   ${text.fullWidth.h6};
+
+  ${media.tablet} {
+    ${text.tablet.h6};
+  }
 `
 const Paragraph = styled.p`
   ${text.fullWidth.bodyM};
+  ${media.tablet} {
+    ${text.tablet.bodyS};
+  }
 `
 const ExternalLink = styled.a`
   ${text.fullWidth.bodyM};
   text-decoration: none;
   color: ${colors.activeTeal};
+  ${media.tablet} {
+    ${text.tablet.bodyS};
+  }
 `
 
 export default NewsExpanded

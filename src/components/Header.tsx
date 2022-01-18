@@ -7,14 +7,14 @@ import React, {
 } from "react"
 import { MobileContext } from "components/layout"
 import styled from "styled-components"
-import media from "styles/media"
-import colors from "styles/Colors"
+import media from "assets/styles/media"
+import colors from "assets/styles/colors"
 import gsap from "gsap"
-import text from "styles/text"
+import text from "assets/styles/text"
 import { ReactComponent as DavidSigSVG } from "assets/svg/davidSig.svg"
 import { ReactComponent as DavidInitialsSVG } from "assets/svg/logoT.svg"
 
-const Header: React.FC<{}> = () => {
+const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   const mobile = useContext(MobileContext)
   // const tablet = useContext(TabletContext);
   const history = location.href
@@ -33,8 +33,8 @@ const Header: React.FC<{}> = () => {
   const pressed = useRef(false)
 
   useEffect(() => {
-    const pathname = window.location.href
-    console.log(window.location.href)
+    const pathname = window.location.pathname
+
     if (pathname) {
       if (pathname === "/") {
         setDisplay(true)
@@ -47,7 +47,7 @@ const Header: React.FC<{}> = () => {
         setRole("developer")
       }
     }
-  }, [window.location])
+  }, [window.location.pathname])
 
   useEffect(() => {
     if (mobile && !initial) {
@@ -102,16 +102,24 @@ const Header: React.FC<{}> = () => {
   }
 
   useEffect(() => {
+    const pathname = window.location.pathname
     const tl = gsap.timeline({
       onStart: () => (mobile ? null : setInitial(false)),
+      onComplete: () => setIntro(false),
     })
-    if (!mobile) {
+    if (!mobile && pathname === "/music") {
       gsap.set(line.current, { scaleY: 0, opacity: 0 })
       tl.to(
         line.current,
         { scaleY: 1, opacity: 1, duration: 0.6, ease: "power1.inOut" },
         0
       )
+        .to(
+          ".carousel_line1, .carousel_line2",
+          { stagger: 0.3, scaleX: "100%", duration: 1 },
+          0.2
+        )
+        .to(".carousel_vert", { scaleY: "100%", duration: 0.9 }, 0.5)
         .to(name.current, { left: 0, duration: 1.3, ease: "power1.inOut" }, 0.3)
 
         .to(
@@ -173,7 +181,11 @@ const Header: React.FC<{}> = () => {
             {
               width: "12vw",
               duration: 0.4,
-              onComplete: () => setInitial(false),
+              onComplete: () => {
+                console.log("hitting here")
+                setIntro(false)
+                setInitial(false)
+              },
             },
             2.3
           )
@@ -460,10 +472,6 @@ const Wrapper = styled.nav<{ willDisplay: boolean; open: boolean }>`
   ${media.mobile} {
     height: 19.3vw;
   }
-
-  ${media.tabletPortrait} {
-    height: 100px;
-  }
 `
 
 const TitleWrapper = styled.div`
@@ -479,11 +487,6 @@ const TitleWrapper = styled.div`
     font-size: 7vw;
     height: 100%;
     width: 90vw;
-  }
-  ${media.tabletPortrait} {
-    position: absolute;
-    font-size: 54px;
-    width: 691px;
   }
 
   ${media.fullWidth} {
@@ -507,11 +510,6 @@ const Line = styled.div<{ open: boolean; initial: boolean }>`
     margin-top: 1vw;
     width: 0.6vw;
   }
-  ${media.tabletPortrait} {
-    height: 33px;
-    margin-top: 4px;
-    width: 2px;
-  }
 `
 
 const TitleContainer = styled.div<{ open: boolean }>`
@@ -519,7 +517,7 @@ const TitleContainer = styled.div<{ open: boolean }>`
   overflow: hidden;
   padding-right: 1.3vw;
   width: 37vw;
-  height: 4.3vw;
+  height: 6vw;
   transform: scaleY(${props => (props.open ? 1 : 0)});
   opacity: ${props => (props.open ? 1 : 0)};
   transition: transform 0.3s 0.1s, opacity 0.5s;
@@ -530,12 +528,6 @@ const TitleContainer = styled.div<{ open: boolean }>`
     transform: none;
     height: 7vw;
     width: 55vw;
-  }
-
-  ${media.tabletPortrait} {
-    transform: none;
-    height: 54px;
-    width: 400px;
   }
 
   ${media.fullWidth} {
@@ -549,14 +541,17 @@ const Title = styled.h1`
   letter-spacing: -0.05em;
   color: ${colors.brightPurple};
   left: 100%;
+
+  ${text.desktop.h2};
+  line-height: 6vw;
 `
 
 const RoleContainer = styled.div<{ open: boolean }>`
   position: relative;
   overflow: hidden;
-  height: 2vw;
+  height: 3vw;
   padding-left: 1.3vw;
-  width: 11vw;
+  width: 15vw;
   margin-top: 0.8vw;
   transform: scaleY(${props => (props.open ? 1 : 0)});
   opacity: ${props => (props.open ? 1 : 0)};
@@ -567,23 +562,16 @@ const RoleContainer = styled.div<{ open: boolean }>`
     width: 20vw;
     padding-left: 2vw;
   }
-  ${media.tabletPortrait} {
-    height: 17px;
-    width: 83px;
-    padding-left: 8px;
-  }
 `
 
 const Role = styled.span`
-  font-size: 2vw;
+  ${text.desktop.h5};
   position: absolute;
-  letter-spacing: 0;
+
   left: -100%;
+  line-height: 3vw;
   ${media.mobile} {
     font-size: 4vw;
-  }
-  ${media.tabletPortrait} {
-    font-size: 17px;
   }
 `
 
@@ -605,11 +593,7 @@ const Link = styled.a<{ open: boolean }>`
   ${media.mobile} {
     font-size: 3.9vw;
     opacity: 0;
-  }
-  ${media.tabletPortrait} {
-    font-size: 16px;
-    opacity: 0;
-  }
+
 `
 
 const NavBtn = styled.button<{ open: boolean }>`
@@ -628,6 +612,7 @@ const NavBtn = styled.button<{ open: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  background: ${colors.dullerTeal};
   cursor: pointer;
   padding: 0;
   color: ${colors.coolWhite};
@@ -658,12 +643,6 @@ const NavBtn = styled.button<{ open: boolean }>`
     top: 2vw;
     right: 0.5vw;
     opacity: ${props => (props.open ? 0 : 1)};
-  }
-  ${media.tabletPortrait} {
-    width: 77px;
-    height: 77px;
-    top: 10px;
-    right: 2px;
   }
 `
 
@@ -707,9 +686,5 @@ const DavidInitials = styled(DavidInitialsSVG)`
   ${media.mobile} {
     width: 12vw;
     height: 12vw;
-  }
-  ${media.mobile} {
-    width: 50px;
-    height: 50px;
   }
 `
