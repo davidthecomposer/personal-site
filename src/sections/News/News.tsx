@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import { PrimaryButtonStyle } from "styles/buttons"
 import colors from "styles/colors"
 import text from "styles/text"
 import media from "styles/media"
@@ -112,20 +111,29 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   }
 
   return (
-    <Wrapper id="news">
-      <SectionHeaders left text="News" classRoot="news-header" />
-      <NewsItemsWrapper>
-        {allNewsItems.slice(0, 3)}
-
+    <Wrapper id="news_page">
+      <SectionHeaders left text="News" classRoot="news-page-header" />
+      <UpperRow>
         <MainButton
-          onClick={() => navigate("/news")}
           borderColor={colors.dullTeal}
           backgroundColor={colors.inputTeal}
           bGOpacity={"20"}
+          onClick={() => navigate("/music")}
         >
-          All News
+          Back to Music
         </MainButton>
-      </NewsItemsWrapper>
+      </UpperRow>
+      <NewsItemsWrapper>{allNewsItems}</NewsItemsWrapper>
+      <LowerRow>
+        <MainButton
+          borderColor={colors.dullTeal}
+          backgroundColor={colors.inputTeal}
+          bGOpacity={"20"}
+          onClick={() => navigate("/music")}
+        >
+          Back to Music
+        </MainButton>
+      </LowerRow>
     </Wrapper>
   )
 }
@@ -331,10 +339,39 @@ const Text = styled.div`
 const NewsItemsWrapper = styled.div`
   width: 87.5vw;
   position: relative;
-  margin: 12.5vw auto 0;
+  margin: 5vw auto;
+
+  button {
+    margin-bottom: 2vw;
+  }
+`
+
+const UpperRow = styled.div`
+  width: 100%;
+  height: fit-content;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  padding: 5vw 0 0 0;
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
+
+const LowerRow = styled.div`
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 5vw 0;
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
 `
 
 export default News

@@ -73,12 +73,12 @@ const HeaderWrapper = styled.div`
   margin-left: 5.6vw;
   overflow: hidden;
 
-  ${media.mobile} {
-    height: 29.7vw;
-  }
   ${media.tablet} {
     margin-left: 1.95vw;
     height: 7.5vw;
+  }
+  ${media.mobile} {
+    height: 10vw;
   }
 `
 
@@ -101,10 +101,11 @@ const Header = styled.h2<{ left?: boolean; small?: boolean }>`
   right: ${props => (props.left ? "auto" : "0")};
   z-index: 2;
 
-  ${media.mobile} {
-  }
   ${media.tablet} {
     ${props => (props.small ? text.tablet.h4 : text.tablet.h3)};
+  }
+  ${media.mobile} {
+    ${props => (props.small ? text.mobile.h4 : text.mobile.h3)};
   }
 `
 const HeaderLine = styled.div<{ left?: boolean }>`
@@ -119,16 +120,16 @@ const HeaderLine = styled.div<{ left?: boolean }>`
   transform-origin: ${props => (props.left ? "100%" : "0")};
   border-radius: 0.3vw;
 
-  ${media.mobile} {
-    height: 1vw;
-    border-radius: 1vw;
-    width: 82vw;
-    margin-left: 5vw;
-  }
   ${media.tablet} {
     height: 0.49vw;
     border-radius: 0.49vw;
     width: calc(100% - 7vw);
     margin-left: ${props => (props.left ? "0" : "3vw")};
+  }
+  ${media.mobile} {
+    height: 1vw;
+    border-radius: 1vw;
+    width: 82vw;
+    margin-left: ${props => (props.left ? "0" : "5vw")};
   }
 `

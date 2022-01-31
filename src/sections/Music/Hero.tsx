@@ -7,11 +7,8 @@ import colors from "assets/styles/colors"
 import { Canvas, useFrame } from "@react-three/fiber"
 import gsap from "gsap"
 import media from "assets/styles/media"
-import {
-  IntroAnimationContext,
-  MobileContext,
-  TabletContext,
-} from "components/layout"
+import { MobileContext, TabletContext } from "components/layout"
+import { IntroAnimationContext } from "pages/music"
 import { shaderMaterial } from "@react-three/drei"
 import { extend } from "@react-three/fiber"
 import { ReactThreeFiber } from "@react-three/fiber"
@@ -393,7 +390,7 @@ const Carousel = styled.div`
   }
   ${media.mobile} {
     width: 90%;
-    height: 75.46vw;
+    height: 80vw;
     margin: 15vw auto 0;
   }
   ${media.fullWidth} {
@@ -435,7 +432,8 @@ const Title = styled.h4`
   ${media.tablet} {
   }
   ${media.mobile} {
-    ${text.mobile.h5};
+    ${text.mobile.h4};
+    margin-bottom: 4vw;
   }
   ${media.fullWidth} {
     ${text.fullWidth.h4};
@@ -509,7 +507,7 @@ const BtnWrap = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
-    top: 1.5vw;
+    top: 2vw;
     bottom: auto;
   }
   ${media.fullWidth} {

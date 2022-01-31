@@ -1,5 +1,5 @@
 <svg  viewBox="0 0 1378 272" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g opacity="0.5">
+
 <g filter="url(#filter0_f_438_99)">
 <path d="M-370.401 600.975L524.065 778L1516.16 722.771L1656 284.133L1444.92 -33H202.163L-1011.57 103.911L-1096 360.873L-370.401 600.975Z" fill="url(#paint0_radial_438_99)"/>
 <path d="M-370.401 600.975L524.065 778L1516.16 722.771L1656 284.133L1444.92 -33H202.163L-1011.57 103.911L-1096 360.873L-370.401 600.975Z" stroke="black" stroke-width="0.88"/>
@@ -12,7 +12,7 @@
 <path d="M1036.63 501.687L1502 232.568L1356.81 -65.9252L203.696 -108L-630 -44.4908V329.419L-270.082 694.596L405.434 720L1036.63 501.687Z" fill="url(#paint2_radial_438_99)"/>
 <path d="M1036.63 501.687L1502 232.568L1356.81 -65.9252L203.696 -108L-630 -44.4908V329.419L-270.082 694.596L405.434 720L1036.63 501.687Z" stroke="black" stroke-width="0.88"/>
 </g>
-</g>
+
 <defs>
 <filter id="filter0_f_438_99" x="-1184.56" y="-121.44" width="2929.04" height="987.882" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>

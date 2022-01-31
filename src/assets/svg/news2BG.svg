@@ -43,11 +43,6 @@
 <stop stop-color="#418387"/>
 <stop offset="1" stop-color="#04434B" stop-opacity="0"/>
 </radialGradient>
-<clipPath id="clip0_438_118">
-<rect width="1378" height="272" fill="white"/>
-</clipPath>
-<clipPath id="clip1_438_118">
-<rect width="1378" height="272" fill="white" transform="translate(1378 272) rotate(-180)"/>
-</clipPath>
+
 </defs>
 </svg>

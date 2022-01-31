@@ -1,9 +1,14 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 import styled from "styled-components"
 import colors from "assets/styles/colors"
+import { navigate } from "gatsby"
 
 const IndexPage: React.FC = () => {
+  useEffect(() => {
+    navigate("/music")
+  }, [])
+
   return <Wrapper></Wrapper>
 }
 

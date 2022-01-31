@@ -49,13 +49,17 @@ export const AudioPlayerElement: React.FC<AudioElementProps> = ({
   )
 }
 
-type Props = {}
 type ActiveTrack = {
   audioRef: React.SetStateAction<HTMLAudioElement | null>
   title: string
   year: string
 }
-const AudioPlayer: React.FC<Props> = () => {
+type Props = {
+  activeTracks: ActiveTrack
+}
+
+const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
+  const { audioRef, title, year } = activeTracks
   const playList = useRef(null)
   const [playPushed, setPlayPushed] = useState(false)
   const mobile = useContext(MobileContext)
@@ -63,21 +67,21 @@ const AudioPlayer: React.FC<Props> = () => {
   const shouldAutoPlay = useRef(false)
   const playTrack = useRef(true)
   const [player, setPlayer] = useState<HTMLAudioElement | null>(null)
-  const importedRef = useContext(AudioPlayerContext).activeTracks?.audioRef
-  const title = useContext(AudioPlayerContext).activeTracks?.title
-  const year = useContext(AudioPlayerContext).activeTracks?.year
+  const importedRef = activeTracks.audioRef
   const setActiveTracks = useContext(AudioPlayerContext).setActiveTracks
   const row = useRef<HTMLDivElement | null>(null)
   const [timeRemaining, setTimeRemaining] = useState("0:00")
   const [progressCheck, setProgressCheck] = useState<number>(0)
   const progress = useRef<HTMLDivElement | null>(null)
   const progressChecked = useRef<number>(1)
+  const lastActive = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
     if (player) {
       player.addEventListener("durationchange", getDuration)
       player.addEventListener("timeupdate", getDuration)
       player.addEventListener("ended", handleEnd)
+      player.addEventListener("pause", handlePause)
       setCanProgress(true)
       setPlayPushed(true)
       progressChecked.current = 1
@@ -85,11 +89,17 @@ const AudioPlayer: React.FC<Props> = () => {
         player.removeEventListener("durationchange", getDuration)
         player.removeEventListener("timeupdate", getDuration)
         player.removeEventListener("ended", handleEnd)
+        player.removeEventListener("pause", handlePause)
       }
     }
   }, [player])
 
   useEffect(() => {
+    if (lastActive.current) {
+      lastActive.current.pause()
+    }
+
+    lastActive.current = importedRef
     setPlayer(importedRef)
 
     return () => {
@@ -109,7 +119,6 @@ const AudioPlayer: React.FC<Props> = () => {
       progressChecked.current = progressChecked.current + 1
 
       if (progressChecked.current < 4) {
-        console.log("wth", progressChecked.current)
         setProgressCheck(time)
       }
     }
@@ -192,6 +201,12 @@ const AudioPlayer: React.FC<Props> = () => {
     }
   }
 
+  const handlePause = () => {
+    console.log("why")
+    playTrack.current = !playTrack.current
+    setPlayPushed(false)
+  }
+
   return (
     <Playlist activeTrack={player ? true : false} ref={playList}>
       <PlayBack>
@@ -249,19 +264,24 @@ const Playlist = styled.div<{ activeTrack: boolean }>`
   border-radius: 0.3vw;
   transform: scaleY(${({ activeTrack }) => (activeTrack ? 1 : 0)});
   transition: transform 0.3s;
-  ${media.mobile} {
-    position: absolute;
-    width: 94vw;
-    height: 145vw;
-    left: auto;
-    top: auto;
-    margin: 0 3vw;
-  }
+
   ${media.tabletPortrait} {
     width: 486px;
     height: 750px;
 
     margin: 0 15px;
+  }
+  ${media.mobile} {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 16vw;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    margin: 0;
+    min-height: 6.94vw;
   }
 `
 
@@ -293,14 +313,6 @@ const PlayBack = styled.div`
   justify-content: space-between;
   padding: 0 1vw;
 
-  ${media.mobile} {
-    width: 79vw;
-    height: 22.5vw;
-    left: 2.7vw;
-    top: 2.7vw;
-    padding: 0 4.1vw;
-    align-items: flex-start;
-  }
   ${media.tabletPortrait} {
     width: 409px;
     height: 116px;
@@ -308,50 +320,36 @@ const PlayBack = styled.div`
     top: 14px;
     padding: 0 21px;
   }
+  ${media.mobile} {
+    position: relative;
+    width: 12vw;
+    height: 12vw;
+    left: 0;
+    top: 0;
+    padding: 0;
+    align-items: flex-start;
+    background: none;
+  }
 `
 
 const PlayButton = styled(PlayButtonSVG)`
   opacity: 1;
   position: relative;
-  width: 1.2vw;
-  height: 1.4vw;
+  width: 100%;
+  height: 100%;
   transition: 0.4s;
   ${media.tablet} {
-  }
-  ${media.mobile} {
-    width: 8vw;
-    height: 8vw;
-    margin-left: 1vw;
-  }
-  ${media.tabletPortrait} {
-    width: 41px;
-    height: 41px;
-    margin-left: 5px;
   }
 `
 
 const PauseButton = styled(PauseButtonSVG)`
   opacity: 1;
   position: absolute;
-  width: 2vw;
-  height: 2vw;
-  top: 0.2vw;
-  left: 0.2vw;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   transition: 0.4s;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-    width: 10vw;
-    height: 10vw;
-    left: 2vw;
-    top: 2vw;
-  }
-  ${media.tabletPortrait} {
-    width: 51px;
-    height: 51px;
-    left: 10px;
-    top: 10px;
-  }
 `
 const Play = styled.button<{ play: boolean }>`
   position: relative;
@@ -363,11 +361,16 @@ const Play = styled.button<{ play: boolean }>`
   justify-content: center;
   align-items: center;
   background: ${colors.formSkinPurprle};
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  outline: none;
 
   ${media.hover} {
     :hover {
       ${PlayButton}, ${PauseButton} {
         transform: scale(0.8);
+
         transition: 0.4s;
       }
     }
@@ -382,16 +385,9 @@ const Play = styled.button<{ play: boolean }>`
   }
 
   ${media.mobile} {
-    width: 14.5vw;
-    height: 14.5vw;
-    margin-top: 4vw;
-    margin-left: 1vw;
-  }
-  ${media.tabletPortrait} {
-    width: 75px;
-    height: 75px;
-    margin-top: 21px;
-    margin-left: 5px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
   }
 `
 
@@ -430,11 +426,13 @@ const Track = styled.div<{ activeTrack: boolean }>`
     }
   }
 
-  ${media.mobile} {
-    height: 10vw;
-  }
   ${media.tabletPortrait} {
     height: 51px;
+  }
+  ${media.mobile} {
+    height: 10vw;
+    width: 80%;
+    margin: 0;
   }
 `
 

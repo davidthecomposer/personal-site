@@ -10,14 +10,12 @@ import gsap from "gsap"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
 const Connect: React.FC<{ mobile: boolean }> = ({ mobile }) => {
-  const header = useRef(null)
-  const headerLine = useRef(null)
   const collaborate = useRef(null)
   const [enter, setEnter] = useState(false)
 
   useEffect(() => {
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: collaborate.current, start: "top 80%" },
+      scrollTrigger: { trigger: "#connect", start: "top 80%" },
     })
 
     tl.from(collaborate.current, {
@@ -48,7 +46,7 @@ const Connect: React.FC<{ mobile: boolean }> = ({ mobile }) => {
         setEnter={setEnter}
         enter={enter}
         leftVal={mobile ? "100%" : "12.8vw"}
-        topVal={mobile ? "60vw" : "43.1vw"}
+        topVal={mobile ? "30vw" : "43.1vw"}
         leftValT={"55%"}
         topValT={"25vw"}
         close={true}
@@ -66,16 +64,16 @@ const Wrapper = styled.section`
   background-image: url(${connectBG});
   overflow: hidden;
   color: ${colors.coolWhite};
-  ${media.mobile} {
-    width: 100%;
-    height: 310.6vw;
-    padding: 0;
-    background-image: url(${connectBGM});
-  }
 
   ${media.fullWidth} {
     height: 1446.4px;
     padding: 164.8px 0;
+  }
+  ${media.mobile} {
+    width: 100%;
+    height: 260vw;
+    padding: 0;
+    background-image: url(${connectBGM});
   }
 `
 
@@ -84,38 +82,33 @@ const Text = styled.p`
   position: relative;
   width: 100%;
 
-  ${media.mobile} {
-    font-size: 3.9vw;
-  }
-
   ${media.fullWidth} {
     ${text.fullWidth.bodyM};
+  }
+
+  ${media.mobile} {
+    font-size: 3.9vw;
   }
 `
 const Collaborate = styled.div`
   position: absolute;
   width: 37.4vw;
   height: 31.4vw;
-  right: 12.4vw;
+  right: 4vw;
   top: 26.5vw;
-
-  ${media.mobile} {
-    width: 95.2vw;
-    height: 76.3vw;
-    left: 2.4vw;
-    top: 208.4vw;
-  }
-
-  ${media.tablet} {
-    right: 55%;
-    top: 52vw;
-  }
 
   ${media.fullWidth} {
     width: 598.4px;
     height: 502.4px;
     right: 192px;
     top: 424px;
+  }
+
+  ${media.mobile} {
+    width: 95.2vw;
+    height: 76.3vw;
+    left: 2.4vw;
+    top: 160.4vw;
   }
 `
 

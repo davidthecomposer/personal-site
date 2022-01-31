@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState, createContext, useEffect } from "react"
 import styled from "styled-components"
 import Layout, { MobileContext } from "components/layout"
 import Hero from "sections/Music/Hero"
@@ -8,7 +8,8 @@ import ConcertMusic from "sections/Music/ConcertMusic"
 import About from "sections/Music/About"
 import News from "sections/Music/News"
 import Connect from "sections/Music/Connect"
-
+import Header from "components/Header"
+export const IntroAnimationContext = createContext<boolean>(true)
 type data = {
   data: any
 }
@@ -19,16 +20,23 @@ const MusicPage: React.FC<data> = ({ data }) => {
   const concertData = data.allContentfulConcertPiece.nodes
   const uniqueConcert = data.allContentfulEnsemble.distinct
   const mediaData = data.allContentfulMediaPiece.nodes
+  const [intro, setIntro] = useState<boolean>(true)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <Wrapper>
-      {/* <AudioPlayer /> */}
-      <Hero data={newsData} mobile={mobile} />
-      <MediaMusic data={mediaData} mobile={mobile} />
-      <ConcertMusic tags={uniqueConcert} data={concertData} mobile={mobile} />
-      <News data={newsData} />
-      <About mobile={mobile} />
-      <Connect mobile={mobile} />
+      <IntroAnimationContext.Provider value={intro}>
+        <Header setIntro={setIntro} />
+        <Hero data={newsData} mobile={mobile} />
+        <MediaMusic data={mediaData} mobile={mobile} />
+        <ConcertMusic tags={uniqueConcert} data={concertData} mobile={mobile} />
+        <News data={newsData} />
+        <About mobile={mobile} />
+        <Connect mobile={mobile} />
+      </IntroAnimationContext.Provider>
     </Wrapper>
   )
 }

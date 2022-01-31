@@ -185,8 +185,6 @@ const FormModal = styled.form<{
   transform: scale(0);
   box-sizing: border-box;
 
-  ${media.mobile} {
-  }
   ${media.tablet} {
     width: 33.69vw;
     height: 32.52vw;
@@ -194,6 +192,13 @@ const FormModal = styled.form<{
     top: ${props => props.topValT};
 
     ${text.tablet.bodyS};
+  }
+  ${media.mobile} {
+    width: 90vw;
+    height: auto;
+    padding: 5vw;
+    left: 5vw;
+    top: ${props => props.topVal};
   }
 `
 
@@ -209,7 +214,9 @@ const FormRow = styled.div`
   ${media.tablet} {
     ${text.tablet.bodyXS}
   }
-  ${media.tabletPortrait} {
+  ${media.mobile} {
+    ${text.mobile.bodyXS};
+    margin-bottom: 3vw;
   }
 `
 
@@ -221,8 +228,7 @@ const FormText = styled.label`
     margin-right: 0;
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    ${text.mobile.bodyM};
   }
 `
 
@@ -237,9 +243,13 @@ const TextInput = styled.input`
   padding-left: 1vw;
 
   ${media.tablet} {
+    ${text.tablet.bodyM}
     height: 3vw;
   }
   ${media.mobile} {
+    ${text.mobile.bodyM}
+    height: 7vw;
+    width: 70%;
   }
   ${media.tabletPortrait} {
   }
@@ -259,14 +269,14 @@ const TextArea = styled.textarea`
   ${text.desktop.bodyS}
   color: black;
   ${media.tablet} {
-   
     height: 9vw;
-
+    ${text.tablet.bodyM}
   }
   ${media.mobile} {
-]
+    ${text.mobile.bodyM}
+    height: 25vw;
+    width: 70%;
   }
- 
 `
 
 const SuccessMessage = styled.div<{ success: boolean }>`
@@ -276,6 +286,9 @@ const SuccessMessage = styled.div<{ success: boolean }>`
   transform: scale(${props => (props.success ? 1 : 0)});
   opacity: (${props => (props.success ? 1 : 0)});
   transition: 0.5s;
+  ${media.mobile} {
+    ${text.mobile.bodyM}
+  }
 `
 
 const Wrapper = styled.div<{ success: boolean }>`
@@ -288,6 +301,11 @@ const Wrapper = styled.div<{ success: boolean }>`
   ${media.tablet} {
     ${text.tablet.bodyS};
     width: 85%;
+  }
+  ${media.mobile} {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
 `
 

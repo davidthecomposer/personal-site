@@ -17,18 +17,21 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   const grey = useRef(null)
   const tablet = useContext(TabletContext)
   useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: "#about" })
+    const tl = gsap.timeline({ scrollTrigger: ".about-images" })
 
     tl.to(".about-bg-cover", { opacity: 0, duration: 2 }, 1)
       .to(".about-images", { opacity: 1, stagger: 0.5, duration: 4 }, 1)
       .to(".about-text", { opacity: 1, duration: 1.5 }, 1)
-  }, [mobile])
+  }, [])
 
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: mobile ? ".about-text" : davidImage.current,
+        trigger: "#about",
+        start: mobile ? "top 50%" : "top top",
+        end: mobile ? "bottom bottom" : "bottom bottom",
         scrub: true,
+        // markers: true,
       },
     })
 
@@ -44,8 +47,8 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
       .to(
         teal.current,
         {
-          yPercent: tablet ? 350 : 120,
-          xPercent: 25,
+          yPercent: tablet ? 350 : 126,
+          xPercent: 22,
           ease: "none",
           duration: 10,
         },
@@ -57,13 +60,19 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
           yPercent: tablet ? -200 : -20,
           xPercent: -40,
           ease: "none",
-          duration: 6,
+          duration: 8,
         },
-        0
+        2
       )
+      .to(davidImage.current, { opacity: mobile ? 0.1 : 1, duration: 3 }, 0)
       .to(
         davidImage.current,
-        { opacity: 1, x: tablet ? "+=5%" : "+=8%", duration: 3 },
+        {
+          opacity: 1,
+          scale: mobile ? 1.2 : 1,
+          x: tablet ? "+=5%" : "+=8%",
+          duration: 3,
+        },
         7
       )
   }, [mobile])
@@ -73,8 +82,7 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
       <SectionHeaders text="About" classRoot="about-header" />
       <Bottom id="about">
         <DavidImage
-          src={mobile ? davidAboutM : davidAbout}
-          alt="David Campbell image"
+          imgSrc={mobile ? davidAboutM : davidAbout}
           className="about-images"
           ref={davidImage}
         />
@@ -166,15 +174,15 @@ const Wrapper = styled.section`
   box-sizing: border-box;
   background-image: url(${davidHuge});
 
+  ${media.fullWidth} {
+    padding: 246px 0 224px 0;
+  }
+
   ${media.mobile} {
     height: 740vw;
     padding: 0 2.4vw 60vw;
     background-image: url(${davidHugeM});
     background-position: 50% 50%;
-  }
-
-  ${media.fullWidth} {
-    padding: 246px 0 224px 0;
   }
 `
 
@@ -203,7 +211,7 @@ const Text = styled.div`
 
   ${media.mobile} {
     font-size: 3.9vw;
-    width: 95.2vw;
+    width: 90vw;
     height: auto;
     left: 3.9vw;
     top: 168.8vw;
@@ -240,19 +248,19 @@ const Teal = styled.div`
   ${media.tablet} {
     top: 0;
   }
-  ${media.mobile} {
-    position: absolute;
-    width: 75.6vw;
-    height: 118.1vw;
-    left: 2.4vw;
-    top: 28vw;
-  }
 
   ${media.fullWidth} {
     width: 776px;
     height: 891.2px;
     left: 617.6px;
     top: 152px;
+  }
+  ${media.mobile} {
+    position: absolute;
+    width: 75.6vw;
+    height: 118.1vw;
+    left: 2.4vw;
+    top: 28vw;
   }
 `
 
@@ -266,28 +274,27 @@ const Grey = styled.div`
   background: #1f1f20;
   z-index: 2;
 
-  ${media.mobile} {
-    width: 65.2vw;
-    height: 107.5vw;
-    left: 29.2vw;
-    top: 61.6vw;
-  }
-  ${media.tablet} {
-    top: 200vw;
-    left: 40vw;
-  }
-
   ${media.fullWidth} {
     width: 785.6px;
     height: 1102.4px;
     left: 356.8px;
     top: 414.4px;
   }
+  ${media.tablet} {
+    top: 200vw;
+    left: 40vw;
+  }
+  ${media.mobile} {
+    width: 65.2vw;
+    height: 107.5vw;
+    left: 29.2vw;
+    top: 61.6vw;
+  }
 `
 
-const DavidImage = styled.div`
+const DavidImage = styled.div<{ imgSrc: string }>`
   position: sticky;
-  /* position: -webkit-sticky; */
+  position: -webkit-sticky;
   display: block;
   width: 36.9vw;
   height: 52.6vw;
@@ -296,10 +303,10 @@ const DavidImage = styled.div`
   margin-top: 22.3vw;
   opacity: 0;
   z-index: 3;
+  background-image: url(${props => props.imgSrc});
+  background-position: 50% 50%;
+  background-size: cover;
   ${media.tablet} {
-    background-image: url(${davidAbout});
-    background-position: 50% 50%;
-    background-size: cover;
   }
   ${media.mobile} {
     width: 54.1vw;
@@ -335,15 +342,16 @@ const Bottom = styled.div`
   position: relative;
   height: 149.1vw;
 
-  ${media.tablet} {
-    height: 270vw;
-  }
-  ${media.mobile} {
-  }
   ${media.fullWidth} {
     height: 2385.6px;
     width: 1600px;
     margin: 0 auto;
+  }
+  ${media.tablet} {
+    height: 270vw;
+  }
+  ${media.mobile} {
+    height: 100%;
   }
 `
 

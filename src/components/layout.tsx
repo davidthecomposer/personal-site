@@ -19,7 +19,7 @@ import AudioPlayer from "./AudioPlayer"
 export const DesktopContext = createContext(false)
 export const TabletContext = createContext(false)
 export const MobileContext = createContext(false)
-export const IntroAnimationContext = createContext<boolean>(true)
+
 export const AudioPlayerContext = createContext<{
   activeTracks: HTMLAudioElement | null
   setActiveTracks: React.Dispatch<ActiveTrack> | null
@@ -33,10 +33,9 @@ type ActiveTrack = {
 
 type Props = {
   children: any
-  data: any
 }
 
-export const Layout: React.FC<Props> = ({ children, data }) => {
+export const Layout: React.FC<Props> = ({ children }) => {
   const [desktop, setDesktop] = useState(window.innerWidth > 1024)
   const [tablet, setTablet] = useState(
     window.innerWidth >= 767 && window.innerWidth <= 1024
@@ -52,7 +51,6 @@ export const Layout: React.FC<Props> = ({ children, data }) => {
     title: "none",
     year: "2022",
   })
-  const [intro, setIntro] = useState<boolean>(true)
 
   const value = useMemo(
     () => ({
@@ -78,98 +76,18 @@ export const Layout: React.FC<Props> = ({ children, data }) => {
   }, [])
 
   return (
-    <StaticQuery
-      query={graphql`
-        query AudioQuery {
-          allContentfulEnsemble {
-            distinct(field: ensembleName)
-          }
-          allContentfulConcertPiece(sort: { fields: ensemble___ensembleName }) {
-            nodes {
-              instrumentation
-              id
-              duration
-              key
-              title
-              year
-              movements {
-                mvtNumber
-              }
-              ensemble {
-                backgroundColor
-                button
-                ensembleName
-              }
-              audio {
-                file {
-                  fileName
-                  url
-                  contentType
-                }
-              }
-            }
-          }
-          allContentfulMovement {
-            nodes {
-              parent {
-                id
-              }
-              audio {
-                file {
-                  fileName
-                  url
-                  contentType
-                }
-              }
-              key
-              mvtNumber
-              title
-            }
-          }
-          allContentfulMediaPiece {
-            nodes {
-              storyBlurb {
-                storyBlurb
-              }
-              musicBlurb {
-                musicBlurb
-              }
-              audio {
-                file {
-                  url
-                  contentType
-                }
-              }
-              key
-              tags
-              title
-              images {
-                file {
-                  url
-                }
-              }
-            }
-          }
-        }
-      `}
-      render={data => (
-        <DesktopContext.Provider value={desktop}>
-          <TabletContext.Provider value={tablet}>
-            <MobileContext.Provider value={mobile}>
-              <AudioPlayerContext.Provider value={value}>
-                <IntroAnimationContext.Provider value={intro}>
-                  <Header setIntro={setIntro} />
-                  <AudioPlayer data={data} activeTracks={activeTracks} />
-                  <SEO></SEO>
-                  <Main>{children}</Main>
-                  <Footer />
-                </IntroAnimationContext.Provider>
-              </AudioPlayerContext.Provider>
-            </MobileContext.Provider>
-          </TabletContext.Provider>
-        </DesktopContext.Provider>
-      )}
-    />
+    <DesktopContext.Provider value={desktop}>
+      <TabletContext.Provider value={tablet}>
+        <MobileContext.Provider value={mobile}>
+          <AudioPlayerContext.Provider value={value}>
+            <AudioPlayer activeTracks={activeTracks} />
+            <SEO></SEO>
+            <Main>{children}</Main>
+            {location.pathname === "/music" && <Footer />}
+          </AudioPlayerContext.Provider>
+        </MobileContext.Provider>
+      </TabletContext.Provider>
+    </DesktopContext.Provider>
   )
 }
 

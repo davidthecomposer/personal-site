@@ -13,6 +13,7 @@ type props = {
   backgroundColor?: string
   bGOpacity?: number | string
   limit?: boolean | undefined
+  disabled?: boolean
 }
 
 const MainButton: React.FC<props> = ({
@@ -22,6 +23,7 @@ const MainButton: React.FC<props> = ({
   backgroundColor,
   bGOpacity,
   limit,
+  disabled,
 }) => {
   return (
     <Button
@@ -29,6 +31,7 @@ const MainButton: React.FC<props> = ({
       onClick={onClick}
       bGOpacity={bGOpacity || "00"}
       limit={limit}
+      disabled={disabled}
     >
       <span>{children}</span>
       <BG bGColor={backgroundColor ? backgroundColor : colors.buttonGrey} />
@@ -64,6 +67,7 @@ const Button = styled.button<{
   borderColor?: string
   bGOpacity: any
   limit: boolean | undefined
+  disabled?: boolean
 }>`
   position: relative;
   width: 7.5vw;
@@ -90,6 +94,7 @@ const Button = styled.button<{
   box-sizing: border-box;
   border-radius: 7.5vw;
   text-align: center;
+
   cursor: pointer;
   ${media.hover} {
     :hover {
@@ -113,8 +118,9 @@ const Button = styled.button<{
     `};
   }
   ${media.mobile} {
-    width: 12vw;
-    height: 12vw;
-    ${text.mobile.bodyS};
+    width: 20vw;
+    height: 20vw;
+    border-radius: 20vw;
+    ${text.mobile.bodyM};
   }
 `

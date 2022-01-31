@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useContext } from "react"
 import styled from "styled-components"
 import { PrimaryButtonStyle } from "styles/Buttons"
 import colors from "styles/colors"
@@ -19,13 +19,13 @@ import {
 } from "react-share"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
+import { MobileContext } from "components/layout"
 
 type props = {
-  mobile: boolean
   pageContext: any
 }
 
-const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
+const NewsExpanded: React.FC<props> = ({ pageContext }) => {
   const mainText = useRef<HTMLDivElement>(null)
   const [contentHeight, setActiveContentHeight] = useState(0)
   const [activeCard, setActiveCard] = useState(-1)
@@ -37,9 +37,7 @@ const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
     TwitterShareButton,
     LinkedinShareButton,
   ]
-
-  console.log(pageContext)
-
+  const mobile = useContext(MobileContext)
   const options = {
     renderNode: {
       [BLOCKS.HEADING_1]: (n: any, children: any) => (
@@ -98,7 +96,7 @@ const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
 
   const allContributors = contributors.map((con: any, i: number) => {
     const { bio, mainImages, name, socialLinks } = con
-    console.log(bio)
+
     return (
       <Contributor
         key={`${title}-cont-${i}`}
@@ -149,7 +147,11 @@ const NewsExpanded: React.FC<props> = ({ pageContext, mobile }) => {
 
   return (
     <NewsStory>
-      <SectionHeaders text={title} classRoot={`${url}-header`} />
+      <SectionHeaders
+        small={mobile ? true : false}
+        text={title}
+        classRoot={`${url}-header`}
+      />
       <MainImage
         src={mobile ? mainImages[1].file.url : mainImages[0].file.url}
         alt={mobile ? mainImages[1].file.fileName : mainImages[0].file.fileName}
@@ -200,12 +202,11 @@ const NewsStory = styled.section`
   background: ${colors.deepPurple};
   padding: 6.25vw 0;
   ${media.tablet} {
-    min-height: calc(100vh - 38vw);
     padding: 6.25vw 0 0 0;
   }
 `
 
-const Text = styled.p<{ collapse: boolean }>`
+const Text = styled.div<{ collapse: boolean }>`
   width: 100%;
   ${text.desktop.bodyM};
   color: ${colors.coolWhite};
@@ -313,8 +314,7 @@ const BottomContainer = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    flex-direction: column-reverse;
   }
 `
 

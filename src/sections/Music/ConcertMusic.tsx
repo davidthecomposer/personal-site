@@ -62,6 +62,7 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
 
         return (
           <PieceCard
+            key={key}
             myKey={key}
             title={title}
             allInstrumentation={allInstrumentation}
@@ -128,30 +129,29 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
     <Wrapper id="Concert-Music">
       <SectionHeaders text="Concert Music" classRoot="concert-header" />
 
-      <MobileWrapper className="mobile__wrapper">
-        <SearchBar>
-          <Filters>{filters}</Filters>
-          <SearchWrapper>
-            <Label>Search:</Label>
-            <Search
-              value={searchValue}
-              onChange={e => {
-                setSearchValue(e.target.value)
-              }}
-            />
-          </SearchWrapper>
-        </SearchBar>
-        <ConcertPiecesContainer ref={musicBook}>
-          <TopLabels>
-            <Label>Title</Label>
-            <Label>Instruments</Label>
-            <Label>Year</Label>
-            <Label>Duration</Label>
-            <Label>Movements</Label>
-          </TopLabels>
-          {renderedPieces}
-        </ConcertPiecesContainer>
-      </MobileWrapper>
+      <SearchBar>
+        <Filters>{filters}</Filters>
+        <SearchWrapper>
+          <Label>Search:</Label>
+          <Search
+            value={searchValue}
+            onChange={e => {
+              setSearchValue(e.target.value)
+            }}
+          />
+        </SearchWrapper>
+      </SearchBar>
+      <ConcertPiecesContainer ref={musicBook}>
+        <TopLabels>
+          <Label>Title</Label>
+          <Label>Instruments</Label>
+          <Label>Year</Label>
+          <Label>Duration</Label>
+          <Label>Movements</Label>
+        </TopLabels>
+        {renderedPieces}
+      </ConcertPiecesContainer>
+
       <BottomSection>
         <CTA ref={cta} enter={enter}>
           <Row>
@@ -203,17 +203,6 @@ const Wrapper = styled.section`
   }
 `
 
-const MobileWrapper = styled.div`
-  ${media.mobile} {
-    position: relative;
-    overflow: scroll;
-    height: 130.1vw;
-    width: 100%;
-    margin-top: 7vw;
-    padding-top: 1vw;
-  }
-`
-
 const Text = styled.div`
   ${text.desktop.bodyS};
   width: 19.3vw;
@@ -252,6 +241,16 @@ const CTA = styled.div<{ enter: boolean }>`
       width: 576px;
     }
   }
+  ${media.mobile} {
+    top: 0;
+    width: 80%;
+    height: 50vw;
+    left: ${props => (props.enter ? "-100vw" : "4.1vw")};
+    transition: 0.5s;
+    ${Text} {
+      width: 100%;
+    }
+  }
 `
 
 const HeadLine = styled.h3`
@@ -265,6 +264,10 @@ const HeadLine = styled.h3`
     width: 416px;
     margin-bottom: 27.2px;
   }
+  ${media.mobile} {
+    ${text.mobile.h3};
+    width: 50%;
+  }
 `
 
 const BottomSection = styled.div`
@@ -275,6 +278,9 @@ const BottomSection = styled.div`
   ${media.fullWidth} {
     height: 500px;
     margin-bottom: 150px;
+  }
+  ${media.mobile} {
+    height: 100vw;
   }
 `
 
@@ -312,6 +318,11 @@ const Instrument = styled.div`
     margin-right: 10.08px;
     margin-bottom: 10.08px;
   }
+  ${media.mobile} {
+    ${text.mobile.bodyS};
+    padding: 1vw 2vw;
+    border-radius: 2vw;
+  }
 `
 
 const TopLabels = styled.div`
@@ -326,6 +337,9 @@ const TopLabels = styled.div`
     height: 36px;
     margin-bottom: 20px;
     padding: 0 30.08px;
+  }
+  ${media.mobile} {
+    display: none;
   }
 `
 
@@ -353,10 +367,6 @@ const Label = styled.p`
     //Movements
   }
 
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
   ${media.fullWidth} {
     :nth-of-type(1) {
       //Title
@@ -378,6 +388,11 @@ const Label = styled.p`
       //Movements
     }
   }
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    ${text.mobile.h5};
+  }
 `
 
 const Row = styled.div`
@@ -386,8 +401,7 @@ const Row = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    margin-bottom: 3vw;
   }
 `
 
@@ -409,6 +423,12 @@ const SearchBar = styled.div`
 
     border-radius: 4px;
     margin: 100px auto 0;
+  }
+
+  ${media.mobile} {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 5vw;
   }
 `
 
@@ -432,14 +452,17 @@ const Search = styled.input`
   caret-color: ${colors.coolWhiteLight};
   color: ${colors.coolWhite};
 
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
   ${media.fullWidth} {
     ${text.fullWidth.h6};
     margin-right: 30.08px;
     height: 40px;
+  }
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    width: 70%;
+    height: 5vw;
+    margin-left: 3vw;
   }
 `
 
@@ -456,8 +479,11 @@ const SearchWrapper = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    width: 100%;
+    ${Label} {
+      width: auto;
+      margin-right: 0;
+    }
   }
 `
 
@@ -489,6 +515,12 @@ const FilterButton = styled.button`
   ${media.fullWidth} {
     ${text.fullWidth.h6};
     margin-right: 30.08px;
+  }
+
+  ${media.mobile} {
+    ${text.mobile.h5};
+    margin-right: 5vw;
+    margin-bottom: 5vw;
   }
 `
 

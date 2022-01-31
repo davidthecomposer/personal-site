@@ -133,26 +133,27 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
         })
       : parsedMovements
 
-  const handleClick = (arr: any) => {
-    if (value.setActiveTracks) {
-      value.setActiveTracks(arr)
-    }
-  }
   const audioRefs = useRef([])
-  const [audioRef, setAudioRef] = useState<HTMLAudioElement | null>(null)
 
-  const handlePlay = (i: number, title: string, year: string) => {
-    if (value.setActiveTracks && audioRefs.current) {
-      audioRefs.current[lastTrack.current].pause()
-      audioRefs.current[lastTrack.current].currentTime = 0
-      lastTrack.current = i
-      audioRefs.current[i].play()
-      value.setActiveTracks({
-        audioRef: audioRefs.current[i],
-        title: title,
-        year: year,
-      })
-      //going to need to send in an object with anmy nmeeded Data (title image audioRef, composer etc)
+  const handlePlay = (
+    i: number,
+    title: string,
+    year: string,
+    canPlay: boolean
+  ) => {
+    if (canPlay) {
+      if (value.setActiveTracks && audioRefs.current) {
+        audioRefs.current[lastTrack.current].pause()
+        audioRefs.current[lastTrack.current].currentTime = 0
+        lastTrack.current = i
+        audioRefs.current[i].play()
+        value.setActiveTracks({
+          audioRef: audioRefs.current[i],
+          title: title,
+          year: year,
+        })
+        //going to need to send in an object with anmy nmeeded Data (title image audioRef, composer etc)
+      }
     }
   }
   const handleGetAudioRef = (ref: any) => {
@@ -168,9 +169,17 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
         key={`playlist-item-${i}`}
         onMouseEnter={() => setActiveCard(mvt.mvtNumber)}
       >
-        <ButtonContainer visible={mvt.audio}>
+        <ButtonContainer visible={mvt.audio?.file?.url}>
           <MainButton
-            onClick={() => handlePlay(mvt.mvtNumber - 1, mvt.title, year || "")}
+            onClick={() =>
+              handlePlay(
+                mvt.mvtNumber - 1,
+                mvt.title,
+                year || "",
+                mvt.audio?.file?.url
+              )
+            }
+            disabled={!mvt.audio?.file?.url}
           >
             PLAY
           </MainButton>
@@ -249,7 +258,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
                   </MainButton>
                 </a>
               )}
-              å
+
               <MainButton
                 onClick={() => {
                   navigate("/music")
@@ -281,11 +290,6 @@ const Wrapper = styled.section<{ bGImage: string }>`
     width: 100%;
     height: 146.1vw;
     margin-bottom: 30vw;
-  }
-  ${media.tabletPortrait} {
-    width: 517px;
-    height: 756px;
-    margin-bottom: 155px;
   }
 `
 
@@ -382,10 +386,10 @@ const MvtSummary = styled.div`
   color: ${colors.coolWhite};
 
   ${media.tablet} {
+    ${text.tablet.bodyS};
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    ${text.mobile.bodyS};
   }
 `
 const MvtName = styled.p`
@@ -438,6 +442,12 @@ const Heading6 = styled.h6`
 `
 const Paragraph = styled.p`
   ${text.fullWidth.bodyS};
+  ${media.tablet} {
+    ${text.tablet.bodyM};
+  }
+  ${media.mobile} {
+    ${text.mobile.bodyS};ß
+  }
 `
 const ExternalLink = styled.a`
   ${text.fullWidth.bodyM};

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useContext } from "react"
 import ContactForm from "components/ContactForm"
 import styled from "styled-components"
 import text from "styles/text"
@@ -11,10 +11,75 @@ import { mediaPieces } from "data/MediaPieces"
 import gsap from "gsap"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
-
+import { AudioPlayerElement } from "components/AudioPlayer"
+import { AudioPlayerContext } from "components/layout"
 type props = {
   mobile: boolean
   data: any
+}
+
+type pieceProps = {
+  track: any
+  i: number
+}
+
+const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
+  const [audioRef, setAudioRef] = useState<HTMLAudioElement>()
+  const value = useContext(AudioPlayerContext)
+  const [info, setInfo] = useState(-1)
+  const handlePlay = () => {
+    if (value.setActiveTracks && audioRef) {
+      audioRef.play()
+      value.setActiveTracks({
+        audioRef: audioRef,
+        title: track.title,
+        year: "Media",
+      })
+    }
+  }
+
+  const handleInfo = (activeNum: number) => {
+    setInfo(activeNum)
+  }
+
+  return (
+    <PieceWrapper className={`media_pieces`} info={info === i}>
+      <ImageWrapper>
+        <ControlPanel>
+          <MainButton
+            limit
+            bGOpacity={"20"}
+            backgroundColor={colors.activeTeal}
+            onClick={handlePlay}
+          >
+            LISTEN
+          </MainButton>
+          {window.matchMedia("(hover: none)").matches && (
+            <MainButton
+              limit
+              bGOpacity={"20"}
+              backgroundColor={colors.activeTeal}
+              onClick={() => handleInfo(i)}
+            >
+              Info
+            </MainButton>
+          )}
+          <AudioWrapper>
+            <AudioPlayerElement
+              myKey={track.key}
+              getRef={setAudioRef}
+              audio={track.audio.file.url}
+            />
+          </AudioWrapper>
+        </ControlPanel>
+        <img src={track.images[0].file.url} alt={track.title} />
+        <TextWrapper>
+          <TrackText>{track.storyBlurb.storyBlurb}</TrackText>
+        </TextWrapper>
+      </ImageWrapper>
+      <Title>{track.title}</Title>
+    </PieceWrapper>
+  )
 }
 
 const MediaMusic: React.FC<props> = ({ mobile, data }) => {
@@ -61,27 +126,7 @@ const MediaMusic: React.FC<props> = ({ mobile, data }) => {
 
   const allTracks = data.map((track: any, i: number) => {
     console.log(track)
-    return (
-      <MediaPiece key={`track-presentation-${i}`} className={`media_pieces`}>
-        <ImageWrapper>
-          <ControlPanel>
-            <MainButton
-              limit
-              bGOpacity={"20"}
-              backgroundColor={colors.activeTeal}
-              // onClick={() => playMedia(track.key)}
-            >
-              LISTEN
-            </MainButton>
-          </ControlPanel>
-          <img src={track.images[0].file.url} alt={track.title} />
-          <TextWrapper>
-            <TrackText>{track.storyBlurb.storyBlurb}</TrackText>
-          </TextWrapper>
-        </ImageWrapper>
-        <Title>{track.title}</Title>
-      </MediaPiece>
-    )
+    return <MediaPiece key={`track-presentation-${i}`} track={track} i={i} />
   })
 
   const handleEnter = () => {
@@ -130,7 +175,7 @@ const MediaMusic: React.FC<props> = ({ mobile, data }) => {
 }
 
 const Wrapper = styled.section`
-  padding: 21.4vw 0 0 0;
+  padding: 14.4vw 0 0 0;
   background-image: url(${mediaMusicBG});
   background-size: cover;
   position: relative;
@@ -142,23 +187,22 @@ const Wrapper = styled.section`
   ${media.tablet} {
   }
   ${media.fullWidth} {
-    padding: 342px 0 0 0;
+    padding: 200px 0 0 0;
   }
 `
 
 const BottomSection = styled.div`
   position: relative;
-  height: 45.5vw;
+  height: 30vw;
   width: 100%;
   margin-top: 16.4vw;
+  ${media.fullWidth} {
+    height: 728px;
+  }
   ${media.tablet} {
   }
   ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-  }
-  ${media.fullWidth} {
-    height: 728px;
+    height: 100vw;
   }
 `
 
@@ -169,18 +213,16 @@ const MediaPieces = styled.div`
   height: auto;
   display: flex;
   flex-wrap: wrap;
-
+  ${media.fullWidth} {
+    width: 1536px;
+    margin: 100px auto;
+  }
   ${media.tablet} {
     width: 85vw;
   }
   ${media.mobile} {
     width: 96vw;
-  }
-  ${media.tabletPortrait} {
-  }
-  ${media.fullWidth} {
-    width: 1536px;
-    margin: 100px auto;
+    align-items: center;
   }
 `
 
@@ -253,7 +295,7 @@ const ImageWrapper = styled.div`
   }
 `
 
-const MediaPiece = styled.div`
+const PieceWrapper = styled.div<{ info: boolean }>`
   position: relative;
   width: 30.25vw;
   height: 20.94vw;
@@ -281,6 +323,23 @@ const MediaPiece = styled.div`
   box-shadow: 5px 5px 5px 0px #00000000, inset 4px 4px 15px 0px #00000000,
     5px 5px 15px 5px rgba(0, 0, 0, 0);
 
+  ${TextWrapper} {
+    ${props =>
+      props.info
+        ? `opacity: 1;
+        transition: 0.3s;`
+        : `opacity: 0;`}
+  }
+  ${ImageWrapper} {
+    img {
+      ${props =>
+        props.info
+          ? ` filter: grayscale(0);
+          opacity: 1;`
+          : `filter: grayscale(80)`}
+    }
+  }
+
   ${media.hover} {
     :hover {
       -webkit-box-shadow: 5px 5px 5px 0px ${colors.dullerTeal},
@@ -304,22 +363,22 @@ const MediaPiece = styled.div`
     }
   }
 
+  ${media.fullWidth} {
+    width: 484px;
+    height: 335px;
+    border-radius: 6px;
+  }
+
   ${media.tablet} {
     width: 37.76vw;
     height: 26.17vw;
     margin-right: 4vw;
   }
   ${media.mobile} {
-    width: 96%;
-    height: 67.76vw;
+    width: 100%;
+    height: auto;
     margin-right: 0;
     margin-bottom: 5vw;
-  }
-
-  ${media.fullWidth} {
-    width: 484px;
-    height: 335px;
-    border-radius: 6px;
   }
 `
 
@@ -334,18 +393,14 @@ const ControlPanel = styled.div`
   height: 100%;
   z-index: 10;
 
-  ${media.mobile} {
-    width: 20%;
-    align-items: center;
-    button {
-      width: 16vw;
-      height: 16vw;
-      border-radius: 16vw;
-    }
-  }
   ${media.fullWidth} {
     left: 5.6px;
     width: 120px;
+  }
+  ${media.mobile} {
+    width: 25vw;
+
+    align-items: center;
   }
 `
 
@@ -356,17 +411,18 @@ const Text = styled.div`
   ${media.mobile} {
     font-size: 4.3vw;
   }
+
+  ${media.fullWidth} {
+    ${text.fullWidth.bodyS};
+    width: 272px;
+  }
   ${media.tablet} {
     ${text.tablet.bodyXS};
     width: 37.24vw;
   }
 
   ${media.mobile} {
-    ${text.mobile.bodyXS};
-  }
-  ${media.fullWidth} {
-    ${text.fullWidth.bodyS};
-    width: 272px;
+    ${text.mobile.bodyM};
   }
 `
 
@@ -421,20 +477,8 @@ const CTA = styled.div<{ enter: boolean }>`
   left: 6.3vw;
   top: 2vw;
   z-index: 3;
-
   ${Text} {
     width: 36vw;
-  }
-
-  ${media.mobile} {
-    top: 0;
-    width: 91.8vw;
-    left: ${props => (props.enter ? "-100vw" : "4.1vw")};
-    transition: 0.5s;
-    height: 100vw;
-  }
-
-  ${media.tabletPortrait} {
   }
   ${media.fullWidth} {
     width: 576px;
@@ -443,6 +487,16 @@ const CTA = styled.div<{ enter: boolean }>`
     top: 32px;
     ${Text} {
       width: 576px;
+    }
+  }
+  ${media.mobile} {
+    top: 0;
+    width: 70%;
+    height: 50vw;
+    left: ${props => (props.enter ? "-100vw" : "4.1vw")};
+    transition: 0.5s;
+    ${Text} {
+      width: 100%;
     }
   }
 `
@@ -456,10 +510,10 @@ const HeadLine = styled.h3`
   ${media.tablet} {
   }
   ${media.mobile} {
-    font-size: 8.7vw;
+    font-size: 5vw;
+    width: 50%;
   }
-  ${media.tabletPortrait} {
-  }
+
   ${media.fullWidth} {
     ${text.fullWidth.h3};
     width: 416px;
@@ -473,10 +527,23 @@ const Row = styled.div`
   justify-content: space-between;
   ${media.tablet} {
   }
-  ${media.mobile} {
+
+  ${media.fullWidth} {
   }
   ${media.fullWidth} {
   }
+  ${media.mobile} {
+    margin-bottom: 5vw;
+  }
+`
+
+const AudioWrapper = styled.div`
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  z-index: -1;
+
   ${media.fullWidth} {
   }
 `

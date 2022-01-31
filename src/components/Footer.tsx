@@ -79,7 +79,7 @@ const Footer: React.FC<{}> = () => {
       name: "instagram icon",
       link: "https://www.instagram.com/david_the_composer/",
     },
-    { icon: web, name: "web icon", link: "https://www.davidhalcampbell.com" },
+    { icon: web, name: "web icon", link: "/" },
     {
       icon: linkedIn,
       name: "linkedIn icon",
@@ -91,12 +91,12 @@ const Footer: React.FC<{}> = () => {
     {
       icon: music,
       name: "davidhalcampbell.com/music",
-      link: "https://www.davidhalcampbell.com/music",
+      link: "/music",
     },
     {
       icon: code,
       name: "davidhalcampbell.com/developer",
-      link: "https://www.davidhalcampbell.com/developer",
+      link: "/developer",
     },
     {
       icon: youtube,

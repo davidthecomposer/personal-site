@@ -46,7 +46,7 @@ const ConcertPiece: React.FC<Props> = ({
   const value = useContext(AudioPlayerContext)
   const buttons = useRef<HTMLDivElement>(null)
   const [audioRef, setAudioRef] = useState<HTMLAudioElement>()
-
+  const mobile = useContext(MobileContext)
   const handlePlay = () => {
     if (value.setActiveTracks && audioRef) {
       audioRef.play()
@@ -57,11 +57,22 @@ const ConcertPiece: React.FC<Props> = ({
 
   return (
     <PieceCard bGColor={backgroundColor}>
-      <PieceTitle>{title}</PieceTitle>
-      <Instrumentation>{allInstrumentation}</Instrumentation>
-      <Year>{year}</Year>
-      <Duration>{duration}</Duration>
-      <Movements>{movementNumber}</Movements>
+      {mobile && (
+        <TopLabels>
+          <Label>Title</Label>
+          <Label>Instruments</Label>
+          <Label>Year</Label>
+          <Label>Duration</Label>
+          <Label>Movements</Label>
+        </TopLabels>
+      )}
+      <MobileWrapper>
+        <PieceTitle>{title}</PieceTitle>
+        <Instrumentation>{allInstrumentation}</Instrumentation>
+        <Year>{year}</Year>
+        <Duration>{duration}</Duration>
+        <Movements>{movementNumber}</Movements>
+      </MobileWrapper>
       <Buttons ref={buttons}>
         <MainButton
           backgroundColor={button}
@@ -142,6 +153,10 @@ border-radius: 0.5vw;
   margin-bottom: 20px;
   padding: 0 19px 0 35px;
   }
+  ${media.mobile} {
+    height: 60vw;
+    padding: 4vw;
+  }
 `
 const PieceTitle = styled.h3`
   ${text.desktop.h5};
@@ -151,6 +166,12 @@ const PieceTitle = styled.h3`
   ${media.fullWidth} {
     ${text.fullWidth.h5};
     width: 256px;
+  }
+  ${media.mobile} {
+    ${text.mobile.h5};
+    height: 20%;
+    margin: 0;
+    width: 100%;
   }
 `
 
@@ -171,6 +192,12 @@ const TrebleUnderlay = styled(TrebleUnderlaySVG)`
     left: 0;
     top: 2px;
   }
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    width: 100%;
+    height: 100%;
+  }
 `
 const AltoUnderlay = styled(AltoUnderlaySVG)`
   position: absolute;
@@ -189,6 +216,12 @@ const AltoUnderlay = styled(AltoUnderlaySVG)`
     left: 0;
     top: 2px;
   }
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    width: 100%;
+    height: 100%;
+  }
 `
 const BassUnderlay = styled(BassUnderlaySVG)`
   position: absolute;
@@ -200,15 +233,18 @@ const BassUnderlay = styled(BassUnderlaySVG)`
   path {
     transition: 0.4s;
   }
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
+
   ${media.fullWidth} {
     width: 1326px;
     height: 138px;
     left: 0;
     top: 2px;
+  }
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    width: 100%;
+    height: 100%;
   }
 `
 
@@ -217,14 +253,16 @@ const Year = styled.h4`
   width: 10vw;
   text-align: left;
   margin-left: 1.88vw;
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
-  }
+
   ${media.fullWidth} {
     ${text.fullWidth.bodyM};
     margin-left: 0;
     width: 160px;
+  }
+  ${media.mobile} {
+    ${text.mobile.bodyM};
+    height: 15%;
+    margin: 0;
   }
 `
 
@@ -239,6 +277,12 @@ const Movements = styled.div`
 
     padding-left: 0;
   }
+  ${media.mobile} {
+    ${text.mobile.bodyM};
+    height: 15%;
+    margin: 0;
+    padding: 0;
+  }
 `
 
 const Duration = styled.div`
@@ -251,6 +295,11 @@ const Duration = styled.div`
     width: 144px;
     padding-left: 0;
   }
+  ${media.mobile} {
+    ${text.mobile.bodyM};
+    height: 15%;
+    margin: 0;
+  }
 `
 
 const Instrumentation = styled.div`
@@ -261,6 +310,11 @@ const Instrumentation = styled.div`
   ${media.fullWidth} {
     width: 284px;
     margin-left: 20px;
+  }
+  ${media.mobile} {
+    width: 100%;
+    height: 25%;
+    margin: 0;
   }
 `
 const Buttons = styled.div`
@@ -273,6 +327,16 @@ const Buttons = styled.div`
     width: 280px;
     margin-left: 24px;
   }
+  ${media.mobile} {
+    position: absolute;
+    z-index: 100;
+    right: 6vw;
+    bottom: 6vw;
+    height: 20vw;
+    width: 50%;
+
+    margin: 0;
+  }
 `
 
 const AudioWrapper = styled.div`
@@ -283,6 +347,45 @@ const AudioWrapper = styled.div`
   z-index: -1;
 
   ${media.fullWidth} {
+  }
+`
+
+const TopLabels = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+  }
+  ${media.fullWidth} {
+  }
+`
+
+const MobileWrapper = styled.div`
+  display: flex;
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    flex-direction: column;
+    height: 100%;
+    margin-left: 8vw;
+    width: 70%;
+  }
+`
+
+const Label = styled.p`
+  ${media.tablet} {
+  }
+  ${media.mobile} {
+    ${text.mobile.h6};
+    height: 15%;
+    :nth-of-type(1) {
+      height: 20%;
+    }
+    :nth-of-type(2) {
+      height: 25%;
+    }
   }
 `
 

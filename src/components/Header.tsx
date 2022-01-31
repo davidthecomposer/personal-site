@@ -36,10 +36,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
     const pathname = window.location.pathname
 
     if (pathname) {
-      if (pathname === "/") {
-        setDisplay(true)
-        setRole("composer")
-      } else if (pathname === "/music") {
+      if (pathname === "/music") {
         setDisplay(true)
         setRole("composer")
       } else {
@@ -109,6 +106,8 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
     })
     if (!mobile && pathname === "/music") {
       gsap.set(line.current, { scaleY: 0, opacity: 0 })
+      gsap.set(myRole.current, { scaleY: 1, opacity: 1 })
+
       tl.to(
         line.current,
         { scaleY: 1, opacity: 1, duration: 0.6, ease: "power1.inOut" },
@@ -498,7 +497,7 @@ const Line = styled.div<{ open: boolean; initial: boolean }>`
   height: 4.3vw;
   background: ${colors.brightPurple};
   width: 0.2vw;
-
+  margin-left: 1.39vw;
   transform: scaleY(${props => (props.initial ? 0 : props.open ? 1 : 0)});
   opacity: 1;
 
@@ -660,17 +659,21 @@ const NavLinks = styled.div<{ open: boolean; initial: boolean }>`
   margin-top: 1vw;
 
   ${Link}:nth-child(even) {
-    :hover {
-      transform: skew(5deg, -5deg);
-      color: ${colors.brightPurple};
-      transition: 0.3s;
+    ${media.hover} {
+      :hover {
+        transform: skew(5deg, -5deg);
+        color: ${colors.brightPurple};
+        transition: 0.3s;
+      }
     }
   }
   ${Link}:nth-child(odd) {
-    :hover {
-      transform: skew(-5deg, 5deg);
-      color: ${colors.brightPurple};
-      transition: 0.3s;
+    ${media.hover} {
+      :hover {
+        transform: skew(-5deg, 5deg);
+        color: ${colors.brightPurple};
+        transition: 0.3s;
+      }
     }
   }
 
