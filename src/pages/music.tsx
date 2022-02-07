@@ -1,6 +1,7 @@
 import React, { useContext, useState, createContext, useEffect } from "react"
 import styled from "styled-components"
-import Layout, { MobileContext } from "components/layout"
+import { MobileContext } from "components/ContextStore"
+import Layout from "components/layout"
 import Hero from "sections/Music/Hero"
 import MediaMusic from "sections/Music/MediaMusic"
 import { graphql } from "gatsby"
@@ -27,7 +28,7 @@ const MusicPage: React.FC<data> = ({ data }) => {
   }, [])
 
   return (
-    <Wrapper>
+    <Layout>
       <IntroAnimationContext.Provider value={intro}>
         <Header setIntro={setIntro} />
         <Hero data={newsData} mobile={mobile} />
@@ -37,7 +38,7 @@ const MusicPage: React.FC<data> = ({ data }) => {
         <About mobile={mobile} />
         <Connect mobile={mobile} />
       </IntroAnimationContext.Provider>
-    </Wrapper>
+    </Layout>
   )
 }
 

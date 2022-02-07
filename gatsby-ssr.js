@@ -1,7 +1,11 @@
-/**
- * Implement Gatsby's SSR (Server Side Rendering) APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/ssr-apis/
- */
+// import "fonts/reset.css"
+// import "fonts/typography.css"
+// import React from "react"
 
-// You can delete this file if you're not using it
+// import ContextStore from "components/ContextStore"
+
+// export const wrapPageElement = ({ element, props }) => {
+//   // props provide same data to Layout as Page element will get
+//   // including location, data, etc - you don't need to pass it
+//   return <ContextStore {...props}>{element}</ContextStore>
+// }

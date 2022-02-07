@@ -9,26 +9,19 @@ import davidAbout from "assets/images/davidAbout.jpg"
 import davidAboutM from "assets/images/davidAboutM.jpg"
 import gsap from "gsap"
 import SectionHeaders from "components/textElements/SectionHeaders"
-import { TabletContext } from "components/layout"
+import { TabletContext } from "components/ContextStore"
 
 const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
   const davidImage = useRef(null)
   const teal = useRef(null)
   const grey = useRef(null)
   const tablet = useContext(TabletContext)
-  useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: ".about-images" })
-
-    tl.to(".about-bg-cover", { opacity: 0, duration: 2 }, 1)
-      .to(".about-images", { opacity: 1, stagger: 0.5, duration: 4 }, 1)
-      .to(".about-text", { opacity: 1, duration: 1.5 }, 1)
-  }, [])
 
   useEffect(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#about",
-        start: mobile ? "top 50%" : "top top",
+        start: "top 75%",
         end: mobile ? "bottom bottom" : "bottom bottom",
         scrub: true,
         // markers: true,
@@ -38,16 +31,20 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
     tl.from(
       ".about-text",
       {
-        yPercent: 30,
+        yPercent: -30,
         xPercent: -3,
         ease: "none",
+        duration: 1,
       },
       0
     )
+      .to(".about-bg-cover", { opacity: 1, duration: 10 }, 0)
+      .to(".about-images", { opacity: 1, stagger: 0.5, duration: 1 }, 0)
+      .to(".about-text", { opacity: 1, duration: 3 }, 1)
       .to(
         teal.current,
         {
-          yPercent: tablet ? 350 : 126,
+          yPercent: tablet ? 380 : 126,
           xPercent: 22,
           ease: "none",
           duration: 10,
@@ -57,14 +54,18 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
       .to(
         grey.current,
         {
-          yPercent: tablet ? -200 : -20,
+          yPercent: tablet ? -300 : -20,
           xPercent: -40,
           ease: "none",
           duration: 8,
         },
-        2
+        1
       )
-      .to(davidImage.current, { opacity: mobile ? 0.1 : 1, duration: 3 }, 0)
+      .to(
+        davidImage.current,
+        { opacity: mobile || tablet ? 0.1 : 1, duration: 3 },
+        1
+      )
       .to(
         davidImage.current,
         {
@@ -73,8 +74,12 @@ const About: React.FC<{ mobile: boolean }> = ({ mobile }) => {
           x: tablet ? "+=5%" : "+=8%",
           duration: 3,
         },
-        7
+        tablet ? 9 : 7
       )
+
+    return () => {
+      tl.kill()
+    }
   }, [mobile])
 
   return (
@@ -206,7 +211,12 @@ const Text = styled.div`
     }
   }
   ${media.tablet} {
-    ${text.tablet.bodyS};
+    ${text.tablet.bodyM};
+    width: 70vw;
+    left: 20vw;
+    p {
+      margin-bottom: 20px;
+    }
   }
 
   ${media.mobile} {
@@ -348,7 +358,7 @@ const Bottom = styled.div`
     margin: 0 auto;
   }
   ${media.tablet} {
-    height: 270vw;
+    height: 300vw;
   }
   ${media.mobile} {
     height: 100%;

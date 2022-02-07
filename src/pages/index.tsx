@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
-
+import "fonts/reset.css"
+import "fonts/typography.css"
 import styled from "styled-components"
 import colors from "assets/styles/colors"
 import { navigate } from "gatsby"

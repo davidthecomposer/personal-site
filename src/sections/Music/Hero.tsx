@@ -7,13 +7,13 @@ import colors from "assets/styles/colors"
 import { Canvas, useFrame } from "@react-three/fiber"
 import gsap from "gsap"
 import media from "assets/styles/media"
-import { MobileContext, TabletContext } from "components/layout"
+import { MobileContext, TabletContext } from "components/ContextStore"
 import { IntroAnimationContext } from "pages/music"
 import { shaderMaterial } from "@react-three/drei"
 import { extend } from "@react-three/fiber"
 import { ReactThreeFiber } from "@react-three/fiber"
 import * as THREE from "three"
-import fakeNews1 from "assets/images/fakeNews1.jpg"
+
 import { TLSSocket } from "tls"
 
 // const WavyImageMaterial = shaderMaterial(
@@ -291,6 +291,10 @@ const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
     }
   }, [activeSlide, intro])
 
+  useEffect(() => {
+    console.log(tablet)
+  }, [])
+
   const slides = fakeNews.map((news: any, i: number) => {
     return (
       <Slide key={`music_slide${i}`}>
@@ -372,6 +376,7 @@ const CarouselLine = styled.div<{ top?: boolean | undefined }>`
   transform-origin: ${props => (props.top ? "100% 100%" : "0% 0%")};
 
   ${media.mobile} {
+    display: none;
   }
   ${media.fullWidth} {
   }

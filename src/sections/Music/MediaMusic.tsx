@@ -5,14 +5,11 @@ import text from "styles/text"
 import colors from "styles/colors"
 import media from "styles/media"
 import mediaMusicBG from "assets/images/mediaMusicBG.jpg"
-import { PrimaryButtonStyle } from "styles/buttons"
-import { mediaPieces } from "data/MediaPieces"
-
 import gsap from "gsap"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 import { AudioPlayerElement } from "components/AudioPlayer"
-import { AudioPlayerContext } from "components/layout"
+import { AudioPlayerContext } from "components/ContextStore"
 type props = {
   mobile: boolean
   data: any
@@ -334,21 +331,14 @@ const PieceWrapper = styled.div<{ info: boolean }>`
     img {
       ${props =>
         props.info
-          ? ` filter: grayscale(0);
+          ? ` filter: grayscale(100);
           opacity: 1;`
-          : `filter: grayscale(80)`}
+          : `filter: grayscale(0)`}
     }
   }
 
   ${media.hover} {
     :hover {
-      -webkit-box-shadow: 5px 5px 5px 0px ${colors.dullerTeal},
-        inset 4px 4px 15px 0px ${colors.dullerTeal},
-        5px 5px 15px 5px rgba(0, 0, 0, 0);
-      box-shadow: 5px 5px 5px 0px ${colors.dullerTeal},
-        inset 4px 4px 15px 0px ${colors.dullerTeal},
-        5px 5px 15px 5px rgba(0, 0, 0, 0);
-
       ${TextWrapper} {
         opacity: 1;
         transition: 0.3s;
@@ -356,7 +346,7 @@ const PieceWrapper = styled.div<{ info: boolean }>`
 
       ${ImageWrapper} {
         img {
-          filter: grayscale(0);
+          filter: grayscale(100);
           opacity: 1;
         }
       }

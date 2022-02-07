@@ -47,8 +47,8 @@ const Connect: React.FC<{ mobile: boolean }> = ({ mobile }) => {
         enter={enter}
         leftVal={mobile ? "100%" : "12.8vw"}
         topVal={mobile ? "30vw" : "43.1vw"}
-        leftValT={"55%"}
-        topValT={"25vw"}
+        leftValT={"10%"}
+        topValT={"45vw"}
         close={true}
       />
     </Wrapper>
@@ -78,14 +78,16 @@ const Wrapper = styled.section`
 `
 
 const Text = styled.p`
-  ${text.desktop.bodyM};
+  ${text.desktop.bodyS};
   position: relative;
   width: 100%;
 
   ${media.fullWidth} {
-    ${text.fullWidth.bodyM};
+    ${text.fullWidth.bodyS};
   }
-
+  ${media.tablet} {
+    ${text.tablet.bodyS};
+  }
   ${media.mobile} {
     font-size: 3.9vw;
   }
@@ -109,6 +111,7 @@ const Collaborate = styled.div`
     height: 76.3vw;
     left: 2.4vw;
     top: 160.4vw;
+    right: auto;
   }
 `
 

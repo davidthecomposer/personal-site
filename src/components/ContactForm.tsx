@@ -7,8 +7,7 @@ import React, {
 } from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
-import { PrimaryButtonStyle } from "assets/styles/buttons"
-import { MobileContext } from "components/layout"
+import { MobileContext } from "components/ContextStore"
 import colors from "assets/styles/colors"
 import media from "assets/styles/media"
 import MainButton from "./buttons/MainButton"
@@ -186,8 +185,8 @@ const FormModal = styled.form<{
   box-sizing: border-box;
 
   ${media.tablet} {
-    width: 33.69vw;
-    height: 32.52vw;
+    width: 40vw;
+    height: 35vw;
     left: ${props => props.leftValT};
     top: ${props => props.topValT};
 
@@ -213,6 +212,9 @@ const FormRow = styled.div`
 
   ${media.tablet} {
     ${text.tablet.bodyXS}
+    :nth-of-type(3) {
+      margin-bottom: 30px;
+    }
   }
   ${media.mobile} {
     ${text.mobile.bodyXS};
@@ -243,15 +245,14 @@ const TextInput = styled.input`
   padding-left: 1vw;
 
   ${media.tablet} {
-    ${text.tablet.bodyM}
+    ${text.tablet.bodyS}
+    width: 80%;
     height: 3vw;
   }
   ${media.mobile} {
-    ${text.mobile.bodyM}
+    ${text.mobile.bodyS}
     height: 7vw;
     width: 70%;
-  }
-  ${media.tabletPortrait} {
   }
 `
 
@@ -270,10 +271,11 @@ const TextArea = styled.textarea`
   color: black;
   ${media.tablet} {
     height: 9vw;
-    ${text.tablet.bodyM}
+    width: 80%;
+    ${text.tablet.bodyS};
   }
   ${media.mobile} {
-    ${text.mobile.bodyM}
+    ${text.mobile.bodyS}
     height: 25vw;
     width: 70%;
   }

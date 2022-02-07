@@ -11,7 +11,7 @@ import gsap from "gsap"
 import { navigate } from "gatsby"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
 import { renderRichText } from "gatsby-source-contentful/rich-text"
-
+import useMedia from "utils/hooks"
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -19,7 +19,7 @@ import {
 } from "react-share"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
-import { MobileContext } from "components/layout"
+import { MobileContext } from "components/ContextStore"
 
 type props = {
   pageContext: any
@@ -90,7 +90,9 @@ const NewsExpanded: React.FC<props> = ({ pageContext }) => {
 
   useEffect(() => {
     if (mainText.current) {
-      setTextHeight(mainText.current.clientHeight + 100)
+      !mobile
+        ? setTextHeight(mainText.current.clientHeight + 100)
+        : setTextHeight(mainText.current.clientHeight)
     }
   }, [])
 
@@ -101,7 +103,7 @@ const NewsExpanded: React.FC<props> = ({ pageContext }) => {
       <Contributor
         key={`${title}-cont-${i}`}
         activeCard={activeCard === i}
-        leftOffset={17.4 * i}
+        leftOffset={mobile ? 40 * i : 17.1 * i}
         textHeight={textHeight}
         hiddenCard={activeCard !== i && activeCard !== -1}
       >
@@ -128,14 +130,15 @@ const NewsExpanded: React.FC<props> = ({ pageContext }) => {
               })}
             </LinkInner>
           </Links>
-
-          <MainButton
-            onClick={() => handleExpandCard(i, `content-${i}`)}
-            borderColor={colors.coolWhiteLight}
-            backgroundColor={colors.activeTeal}
-          >
-            {activeCard === i ? "BACK" : "ABOUT"}
-          </MainButton>
+          {!mobile && (
+            <MainButton
+              onClick={() => handleExpandCard(i, `content-${i}`)}
+              borderColor={colors.coolWhiteLight}
+              backgroundColor={colors.activeTeal}
+            >
+              {activeCard === i ? "BACK" : "ABOUT"}
+            </MainButton>
+          )}
         </MainCard>
         <Content activeCard={activeCard === i} className={`content-${i}`}>
           <ContributorTitle>{name}</ContributorTitle>
@@ -147,14 +150,18 @@ const NewsExpanded: React.FC<props> = ({ pageContext }) => {
 
   return (
     <NewsStory>
-      <SectionHeaders
-        small={mobile ? true : false}
-        text={title}
-        classRoot={`${url}-header`}
-      />
+      <SectionHeaders small text={title} classRoot={`${url}-header`} />
       <MainImage
-        src={mobile ? mainImages[1].file.url : mainImages[0].file.url}
-        alt={mobile ? mainImages[1].file.fileName : mainImages[0].file.fileName}
+        src={
+          mobile && mainImages[1]
+            ? mainImages[1].file.url
+            : mainImages[0].file.url
+        }
+        alt={
+          mobile && mainImages[1]
+            ? mainImages[1].file.fileName
+            : mainImages[0].file.fileName
+        }
       />
       <BottomContainer>
         <Sticky className={"sticky"}>
@@ -204,6 +211,9 @@ const NewsStory = styled.section`
   ${media.tablet} {
     padding: 6.25vw 0 0 0;
   }
+  ${media.tablet} {
+    padding: 6.25vw 2vw;
+  }
 `
 
 const Text = styled.div<{ collapse: boolean }>`
@@ -212,7 +222,9 @@ const Text = styled.div<{ collapse: boolean }>`
   color: ${colors.coolWhite};
   transform: scaleY(${props => (props.collapse ? 0 : 1)});
   transition: 0.5s;
-  /* opacity: ${props => (props.collapse ? 0 : 1)}; */
+  ${media.mobile} {
+    ${text.mobile.bodyL};
+  }
 `
 
 const MainImage = styled.img`
@@ -222,6 +234,12 @@ const MainImage = styled.img`
   display: inline-block;
   position: relative;
   margin: 3.125vw 0 6.25vw 7.25vw;
+  ${media.mobile} {
+    height: auto;
+    width: 100%;
+    margin: 5.33vw auto;
+    object-fit: contain;
+  }
 `
 
 const Sticky = styled.div`
@@ -241,7 +259,13 @@ const Sticky = styled.div`
   flex-direction: column;
   align-items: center;
 
-  ${media.fullWidth} {
+  ${media.mobile} {
+    position: relative;
+    top: 0;
+    margin: 0 0 8vw;
+    width: 40%;
+    height: auto;
+    padding: 2.67vw;
   }
 `
 
@@ -255,6 +279,7 @@ const Line = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
+    margin: 2.67vw 0;
   }
   ${media.fullWidth} {
   }
@@ -265,11 +290,10 @@ const ShareText = styled.p`
   color: ${colors.headlineWhite};
   width: 100%;
   text-align: right;
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    text-align: center;
+    ${text.mobile.bodyM};
   }
 `
 
@@ -301,6 +325,12 @@ const Links = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
+    width: 100%;
+    height: 10.67vw;
+    .share_links {
+      width: 5.33vw;
+      height: 5.33vw;
+    }
   }
   ${media.tabletPortrait} {
   } ;
@@ -309,24 +339,24 @@ const Links = styled.div`
 const BottomContainer = styled.div`
   display: flex;
   position: relative;
-  /* height: 1000px; */
   padding: 0 7.25vw;
   ${media.tablet} {
   }
   ${media.mobile} {
-    flex-direction: column-reverse;
+    flex-direction: column;
+    padding: 0 2vw;
   }
 `
 
 const Column = styled.div`
   margin-left: 5vw;
   width: 71vw;
-  border: 1px solid redl ${media.tablet} {
 
+  ${media.tablet} {
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    width: 100%;
+    margin: 0;
   }
 `
 
@@ -353,8 +383,12 @@ const Contributor = styled.div<{
   ${media.tablet} {
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    position: relative;
+    height: auto;
+    width: 100%;
+    left: auto;
+    margin-bottom: 20px;
+    flex-direction: column;
   }
 `
 const LinkInner = styled.div`
@@ -392,10 +426,11 @@ const Name = styled.p`
   transition: 0.4s;
   color: ${colors.coolWhite};
   ${media.tablet} {
+    ${text.tablet.bodyS};
+    opacity: 1;
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    display: none;
   }
 `
 
@@ -428,8 +463,16 @@ const MainCard = styled.div<{ activeCard: boolean }>`
   }
 
   ${media.tablet} {
+    ${Links} {
+      transform: scaleY(1);
+    }
   }
   ${media.mobile} {
+    width: 60%;
+
+    ${Links} {
+      transform: scaleY(1);
+    }
   }
   ${media.fullWidth} {
   }
@@ -443,8 +486,8 @@ const Image = styled.img`
   ${media.tablet} {
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    width: 100%;
+    height: auto;
   }
 `
 
@@ -453,11 +496,12 @@ const Contributors = styled.div`
   display: flex;
   margin-top: 6.25vw;
   height: 38vw;
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    height: auto;
+    width: 100%;
+    flex-direction: column;
+    margin: 20px 0 0 0;
   }
 `
 
@@ -472,6 +516,14 @@ const Content = styled.div<{ activeCard: boolean }>`
   ${media.tablet} {
   }
   ${media.mobile} {
+    position: relative;
+
+    left: auto;
+    right: 0;
+    top: 0;
+    width: 100%;
+    opacity: 1;
+    margin-left: 0;
   }
   ${media.fullWidth} {
   }
@@ -485,6 +537,7 @@ const ContributorTitle = styled.h3`
   ${media.tablet} {
   }
   ${media.mobile} {
+    ${text.mobile.h3};
   }
   ${media.fullWidth} {
   }
@@ -496,6 +549,7 @@ const ContributorBio = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
+    ${text.mobile.bodyM};
   }
   ${media.fullWidth} {
   }
@@ -543,6 +597,9 @@ const Paragraph = styled.p`
   ${media.tablet} {
     ${text.tablet.bodyS};
   }
+  ${media.mobile} {
+    ${text.mobile.bodyL};
+  }
 `
 const ExternalLink = styled.a`
   ${text.fullWidth.bodyM};
@@ -550,6 +607,9 @@ const ExternalLink = styled.a`
   color: ${colors.activeTeal};
   ${media.tablet} {
     ${text.tablet.bodyS};
+  }
+  ${media.mobile} {
+    ${text.mobile.bodyL};
   }
 `
 

@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useContext } from "react"
 import styled from "styled-components"
 import colors from "assets/styles/colors"
 import text from "assets/styles/text"
 import media from "assets/styles/media"
 import gsap from "gsap"
-// import useAnimationFrame useMedia  from "utils/Hooks";
 
 type props = {
   left?: boolean
@@ -74,7 +73,7 @@ const HeaderWrapper = styled.div`
   overflow: hidden;
 
   ${media.tablet} {
-    margin-left: 1.95vw;
+    margin-left: 3.95vw;
     height: 7.5vw;
   }
   ${media.mobile} {
@@ -90,7 +89,7 @@ const Header = styled.h2<{ left?: boolean; small?: boolean }>`
   span {
     transform: translate(
       ${props => (props.left ? "8vw" : "-8vw")},
-      ${props => (props.small ? "140%" : "115%")}
+      ${props => (props.small ? "140%" : "120%")}
     );
     display: inline-block;
     margin-right: 1.25vw;
@@ -106,6 +105,14 @@ const Header = styled.h2<{ left?: boolean; small?: boolean }>`
   }
   ${media.mobile} {
     ${props => (props.small ? text.mobile.h4 : text.mobile.h3)};
+    span {
+      transform: translate(
+        ${props => (props.left ? "8vw" : "-8vw")},
+        ${props => (props.small ? "180%" : "120%")}
+      );
+      display: inline-block;
+      margin-right: 1.25vw;
+    }
   }
 `
 const HeaderLine = styled.div<{ left?: boolean }>`

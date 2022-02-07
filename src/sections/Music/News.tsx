@@ -35,7 +35,7 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   useEffect(() => {
     NewsStories.forEach((item: any, i: number) => {
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 60%" },
+        scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
       })
 
       tl.from(`.newsCard-${i}`, {
@@ -69,14 +69,6 @@ const News: React.FC<{ data: any }> = ({ data }) => {
         <NewsRow>
           <Text>{story.blurb}</Text>
           <ButtonRow>
-            <MainButton
-              onClick={() => handleMore(`.front-${i}`, `.more-${i}`)}
-              borderColor={colors.dullTeal}
-              backgroundColor={colors.inputTeal}
-              bGOpacity={"20"}
-            >
-              Link Out
-            </MainButton>
             <MainButton
               onClick={() => navigate(`/news/${pathName}`)}
               borderColor={colors.dullTeal}

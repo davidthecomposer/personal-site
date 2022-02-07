@@ -6,20 +6,14 @@ import React, {
   useContext,
 } from "react"
 import styled from "styled-components"
-import { PrimaryButtonStyle } from "styles/buttons"
 import colors from "styles/colors"
 import text from "styles/text"
-import twitter from "assets/svg/twitterIcon.svg"
-import linkedin from "assets/svg/linkedIcon.svg"
-import facebook from "assets/svg/facebookIcon.svg"
 import media from "styles/media"
 import gsap from "gsap"
-import Compositions from "pages/compositions"
-
 import { navigate, graphql } from "gatsby"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
 import { renderRichText } from "gatsby-source-contentful/rich-text"
-import Layout, { AudioPlayerContext } from "components/layout"
+import { AudioPlayerContext } from "components/ContextStore"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 import { AudioPlayerElement } from "components/AudioPlayer"
@@ -168,6 +162,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
       <Playlist
         key={`playlist-item-${i}`}
         onMouseEnter={() => setActiveCard(mvt.mvtNumber)}
+        onClick={() => setActiveCard(mvt.mvtNumber)}
       >
         <ButtonContainer visible={mvt.audio?.file?.url}>
           <MainButton
@@ -288,20 +283,8 @@ const Wrapper = styled.section<{ bGImage: string }>`
   background-size: cover;
   ${media.mobile} {
     width: 100%;
-    height: 146.1vw;
+    min-height: 100vh;
     margin-bottom: 30vw;
-  }
-`
-
-const Text = styled.div`
-  width: 100%;
-  color: ${colors.coolWhite};
-
-  transition: 0.5s;
-  margin: 3.13vw 0 6.25vw;
-  ${media.mobile} {
-  }
-  ${media.tabletPortrait} {
   }
 `
 
@@ -320,10 +303,14 @@ const PlaylistColumn = styled.div`
   width: fit-content;
   max-width: 30vw;
   ${media.tablet} {
+    margin-top: 23vw;
   }
   ${media.mobile} {
+    margin-top: 50px;
   }
-  ${media.fullWidth} {
+  ${media.mobile} {
+    width: 100%;
+    max-width: 100%;
   }
 `
 
@@ -348,8 +335,10 @@ const MovementDescription = styled.div`
 
   width: 40vw;
   ${media.tablet} {
+    width: 70%;
   }
   ${media.mobile} {
+    width: 100%;
   }
   ${media.fullWidth} {
   }
@@ -373,10 +362,10 @@ const MvtTitle = styled.h3`
     opacity: 0.33;
   }
   ${media.tablet} {
+    ${text.tablet.h5};
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    ${text.mobile.h5};
   }
 `
 
@@ -397,8 +386,10 @@ const MvtName = styled.p`
   ${text.desktop.h6};
   color: ${colors.coolWhite};
   ${media.tablet} {
+    ${text.tablet.h6};
   }
   ${media.mobile} {
+    ${text.mobile.h4};
   }
   ${media.fullWidth} {
   }
@@ -417,6 +408,7 @@ const MvtTime = styled.div`
   ${media.tablet} {
   }
   ${media.mobile} {
+    ${text.mobile.bodyL};
   }
   ${media.fullWidth} {
   }
@@ -439,6 +431,10 @@ const Heading5 = styled.h5`
 `
 const Heading6 = styled.h6`
   ${text.fullWidth.bodyM};
+
+  ${media.tablet} {
+    ${text.tablet.bodyL};
+  }
 `
 const Paragraph = styled.p`
   ${text.fullWidth.bodyS};
@@ -446,7 +442,7 @@ const Paragraph = styled.p`
     ${text.tablet.bodyM};
   }
   ${media.mobile} {
-    ${text.mobile.bodyS};ß
+    ${text.tablet.bodyL};
   }
 `
 const ExternalLink = styled.a`
@@ -472,11 +468,23 @@ const BigRow = styled.div`
   display: flex;
   justify-content: space-between;
 
-  ${media.tablet} {
+  ${media.mobile} {
+    flex-direction: column;
   }
+`
+
+const Text = styled.div`
+  width: 100%;
+  color: ${colors.coolWhite};
+
+  transition: 0.5s;
+  margin: 3.13vw 0 6.25vw;
   ${media.mobile} {
   }
-  ${media.fullWidth} {
+  ${media.tablet} {
+    ${Paragraph} {
+      ${text.tablet.bodyS};
+    }
   }
 `
 
@@ -487,8 +495,8 @@ const ButtonContainer = styled.div<{ visible: boolean }>`
   position: relative;
   button {
     position: absolute;
-    width: 3vw;
-    height: 3vw;
+    width: 100%;
+    height: 100%;
     ${text.desktop.bodyXS};
     left: 0;
     top: 0;
@@ -498,6 +506,19 @@ const ButtonContainer = styled.div<{ visible: boolean }>`
   ${media.tablet} {
   }
   ${media.mobile} {
+    width: 10vw;
+    height: 10vw;
+    margin-right: 5vw;
+    button {
+      position: absolute;
+      width: 10vw;
+      height: 10vw;
+      ${text.desktop.bodyL};
+      left: 0;
+      top: 0;
+      opacity: ${props => (props.visible ? 1 : 0.1)};
+      /* transform: scale(${props => (props.visible ? 1 : 0)}); */
+    }
   }
   ${media.fullWidth} {
   }
@@ -520,13 +541,6 @@ const Playlist = styled.div`
       }
     }
   }
-
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
-  ${media.fullWidth} {
-  }
 `
 
 const Date = styled.p`
@@ -536,6 +550,7 @@ const Date = styled.p`
   ${media.tablet} {
   }
   ${media.mobile} {
+    ${text.mobile.bodyL};
   }
   ${media.fullWidth} {
   }
@@ -557,11 +572,9 @@ const Instrument = styled.p`
   color: ${colors.coolWhite};
   opacity: 0.33;
   margin-right: 0.63vw;
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    ${text.mobile.bodyM};
   }
 `
 const Sticky = styled.div`
@@ -587,10 +600,14 @@ const Sticky = styled.div`
     text-decoration: none;
   }
   ${media.tablet} {
+    position: absolute;
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    position: relative;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 60%;
+    margin: 20px auto;
   }
 `
 
@@ -598,10 +615,10 @@ const Column = styled.div`
   position: relative;
 
   ${media.tablet} {
+    position: absolute;
   }
   ${media.mobile} {
-  }
-  ${media.fullWidth} {
+    position: relative;
   }
 `
 

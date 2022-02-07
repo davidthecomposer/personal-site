@@ -1,18 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useContext,
-  forwardRef,
-  useCallback,
-} from "react"
+import React, { useEffect, useRef, useState, useContext } from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
 import colors from "assets/styles/colors"
 import gsap from "gsap"
 import media from "assets/styles/media"
-import { MobileContext, AudioPlayerContext } from "components/layout"
-import { StaticQuery, graphql } from "gatsby"
+import { MobileContext, AudioPlayerContext } from "components/ContextStore"
 import { ReactComponent as PlayButtonSVG } from "assets/svg/playButton.svg"
 import { ReactComponent as PauseButtonSVG } from "assets/svg/pauseButton.svg"
 
@@ -55,7 +47,7 @@ type ActiveTrack = {
   year: string
 }
 type Props = {
-  activeTracks: ActiveTrack
+  activeTracks: any
 }
 
 const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
@@ -67,7 +59,6 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
   const shouldAutoPlay = useRef(false)
   const playTrack = useRef(true)
   const [player, setPlayer] = useState<HTMLAudioElement | null>(null)
-  const importedRef = activeTracks.audioRef
   const setActiveTracks = useContext(AudioPlayerContext).setActiveTracks
   const row = useRef<HTMLDivElement | null>(null)
   const [timeRemaining, setTimeRemaining] = useState("0:00")
@@ -96,16 +87,17 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
 
   useEffect(() => {
     if (lastActive.current) {
+      console.log("importedRef")
       lastActive.current.pause()
     }
 
-    lastActive.current = importedRef
-    setPlayer(importedRef)
+    lastActive.current = audioRef
+    setPlayer(audioRef)
 
     return () => {
       setPlayer(null)
     }
-  }, [importedRef])
+  }, [audioRef])
 
   const getDuration = () => {
     if (player) {
@@ -127,13 +119,15 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
   const handleClick = (e: any) => {
     setPlayPushed(!playPushed)
     playTrack.current = !playTrack.current
-    if (playTrack.current) {
+    if (playTrack.current && player) {
       //@ts-ignore
       player.play()
       setCanProgress(true)
     } else {
-      //@ts-ignore
-      player.pause()
+      console.log("pause"),
+        //@ts-ignore
+
+        player.pause()
       setCanProgress(false)
     }
   }
@@ -265,11 +259,12 @@ const Playlist = styled.div<{ activeTrack: boolean }>`
   transform: scaleY(${({ activeTrack }) => (activeTrack ? 1 : 0)});
   transition: transform 0.3s;
 
-  ${media.tabletPortrait} {
-    width: 486px;
-    height: 750px;
-
-    margin: 0 15px;
+  ${media.tablet} {
+    width: 50vw;
+    height: 120px;
+    right: 10px;
+    padding: 10px;
+    margin: 0;
   }
   ${media.mobile} {
     display: flex;
@@ -295,7 +290,7 @@ const Text = styled.div`
   ${media.mobile} {
     font-size: 4.3vw;
   }
-  ${media.tabletPortrait} {
+  ${media.tablet} {
     font-size: 22px;
   }
 `
@@ -313,12 +308,12 @@ const PlayBack = styled.div`
   justify-content: space-between;
   padding: 0 1vw;
 
-  ${media.tabletPortrait} {
-    width: 409px;
-    height: 116px;
-    left: 14px;
-    top: 14px;
-    padding: 0 21px;
+  ${media.tablet} {
+    width: 100%;
+    position: relative;
+    height: 50px;
+    left: auto;
+    top: auto;
   }
   ${media.mobile} {
     position: relative;
@@ -383,7 +378,10 @@ const Play = styled.button<{ play: boolean }>`
   ${PauseButton} {
     opacity: ${props => (props.play ? 1 : 0)};
   }
-
+  ${media.tablet} {
+    width: 40px;
+    height: 40px;
+  }
   ${media.mobile} {
     width: 100%;
     height: 100%;
@@ -426,8 +424,11 @@ const Track = styled.div<{ activeTrack: boolean }>`
     }
   }
 
-  ${media.tabletPortrait} {
-    height: 51px;
+  ${media.tablet} {
+    ${text.tablet.bodyS};
+    height: 50px;
+    width: 100%;
+    margin: 5px 0 0 0;
   }
   ${media.mobile} {
     height: 10vw;
@@ -448,6 +449,9 @@ const Row1 = styled.div`
     transition: 0.3s;
     color: ${colors.coolWhite};
     line-height: 200%;
+  }
+  ${media.tablet} {
+    width: 100%;
   }
 `
 

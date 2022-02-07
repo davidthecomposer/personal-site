@@ -78,74 +78,76 @@ exports.createPages = ({ graphql, actions }) => {
           })
         })
       }),
-      graphql(
-        `
-          {
-            allContentfulConcertPiece {
-              nodes {
-                description {
-                  raw
-                }
-                small
-                instrumentation
-                id
-                duration
-                key
-                scoreSample {
-                  file {
-                    url
-                  }
-                }
-                title
-                year
-                movements {
-                  mvtNumber
+      resolve(
+        graphql(
+          `
+            {
+              allContentfulConcertPiece {
+                nodes {
                   description {
                     raw
                   }
-                  title
+                  small
+                  instrumentation
+                  id
+                  duration
                   key
-                  time
-                  audio {
+                  scoreSample {
                     file {
-                      fileName
                       url
-                      contentType
                     }
                   }
-                }
-                backgroundImages {
-                  file {
-                    url
+                  title
+                  year
+                  movements {
+                    mvtNumber
+                    description {
+                      raw
+                    }
+                    title
+                    key
+                    time
+                    audio {
+                      file {
+                        fileName
+                        url
+                        contentType
+                      }
+                    }
+                  }
+                  backgroundImages {
+                    file {
+                      url
+                    }
                   }
                 }
               }
             }
+          `
+        ).then(result => {
+          if (result.errors) {
+            console.error(result.errors)
+            return reject(result.errors)
           }
-        `
-      ).then(result => {
-        if (result.errors) {
-          console.error(result.errors)
-          return reject(result.errors)
-        }
 
-        const pageData = result.data.allContentfulConcertPiece.nodes
-        console.log(pageData)
+          const pageData = result.data.allContentfulConcertPiece.nodes
+          console.log(pageData)
 
-        pageData.forEach((piece, index) => {
-          const pathName = piece.key
+          pageData.forEach((piece, index) => {
+            const pathName = piece.key
 
-          createPage({
-            path: `/music/${pathName}`,
-            component: ConcertPiece,
-            context: {
-              concertPiece: piece,
-              pathName: pathName,
-              index,
-            },
+            createPage({
+              path: `/music/${pathName}`,
+              component: ConcertPiece,
+              context: {
+                concertPiece: piece,
+                pathName: pathName,
+                index,
+              },
+            })
           })
         })
-      })
+      )
     )
   })
 }

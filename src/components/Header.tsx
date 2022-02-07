@@ -5,7 +5,7 @@ import React, {
   useContext,
   useCallback,
 } from "react"
-import { MobileContext } from "components/layout"
+import { MobileContext } from "components/ContextStore"
 import styled from "styled-components"
 import media from "assets/styles/media"
 import colors from "assets/styles/colors"
@@ -589,6 +589,9 @@ const Link = styled.a<{ open: boolean }>`
   ${media.fullWidth} {
     font-size: 1.1vw;
   }
+  ${media.tablet} {
+    font-size: 1.6vw;
+  }
   ${media.mobile} {
     font-size: 3.9vw;
     opacity: 0;
@@ -635,6 +638,10 @@ const NavBtn = styled.button<{ open: boolean }>`
       }
     }
   }
+  ${media.tablet} {
+    width: 13.33vw;
+    height: 13.33vw;
+  }
 
   ${media.mobile} {
     width: 15vw;
@@ -676,12 +683,14 @@ const NavLinks = styled.div<{ open: boolean; initial: boolean }>`
       }
     }
   }
+  ${media.tablet} {
+    width: fit-content;
+    margin-top: 2.4vw;
+  }
 
   ${media.mobile} {
     width: fit-content;
     height: auto;
-  }
-  ${media.fullWidth} {
   }
 `
 

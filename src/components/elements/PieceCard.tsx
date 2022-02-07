@@ -7,7 +7,6 @@ import React, {
 } from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
-import { MobileContext } from "components/layout"
 import colors from "assets/styles/colors"
 import media from "assets/styles/media"
 import MainButton from "components/buttons/MainButton"
@@ -16,7 +15,7 @@ import { navigate } from "gatsby"
 import { ReactComponent as TrebleUnderlaySVG } from "assets/svg/trebleUnderlay.svg"
 import { ReactComponent as AltoUnderlaySVG } from "assets/svg/altoUnderlay.svg"
 import { ReactComponent as BassUnderlaySVG } from "assets/svg/bassUnderlay.svg"
-import { AudioPlayerContext } from "components/layout"
+import { AudioPlayerContext, MobileContext } from "components/ContextStore"
 
 type Props = {
   myKey: string
@@ -54,7 +53,9 @@ const ConcertPiece: React.FC<Props> = ({
       //going to need to send in an object with anmy nmeeded Data (title image audioRef, composer etc)
     }
   }
-
+  useEffect(() => {
+    console.log(mobile)
+  }, [])
   return (
     <PieceCard bGColor={backgroundColor}>
       {mobile && (

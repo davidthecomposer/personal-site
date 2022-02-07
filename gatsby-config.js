@@ -20,7 +20,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-layout`,
       options: {
-        component: require.resolve(`./src/components/layout.tsx`),
+        component: require.resolve(`./src/components/ContextStore.tsx`),
       },
     },
     `gatsby-plugin-image`,
@@ -49,12 +49,6 @@ module.exports = {
             { removeUselessDefs: true },
           ],
         },
-      },
-    },
-    {
-      resolve: `gatsby-plugin-layout`,
-      options: {
-        component: require.resolve(`./src/components/layout.tsx`),
       },
     },
     {

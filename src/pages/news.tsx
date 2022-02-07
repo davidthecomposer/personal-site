@@ -1,12 +1,9 @@
 import React, { useContext } from "react"
 import styled from "styled-components"
-import Layout, { MobileContext } from "components/layout"
-import Hero from "sections/Music/Hero"
-import MediaMusic from "sections/Music/MediaMusic"
+import { MobileContext } from "components/ContextStore"
 import { graphql } from "gatsby"
 
 import News from "sections/News/news"
-import Connect from "sections/Music/Connect"
 
 type data = {
   data: any
