@@ -20,7 +20,8 @@
       "components/*": ["components/*"],
       "images/*": ["images/*"],
       "sections/*": ["sections/*"],
-      "styles/*": ["styles/*"],
+      "styles/*": ["/assets/styles/*"],
+      "assets/*": ["assets/*"],
       "templates/*": ["templates/*"],
       "utils/*": ["utils/*"]
     }
