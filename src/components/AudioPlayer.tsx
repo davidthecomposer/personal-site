@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
-import colors from "assets/styles/colors"
+import colors from "styles/colors"
 import gsap from "gsap"
 import media from "assets/styles/media"
 import { MobileContext, AudioPlayerContext } from "components/ContextStore"

@@ -1,5 +1,5 @@
 import media from "./media"
-import colors from "./colors"
+import colors from "styles/colors"
 
 const mainStyles = {
   headings: `font-family: "Nixie One";

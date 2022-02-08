@@ -10,7 +10,7 @@ type Props = {
   children: any
 }
 
-export const Layout: React.FC<Props> = ({ children }) => {
+const Layout: React.FC<Props> = ({ children }) => {
   return (
     <Wrapper>
       <SEO></SEO>

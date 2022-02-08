@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from "react"
 import styled from "styled-components"
 import MainButton from "components/buttons/MainButton"
 import text from "assets/styles/text"
-import colors from "assets/styles/colors"
+import colors from "styles/colors"
 
 import { Canvas, useFrame } from "@react-three/fiber"
 import gsap from "gsap"

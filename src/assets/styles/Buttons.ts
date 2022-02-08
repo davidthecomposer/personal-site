@@ -1,6 +1,6 @@
 import text from "./text"
 import media from "./media"
-import colors from "./colors"
+import colors from "styles/colors"
 
 export const PrimaryButtonStyle = `
 width: 7.5vw;
@@ -17,7 +17,7 @@ ${media.mobile} {
     height: 9.7vw;
     border-radius: 1.4vw;
 }
-${media.tabletPortrait} {
+${media.tablet} {
    
     border-radius: 8px;
 }

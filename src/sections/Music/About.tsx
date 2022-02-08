@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useContext } from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
-import colors from "assets/styles/colors"
+import colors from "styles/colors"
 import media from "assets/styles/media"
 import davidHuge from "assets/images/davidHuge.jpg"
 import davidHugeM from "assets/images/davidHugeM.jpg"

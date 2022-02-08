@@ -8,7 +8,7 @@ import React, {
 import styled from "styled-components"
 import text from "assets/styles/text"
 import { MobileContext } from "components/ContextStore"
-import colors from "assets/styles/colors"
+import colors from "styles/colors"
 import media from "assets/styles/media"
 import MainButton from "./buttons/MainButton"
 import gsap from "gsap"

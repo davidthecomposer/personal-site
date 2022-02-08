@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useContext } from "react"
 import styled from "styled-components"
-import colors from "assets/styles/colors"
+import colors from "styles/colors"
 import text from "assets/styles/text"
 import media from "assets/styles/media"
 import gsap from "gsap"
