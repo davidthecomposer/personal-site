@@ -21,8 +21,8 @@
       "components/*": ["components/*"],
       "images/*": ["images/*"],
       "sections/*": ["sections/*"],
-      "styles/*": ["styles/*"],
       "assets/*": ["assets/*"],
+      "styles/*": ["styles/*"],
       "templates/*": ["templates/*"],
       "utils/*": ["utils/*"],
       "types/*": ["types/*"]
