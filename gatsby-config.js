@@ -62,6 +62,7 @@ module.exports = {
         icon: `src/assets/svg/logo.svg`, // This path is relative to the root of the site.
       },
     },
+    `gatsby-plugin-netlify`,
     {
       resolve: "gatsby-plugin-root-import",
       options: {
