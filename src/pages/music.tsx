@@ -1,7 +1,7 @@
 import React, { useContext, useState, createContext, useEffect } from "react"
 import styled from "styled-components"
 import { MobileContext } from "components/ContextStore"
-import Layout from "components/layout"
+import Layout from "components/Layout"
 import Hero from "sections/Music/Hero"
 import MediaMusic from "sections/Music/MediaMusic"
 import { graphql } from "gatsby"
@@ -26,7 +26,7 @@ const MusicPage: React.FC<data> = ({ data }) => {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-
+  //
   return (
     <Layout>
       <IntroAnimationContext.Provider value={intro}>
