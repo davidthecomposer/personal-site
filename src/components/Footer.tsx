@@ -1,9 +1,9 @@
 import React, { useEffect } from "react"
 import styled from "styled-components"
-import media from "styles/media"
-import colors from "styles/colors"
+import media from "../assets/styles/media"
+import colors from "../assets/styles/colors"
 import gsap from "gsap"
-import text from "styles/text"
+import text from "../assets/styles/text"
 // import twitter from "assets/svg/twitterIcon.svg";
 import instagram from "assets/svg/instagramIcon.svg"
 import web from "assets/svg/webIcon.svg"

@@ -1,4 +1,4 @@
-import { Colors } from "src/types"
+import { Colors } from "../../types/types"
 
 const colors: Colors = {
   coolPurple: "#DBD1DB",

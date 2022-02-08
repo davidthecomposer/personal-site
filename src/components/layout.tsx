@@ -1,11 +1,10 @@
-import React, { useContext, useEffect } from "react"
+import React from "react"
 import styled from "styled-components"
 import SEO from "components/seo"
 import "fonts/reset.css"
 import "fonts/typography.css"
 import Footer from "./Footer"
-import AudioPlayer from "./AudioPlayer"
-import { AudioPlayerContext } from "./ContextStore"
+
 type Props = {
   children: any
 }

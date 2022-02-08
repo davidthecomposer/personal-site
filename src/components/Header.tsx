@@ -8,7 +8,7 @@ import React, {
 import { MobileContext } from "components/ContextStore"
 import styled from "styled-components"
 import media from "assets/styles/media"
-import colors from "styles/colors"
+import colors from "../assets/styles/colors"
 import gsap from "gsap"
 import text from "assets/styles/text"
 import { ReactComponent as DavidSigSVG } from "assets/svg/davidSig.svg"

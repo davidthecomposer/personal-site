@@ -7,7 +7,7 @@ import React, {
 } from "react"
 import styled from "styled-components"
 import text from "assets/styles/text"
-import colors from "styles/colors"
+import colors from "../../assets/styles/colors"
 import media from "assets/styles/media"
 import MainButton from "components/buttons/MainButton"
 import { AudioPlayerElement } from "components/AudioPlayer"
