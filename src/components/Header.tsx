@@ -17,7 +17,7 @@ import { ReactComponent as DavidInitialsSVG } from "assets/svg/logoT.svg"
 const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   const mobile = useContext(MobileContext)
   // const tablet = useContext(TabletContext);
-  const history = location.href
+
   const [role, setRole] = useState("")
 
   const name = useRef(null)
@@ -33,7 +33,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   const pressed = useRef(false)
 
   useEffect(() => {
-    const pathname = window.location.pathname
+    const pathname = globalThis?.location.pathname
 
     if (pathname) {
       if (pathname === "/music") {
@@ -44,7 +44,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
         setRole("developer")
       }
     }
-  }, [window.location.pathname])
+  }, [globalThis])
 
   useEffect(() => {
     if (mobile && !initial) {

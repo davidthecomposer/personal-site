@@ -51,16 +51,17 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
           >
             LISTEN
           </MainButton>
-          {window.matchMedia("(hover: none)").matches && (
-            <MainButton
-              limit
-              bGOpacity={"20"}
-              backgroundColor={colors.activeTeal}
-              onClick={() => handleInfo(i)}
-            >
-              Info
-            </MainButton>
-          )}
+          {typeof window !== "undefined" &&
+            window.matchMedia("(hover: none)").matches && (
+              <MainButton
+                limit
+                bGOpacity={"20"}
+                backgroundColor={colors.activeTeal}
+                onClick={() => handleInfo(i)}
+              >
+                Info
+              </MainButton>
+            )}
           <AudioWrapper>
             <AudioPlayerElement
               myKey={track.key}
