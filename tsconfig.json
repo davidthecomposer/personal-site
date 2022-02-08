@@ -24,7 +24,8 @@
       "styles/*": ["styles/*"],
       "assets/*": ["assets/*"],
       "templates/*": ["templates/*"],
-      "utils/*": ["utils/*"]
+      "utils/*": ["utils/*"],
+      "types/*": ["types/*"]
     }
   }
 }

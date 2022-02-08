@@ -1,4 +1,6 @@
-const colors = {
+import { Colors } from "src/types"
+
+const colors: Colors = {
   coolPurple: "#DBD1DB",
   deepPurple: "#17161B",
   brightPurple: "#ffcef8",
