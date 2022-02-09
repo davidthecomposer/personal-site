@@ -38,7 +38,7 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
   const handleInfo = (activeNum: number) => {
     setInfo(activeNum)
   }
-
+  //ugh
   return (
     <PieceWrapper className={`media_pieces`} info={info === i}>
       <ImageWrapper>
