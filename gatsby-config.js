@@ -107,7 +107,7 @@ module.exports = {
       resolve: `gatsby-plugin-tsconfig-paths`,
       options: {
         configFile: `${__dirname}/tsconfig.json`,
-        silent: false,
+        silent: true,
       },
     },
   ],
