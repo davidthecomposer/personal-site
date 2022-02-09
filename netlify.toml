@@ -1,0 +1,7 @@
+[build]
+command = "gatsby build && rm -rf .cache/functions"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
