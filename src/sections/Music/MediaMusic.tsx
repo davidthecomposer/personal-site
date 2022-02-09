@@ -123,7 +123,6 @@ const MediaMusic: React.FC<props> = ({ mobile, data }) => {
   const playMedia = () => {}
 
   const allTracks = data.map((track: any, i: number) => {
-    console.log(track)
     return <MediaPiece key={`track-presentation-${i}`} track={track} i={i} />
   })
 

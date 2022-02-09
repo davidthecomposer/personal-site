@@ -55,8 +55,6 @@ const News: React.FC<{ data: any }> = ({ data }) => {
     }
     const pathName = item.url
 
-    console.log(pathName)
-
     return (
       <NewsCard
         className={`newsCard-${i}`}

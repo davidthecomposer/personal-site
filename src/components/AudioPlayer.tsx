@@ -87,7 +87,6 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
 
   useEffect(() => {
     if (lastActive.current) {
-      console.log("importedRef")
       lastActive.current.pause()
     }
 
@@ -124,10 +123,9 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
       player.play()
       setCanProgress(true)
     } else {
-      console.log("pause"),
-        //@ts-ignore
+      //@ts-ignore
 
-        player.pause()
+      player.pause()
       setCanProgress(false)
     }
   }
@@ -162,7 +160,6 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
 
   useEffect(() => {
     if (player) {
-      console.log("jumping here")
       const tl = gsap.timeline({
         paused: true,
 
@@ -196,9 +193,9 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
   }
 
   const handlePause = () => {
-    console.log("why")
-    playTrack.current = !playTrack.current
+    playTrack.current = true
     setPlayPushed(false)
+    setCanProgress(false)
   }
 
   return (

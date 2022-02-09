@@ -291,10 +291,6 @@ const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
     }
   }, [activeSlide, intro])
 
-  useEffect(() => {
-    console.log(tablet)
-  }, [])
-
   const slides = fakeNews.map((news: any, i: number) => {
     return (
       <Slide key={`music_slide${i}`}>

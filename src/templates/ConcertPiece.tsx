@@ -207,19 +207,17 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
   useEffect(() => {
     if (parsedMovements.length > 1) {
       const newArr = renderActiveMvt(allMovements)
-      gsap.to(".mvt_info", {
-        opacity: 0,
-        duration: 0.5,
-        onComplete: () => setMvtInfo(newArr),
-      })
+      setMvtInfo(newArr)
     }
   }, [renderActiveMvt])
 
   useEffect(() => {
-    gsap.to(".mvt_info", {
-      opacity: 1,
-      duration: 0.5,
-    })
+    if (mvtInfo.length > 0) {
+      gsap.to(".mvt_info", {
+        opacity: 1,
+        duration: 0.5,
+      })
+    }
   }, [mvtInfo])
 
   return (

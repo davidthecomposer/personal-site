@@ -46,7 +46,6 @@ const ContactForm: React.FC<{
 
   useEffect(() => {
     if (form.current) {
-      console.log(enter)
       const tl = gsap.timeline()
       if (enter) {
         tl.to(form.current, { scale: 1, duration: 0 }, 0).to(

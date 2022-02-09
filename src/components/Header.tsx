@@ -8,7 +8,7 @@ import React, {
 import { MobileContext } from "components/ContextStore"
 import styled from "styled-components"
 import media from "assets/styles/media"
-import colors from "../assets/styles/colors"
+import colors from "assets/styles/colors"
 import gsap from "gsap"
 import text from "assets/styles/text"
 import { ReactComponent as DavidSigSVG } from "assets/svg/davidSig.svg"
@@ -36,11 +36,9 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
     const pathname = globalThis?.location.pathname
 
     if (pathname) {
-      if (pathname === "/music") {
-        setDisplay(true)
+      if (pathname.includes("/music")) {
         setRole("composer")
       } else {
-        setDisplay(false)
         setRole("developer")
       }
     }
@@ -181,7 +179,6 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
               width: "12vw",
               duration: 0.4,
               onComplete: () => {
-                console.log("hitting here")
                 setIntro(false)
                 setInitial(false)
               },
@@ -390,7 +387,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   return (
     <Wrapper
       ref={wrapper}
-      willDisplay={display}
+      // willDisplay={display}
       open={navOpen && !pressed.current}
     >
       <TitleWrapper className="titleWrapper">
@@ -457,11 +454,11 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
 
 export default Header
 
-const Wrapper = styled.nav<{ willDisplay: boolean; open: boolean }>`
+const Wrapper = styled.nav<{ open: boolean }>`
   position: fixed;
   height: 6vw;
   box-sizing: border-box;
-  display: ${props => (props.willDisplay ? "flex" : "none")};
+  display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5vw 2vw;

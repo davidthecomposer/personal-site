@@ -44,10 +44,6 @@ const ContextStore: React.FC<Props> = ({ children }) => {
   )
 
   useEffect(() => {
-    console.log(activeTracks, "in layout")
-  }, [activeTracks])
-
-  useEffect(() => {
     window.addEventListener("resize", () => {
       setDesktop(window.innerWidth > 1024)
       setTablet(window.innerWidth >= 767 && window.innerWidth <= 1024)
@@ -60,7 +56,6 @@ const ContextStore: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      console.log(window.innerWidth)
       setMobile(window.innerWidth <= mobile)
       setTablet(window.innerWidth > mobile && window.innerWidth <= tablet)
       setDesktop(window.innerWidth > tablet && window.innerWidth <= desktop)

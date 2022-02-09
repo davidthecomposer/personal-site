@@ -53,9 +53,7 @@ const ConcertPiece: React.FC<Props> = ({
       //going to need to send in an object with anmy nmeeded Data (title image audioRef, composer etc)
     }
   }
-  useEffect(() => {
-    console.log(mobile)
-  }, [])
+
   return (
     <PieceCard bGColor={backgroundColor}>
       {mobile && (

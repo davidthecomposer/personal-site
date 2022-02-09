@@ -62,7 +62,6 @@ exports.createPages = ({ graphql, actions }) => {
         }
 
         const pageData = result.data.allContentfulAnnouncement.nodes
-        console.log(pageData)
 
         pageData.forEach((newsItem, index) => {
           const pathName = newsItem.url
@@ -131,7 +130,6 @@ exports.createPages = ({ graphql, actions }) => {
           }
 
           const pageData = result.data.allContentfulConcertPiece.nodes
-          console.log(pageData)
 
           pageData.forEach((piece, index) => {
             const pathName = piece.key

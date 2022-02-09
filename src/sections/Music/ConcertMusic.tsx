@@ -89,7 +89,7 @@ const ConcertMusic: React.FC<props> = ({ mobile, data, tags }) => {
         lastSearchValue.current = searchValue
         newArticles = pieces.filter((piece: any) => {
           let myTags = piece?.instrumentation?.join(" ").toLowerCase()
-          console.log(myTags, "tags")
+
           if (
             piece.ensemble.ensembleName
               .toLowerCase()
