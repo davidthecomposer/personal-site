@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { MobileContext } from "components/ContextStore"
 import { graphql } from "gatsby"
 
-import News from "sections/News/news"
+import News from "sections/News/News"
 
 type data = {
   data: any
