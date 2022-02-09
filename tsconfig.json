@@ -1,31 +1,30 @@
-{
-  "include": ["src/**/*"],
-  "compilerOptions": {
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["dom", "es2015"],
-    "allowJs": true,
-    "checkJs": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
-    "noEmit": true,
-    "downlevelIteration": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node",
-    "baseUrl": "src",
-    "paths": {
-      "components/*": ["components/*"],
-      "images/*": ["images/*"],
-      "sections/*": ["sections/*"],
-      "assets/*": ["assets/*"],
-      "styles/*": ["styles/*"],
-      "templates/*": ["templates/*"],
-      "utils/*": ["utils/*"],
-      "types/*": ["types/*"]
-    }
-  }
-}
+// {
+//   "include": ["src/**/*"],
+//   "compilerOptions": {
+//     "target": "es2015",
+//     "module": "esnext",
+//     "lib": ["dom", "es2015"],
+//     "allowJs": true,
+//     "checkJs": true,
+//     "jsx": "react-jsx",
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "experimentalDecorators": true,
+//     "emitDecoratorMetadata": true,
+//     "resolveJsonModule": true,
+//     "noEmit": true,
+//     "downlevelIteration": true,
+//     "skipLibCheck": true,
+//     "moduleResolution": "node",
+//     "baseUrl": "src",
+//     "paths": {
+//       "components/*": ["components/*"],
+//       "images/*": ["images/*"],
+//       "sections/*": ["sections/*"],
+//       "assets/*": ["assets/*"],
+//       "templates/*": ["templates/*"],
+//       "utils/*": ["utils/*"],
+//       "types/*": ["types/*"]
+//     }
+//   }
+// }
