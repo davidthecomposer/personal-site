@@ -1,6 +1,6 @@
 import text from "./text"
 import media from "./media"
-import colors from "./colors"
+import colors from "assets/styles/colors"
 
 export const PrimaryButtonStyle = `
 width: 7.5vw;
