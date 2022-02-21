@@ -105,7 +105,7 @@ const News: React.FC<{ data: any }> = ({ data }) => {
     <Wrapper id="news">
       <SectionHeaders left text="News" classRoot="news-header" />
       <NewsItemsWrapper>
-        {allNewsItems.slice(0, 3)}
+        {allNewsItems.slice(0, 4)}
 
         <MainButton
           onClick={() => navigate("/news")}

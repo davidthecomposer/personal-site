@@ -54,10 +54,9 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
   const { audioRef, title, year } = activeTracks
   const playList = useRef(null)
   const [playPushed, setPlayPushed] = useState(false)
+  const playPressed = useRef(false)
   const mobile = useContext(MobileContext)
   const [canProgress, setCanProgress] = useState<boolean>(false)
-  const shouldAutoPlay = useRef(false)
-  const playTrack = useRef(true)
   const [player, setPlayer] = useState<HTMLAudioElement | null>(null)
   const setActiveTracks = useContext(AudioPlayerContext).setActiveTracks
   const row = useRef<HTMLDivElement | null>(null)
@@ -73,9 +72,9 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
       player.addEventListener("timeupdate", getDuration)
       player.addEventListener("ended", handleEnd)
       player.addEventListener("pause", handlePause)
-      setCanProgress(true)
-      setPlayPushed(true)
-      progressChecked.current = 1
+
+      handleInitPlay()
+
       return () => {
         player.removeEventListener("durationchange", getDuration)
         player.removeEventListener("timeupdate", getDuration)
@@ -115,19 +114,24 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
     }
   }
 
-  const handleClick = (e: any) => {
-    setPlayPushed(!playPushed)
-    playTrack.current = !playTrack.current
-    if (playTrack.current && player) {
-      //@ts-ignore
-      player.play()
-      setCanProgress(true)
-    } else {
-      //@ts-ignore
+  const handleInitPlay = () => {
+    progressChecked.current = 1
+    player?.play()
+    setProgressCheck(0)
+    setPlayPushed(true)
+    setCanProgress(true)
+  }
 
-      player.pause()
-      setCanProgress(false)
-    }
+  const handlePlay = () => {
+    player?.play()
+    setPlayPushed(true)
+    setCanProgress(true)
+  }
+
+  const handlePause = () => {
+    player?.pause()
+    setPlayPushed(false)
+    setCanProgress(false)
   }
 
   const returnTimeString = (time: number) => {
@@ -186,16 +190,11 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
       }
     }
   }, [canProgress, progressCheck])
+
   const handleEnd = () => {
     if (setActiveTracks) {
       setActiveTracks({ audioRef: null, title: "", year: "" })
     }
-  }
-
-  const handlePause = () => {
-    playTrack.current = true
-    setPlayPushed(false)
-    setCanProgress(false)
   }
 
   return (
@@ -204,7 +203,7 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
         <Play
           aria-label="play and pause button"
           // onTouchStart={(e) => handleClick(e)}
-          onClick={e => handleClick(e)}
+          onClick={!player?.paused ? handlePause : handlePlay}
           play={playPushed}
         >
           <PauseButton />

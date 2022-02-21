@@ -26,7 +26,7 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
   const [info, setInfo] = useState(-1)
   const handlePlay = () => {
     if (value.setActiveTracks && audioRef) {
-      audioRef.play()
+      // audioRef.play()
       value.setActiveTracks({
         audioRef: audioRef,
         title: track.title,
