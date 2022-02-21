@@ -493,13 +493,12 @@ const ButtonContainer = styled.div<{ visible: boolean }>`
   position: relative;
   button {
     position: absolute;
-    width: 100%;
+    width: 3vw;
     height: 100%;
     ${text.desktop.bodyXS};
     left: 0;
     top: 0;
     opacity: ${props => (props.visible ? 1 : 0.1)};
-    /* transform: scale(${props => (props.visible ? 1 : 0)}); */
   }
   ${media.tablet} {
   }
@@ -515,7 +514,6 @@ const ButtonContainer = styled.div<{ visible: boolean }>`
       left: 0;
       top: 0;
       opacity: ${props => (props.visible ? 1 : 0.1)};
-      /* transform: scale(${props => (props.visible ? 1 : 0)}); */
     }
   }
   ${media.fullWidth} {

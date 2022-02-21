@@ -48,7 +48,7 @@ const ConcertPiece: React.FC<Props> = ({
   const mobile = useContext(MobileContext)
   const handlePlay = () => {
     if (value.setActiveTracks && audioRef) {
-      audioRef.play()
+      // audioRef.play()
       value.setActiveTracks({ audioRef: audioRef, title: title, year: year })
       //going to need to send in an object with anmy nmeeded Data (title image audioRef, composer etc)
     }
