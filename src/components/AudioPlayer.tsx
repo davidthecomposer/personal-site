@@ -115,7 +115,6 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
   }
 
   const handleInitPlay = () => {
-    console.log("initPlay", playPushed, player)
     progressChecked.current = 1
     player?.play()
     setProgressCheck(0)
@@ -124,14 +123,12 @@ const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
   }
 
   const handlePlay = () => {
-    console.log("play", playPushed)
     player?.play()
     setPlayPushed(true)
     setCanProgress(true)
   }
 
   const handlePause = () => {
-    console.log("pause", playPushed, player)
     player?.pause()
     setPlayPushed(false)
     setCanProgress(false)
