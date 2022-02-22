@@ -194,6 +194,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
   const renderActiveMvt = useCallback(
     (arr: any) => {
       return arr.filter((list: any, i: number, arr: any) => {
+        console.log(list)
         if (arr.length === 1) {
           return list
         } else {

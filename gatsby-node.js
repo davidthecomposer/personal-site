@@ -16,6 +16,7 @@ exports.createPages = ({ graphql, actions }) => {
                 url
                 order
                 title
+                buttonText
                 mainImages {
                   file {
                     fileName

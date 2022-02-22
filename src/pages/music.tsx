@@ -55,6 +55,7 @@ export const announceQuery = graphql`
         url
         order
         title
+        buttonText
         mainImages {
           file {
             fileName

@@ -13,37 +13,25 @@ import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
 const News: React.FC<{ data: any }> = ({ data }) => {
-  const header = useRef(null)
-  const headerLine = useRef(null)
   const [openLink, setOpenLink] = useState("")
-
+  const newsWrapper = useRef<HTMLDivElement>(null)
   const NewsStories = data
 
   useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: headerLine.current })
+    if (newsWrapper.current) {
+      NewsStories.forEach((item: any, i: number) => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 60%" },
+        })
 
-    tl.to(headerLine.current, {
-      scale: 1,
-      duration: 1,
-      ease: "power1.inOut",
-    })
-      .to(header.current, { y: 0, duration: 0.6 }, 1)
-      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-  }, [])
-
-  useEffect(() => {
-    NewsStories.forEach((item: any, i: number) => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 60%" },
+        tl.from(`.newsCard-${i}`, {
+          opacity: 0,
+          x: i % 2 === 0 ? "-=2vw" : "+=2vw",
+          duration: 0.9,
+          ease: "power1.inOut",
+        })
       })
-
-      tl.from(`.newsCard-${i}`, {
-        opacity: 0,
-        x: i % 2 === 0 ? "-=2vw" : "+=2vw",
-        duration: 0.9,
-        ease: "power1.inOut",
-      })
-    })
+    }
   }, [])
 
   const allNewsItems = NewsStories.map((item: any, i: number) => {
@@ -121,7 +109,7 @@ const News: React.FC<{ data: any }> = ({ data }) => {
           Back to Music
         </MainButton>
       </UpperRow>
-      <NewsItemsWrapper>{allNewsItems}</NewsItemsWrapper>
+      <NewsItemsWrapper ref={newsWrapper}>{allNewsItems}</NewsItemsWrapper>
       <LowerRow>
         <MainButton
           borderColor={colors.dullTeal}

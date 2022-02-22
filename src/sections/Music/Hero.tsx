@@ -200,7 +200,7 @@ const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
         title: news.title,
         image: news.mainImages[0].file.url,
         slug: news.url,
-        buttonText: "Listen",
+        buttonText: news.buttonText,
         audio: "",
         video: "",
       }
