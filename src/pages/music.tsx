@@ -55,6 +55,7 @@ export const announceQuery = graphql`
         url
         order
         title
+        news
         buttonText
         mainImages {
           file {
@@ -147,6 +148,12 @@ export const announceQuery = graphql`
           musicBlurb
         }
         audio {
+          file {
+            url
+            contentType
+          }
+        }
+        video {
           file {
             url
             contentType

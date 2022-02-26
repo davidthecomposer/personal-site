@@ -15,6 +15,7 @@ import { ReactThreeFiber } from "@react-three/fiber"
 import * as THREE from "three"
 
 import { TLSSocket } from "tls"
+import { navigate } from "gatsby"
 
 // const WavyImageMaterial = shaderMaterial(
 //   {
@@ -201,6 +202,7 @@ const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
         image: news.mainImages[0].file.url,
         slug: news.url,
         buttonText: news.buttonText,
+        news: news.news,
         audio: "",
         video: "",
       }
@@ -302,11 +304,19 @@ const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
     )
   })
 
+  const handleButton = (isNews: boolean, link: string) => {
+    if (isNews) {
+      navigate(`/news/${link}`)
+    } else {
+      navigate(link)
+    }
+  }
+
   const buttons = fakeNews.map((news: any, i: number) => {
     return (
       <BtnWrap className={`slide_${i}`} key={`button_${i}`}>
         <MainButton
-          onClick={() => {}}
+          onClick={() => handleButton(news.news, news.slug)}
           borderColor={colors.dullerTeal}
           backgroundColor={colors.activeTeal}
           limit

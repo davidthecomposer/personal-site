@@ -100,6 +100,9 @@ module.exports = {
           ContentfulConcertPiece: {
             audio: {},
           },
+          ContentfulMediaPiece: {
+            video: {},
+          },
         },
       },
     },
