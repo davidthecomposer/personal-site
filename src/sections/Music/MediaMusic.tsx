@@ -57,6 +57,14 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
       video.current.controls = false
     }
   }
+  const handleVideoEnd = () => {
+    if (video.current) {
+      video.current.currentTime = 0
+      video.current.pause()
+      video.current.load()
+    }
+    console.log(video.current)
+  }
 
   return (
     <PieceWrapper className={`media_pieces`} info={info === i}>
@@ -103,6 +111,7 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
             ref={video}
             onMouseEnter={setControls}
             onMouseLeave={unsetControls}
+            onEnded={handleVideoEnd}
           />
         )}
         <TextWrapper>
@@ -297,6 +306,8 @@ const ImageWrapper = styled.div`
     width: 100%;
     height: 100%;
     position: absolute;
+    object-fit: cover;
+    padding: 0;
     left: 0;
     top: 0;
     z-index: 5;
