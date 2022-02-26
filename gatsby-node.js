@@ -16,6 +16,8 @@ exports.createPages = ({ graphql, actions }) => {
                 url
                 order
                 title
+                news
+                buttonText
                 mainImages {
                   file {
                     fileName
@@ -61,7 +63,9 @@ exports.createPages = ({ graphql, actions }) => {
           return reject(result.errors)
         }
 
-        const pageData = result.data.allContentfulAnnouncement.nodes
+        const pageData = result.data.allContentfulAnnouncement.nodes.filter(
+          data => data.news
+        )
 
         pageData.forEach((newsItem, index) => {
           const pathName = newsItem.url

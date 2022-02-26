@@ -152,13 +152,9 @@ const NewsExpanded: React.FC<props> = ({ pageContext }) => {
     <NewsStory>
       <SectionHeaders small text={title} classRoot={`${url}-header`} />
       <MainImage
-        src={
-          mobile && mainImages[1]
-            ? mainImages[1].file.url
-            : mainImages[0].file.url
-        }
+        src={mainImages[1] ? mainImages[1].file.url : mainImages[0].file.url}
         alt={
-          mobile && mainImages[1]
+          mainImages[1]
             ? mainImages[1].file.fileName
             : mainImages[0].file.fileName
         }

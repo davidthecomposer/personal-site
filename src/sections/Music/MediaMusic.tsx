@@ -23,54 +23,88 @@ type pieceProps = {
 const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
   const [audioRef, setAudioRef] = useState<HTMLAudioElement>()
   const value = useContext(AudioPlayerContext)
+  const video = useRef<HTMLVideoElement>(null)
+  const panel = useRef<HTMLDivElement>(null)
+  const playing = useRef<boolean>(false)
+  const [buttonText, setButtonText] = useState("Watch")
   const [info, setInfo] = useState(-1)
+  console.log(track)
   const handlePlay = () => {
-    if (value.setActiveTracks && audioRef) {
-      // audioRef.play()
-      value.setActiveTracks({
-        audioRef: audioRef,
-        title: track.title,
-        year: "Media",
-      })
+    if (track.audio) {
+      if (value.setActiveTracks && audioRef) {
+        // audioRef.play()
+        value.setActiveTracks({
+          audioRef: audioRef,
+          title: track.title,
+          year: "Media",
+        })
+      }
     }
   }
 
   const handleInfo = (activeNum: number) => {
     setInfo(activeNum)
   }
-  //ugh
+
+  const setControls = () => {
+    if (video.current) {
+      video.current.controls = true
+    }
+  }
+
+  const unsetControls = () => {
+    if (video.current) {
+      video.current.controls = false
+    }
+  }
+
   return (
     <PieceWrapper className={`media_pieces`} info={info === i}>
       <ImageWrapper>
-        <ControlPanel>
-          <MainButton
-            limit
-            bGOpacity={"20"}
-            backgroundColor={colors.activeTeal}
-            onClick={handlePlay}
-          >
-            LISTEN
-          </MainButton>
-          {typeof window !== "undefined" &&
-            window.matchMedia("(hover: none)").matches && (
-              <MainButton
-                limit
-                bGOpacity={"20"}
-                backgroundColor={colors.activeTeal}
-                onClick={() => handleInfo(i)}
-              >
-                Info
-              </MainButton>
-            )}
-          <AudioWrapper>
-            <AudioPlayerElement
-              myKey={track.key}
-              getRef={setAudioRef}
-              audio={track.audio.file.url}
-            />
-          </AudioWrapper>
-        </ControlPanel>
-        <img src={track.images[0].file.url} alt={track.title} />
+        {track.audio && (
+          <ControlPanel ref={panel}>
+            <MainButton
+              limit
+              bGOpacity={"20"}
+              backgroundColor={colors.activeTeal}
+              onClick={handlePlay}
+            >
+              {track.audio ? "Listen" : buttonText}
+            </MainButton>
+            {typeof window !== "undefined" &&
+              window.matchMedia("(hover: none)").matches && (
+                <MainButton
+                  limit
+                  bGOpacity={"20"}
+                  backgroundColor={colors.activeTeal}
+                  onClick={() => handleInfo(i)}
+                >
+                  Info
+                </MainButton>
+              )}
+          </ControlPanel>
+        )}
+        {track.audio ? (
+          <>
+            <img src={track.images[0].file.url} alt={track.title} />
+            <AudioWrapper>
+              <AudioPlayerElement
+                myKey={track.key}
+                getRef={setAudioRef}
+                audio={track.audio.file.url}
+              />
+            </AudioWrapper>
+          </>
+        ) : (
+          <video
+            src={track.video.file.url}
+            poster={track.images[0].file.url}
+            preload={"meta"}
+            ref={video}
+            onMouseEnter={setControls}
+            onMouseLeave={unsetControls}
+          />
+        )}
         <TextWrapper>
           <TrackText>{track.storyBlurb.storyBlurb}</TrackText>
         </TextWrapper>
@@ -257,6 +291,15 @@ const ImageWrapper = styled.div`
     top: 0;
     right: 0;
     filter: grayscale(0%);
+    transition: 0.4s;
+  }
+  video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5;
     transition: 0.4s;
   }
 

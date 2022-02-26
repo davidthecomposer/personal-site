@@ -47,49 +47,51 @@ const News: React.FC<{ data: any }> = ({ data }) => {
     })
   }, [])
 
-  const allNewsItems = NewsStories.map((item: any, i: number) => {
-    const { articleBlurb, paragraph } = item
-    const story = {
-      title: item.title,
-      blurb: articleBlurb.articleBlurb,
+  const allNewsItems = NewsStories.filter((item: any) => item.news).map(
+    (item: any, i: number) => {
+      const { articleBlurb, paragraph } = item
+      const story = {
+        title: item.title,
+        blurb: articleBlurb.articleBlurb,
+      }
+      const pathName = item.url
+
+      return (
+        <NewsCard
+          className={`newsCard-${i}`}
+          key={`newsCard-${i}`}
+          reversed={i % 2 !== 0}
+        >
+          <TitleContainer>
+            <NewsTitle>{story.title ? story.title : "no title"}</NewsTitle>
+          </TitleContainer>
+          <NewsRow>
+            <Text>{story.blurb}</Text>
+            <ButtonRow>
+              <MainButton
+                onClick={() => navigate(`/news/${pathName}`)}
+                borderColor={colors.dullTeal}
+                backgroundColor={colors.inputTeal}
+                bGOpacity={"20"}
+              >
+                More
+              </MainButton>
+            </ButtonRow>
+          </NewsRow>
+
+          {i % 4 === 0 ? (
+            <NewsCard4BG />
+          ) : i % 3 === 0 ? (
+            <NewsCard3BG />
+          ) : i % 2 === 0 ? (
+            <NewsCard2BG />
+          ) : (
+            <NewsCard1BG />
+          )}
+        </NewsCard>
+      )
     }
-    const pathName = item.url
-
-    return (
-      <NewsCard
-        className={`newsCard-${i}`}
-        key={`newsCard-${i}`}
-        reversed={i % 2 !== 0}
-      >
-        <TitleContainer>
-          <NewsTitle>{story.title ? story.title : "no title"}</NewsTitle>
-        </TitleContainer>
-        <NewsRow>
-          <Text>{story.blurb}</Text>
-          <ButtonRow>
-            <MainButton
-              onClick={() => navigate(`/news/${pathName}`)}
-              borderColor={colors.dullTeal}
-              backgroundColor={colors.inputTeal}
-              bGOpacity={"20"}
-            >
-              More
-            </MainButton>
-          </ButtonRow>
-        </NewsRow>
-
-        {i % 4 === 0 ? (
-          <NewsCard4BG />
-        ) : i % 3 === 0 ? (
-          <NewsCard3BG />
-        ) : i % 2 === 0 ? (
-          <NewsCard2BG />
-        ) : (
-          <NewsCard1BG />
-        )}
-      </NewsCard>
-    )
-  })
+  )
 
   const handleMore = (activeClass: string, inActiveClass: string) => {
     gsap.to(activeClass, { x: "-=101%", duration: 0.5, ease: "Power1.out" })

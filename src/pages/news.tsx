@@ -33,6 +33,7 @@ export const announceQuery = graphql`
         url
         order
         title
+        news
         mainImages {
           file {
             fileName
