@@ -11,7 +11,7 @@ import gsap from "gsap"
 import { navigate } from "gatsby"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
 import { renderRichText } from "gatsby-source-contentful/rich-text"
-import useMedia from "utils/hooks"
+
 import {
   FacebookShareButton,
   TwitterShareButton,
