@@ -308,7 +308,7 @@ const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
     if (isNews) {
       navigate(`/news/${link}`)
     } else {
-      navigate(link)
+      window.open(link, "_blank")
     }
   }
 

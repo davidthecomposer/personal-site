@@ -22,10 +22,10 @@
       "images/*": ["images/*"],
       "sections/*": ["sections/*"],
       "assets/*": ["assets/*"],
+      "styles/*": ["assets/styles/*"],
       "templates/*": ["templates/*"],
       "utils/*": ["utils/*"],
       "types/*": ["types/*"]
     }
   }
 }
-//something
