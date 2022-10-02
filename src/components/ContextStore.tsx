@@ -7,7 +7,7 @@ export const MobileContext = createContext(false)
 import "fonts/reset.css"
 import "fonts/typography.css"
 export const AudioPlayerContext = createContext<{
-  activeTracks: ActiveTrack
+  activeTracks: ActiveTrack | null
   setActiveTracks: React.Dispatch<ActiveTrack>
 }>({
   activeTracks: { audioRef: null, title: "none", year: "2022" },

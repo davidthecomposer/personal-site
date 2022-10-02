@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import { PrimaryButtonStyle } from "styles/buttons"
-import colors from "styles/colors"
-import text from "styles/text"
-import media from "styles/media"
-import { graphql, navigate } from "gatsby"
+import colors from "assets/styles/colors"
+import text from "assets/styles/text"
+import media from "assets/styles/media"
+import { navigate } from "gatsby"
 import gsap from "gsap"
 import { ReactComponent as NewsCard1BGSVG } from "assets/svg/news1BG.svg"
 import { ReactComponent as NewsCard2BGSVG } from "assets/svg/news2BG.svg"
@@ -16,7 +15,6 @@ import SectionHeaders from "components/textElements/SectionHeaders"
 const News: React.FC<{ data: any }> = ({ data }) => {
   const header = useRef(null)
   const headerLine = useRef(null)
-  const [openLink, setOpenLink] = useState("")
 
   const NewsStories = data
 
@@ -92,16 +90,6 @@ const News: React.FC<{ data: any }> = ({ data }) => {
       )
     }
   )
-
-  const handleMore = (activeClass: string, inActiveClass: string) => {
-    gsap.to(activeClass, { x: "-=101%", duration: 0.5, ease: "Power1.out" })
-    gsap.to(inActiveClass, {
-      x: "-=100%",
-      duration: 0.5,
-      ease: "Power1.out",
-      delay: 0.3,
-    })
-  }
 
   return (
     <Wrapper id="news">

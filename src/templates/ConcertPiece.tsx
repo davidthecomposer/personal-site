@@ -6,9 +6,9 @@ import React, {
   useContext,
 } from "react"
 import styled from "styled-components"
-import colors from "styles/colors"
-import text from "styles/text"
-import media from "styles/media"
+import colors from "assets/styles/colors"
+import text from "assets/styles/text"
+import media from "assets/styles/media"
 import gsap from "gsap"
 import { navigate, graphql } from "gatsby"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
@@ -290,12 +290,6 @@ const Wrapper = styled.section<{ bGImage: string }>`
 const BottomContainer = styled.div`
   position: relative;
   padding: 0 7.25vw;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
-  ${media.fullWidth} {
-  }
 `
 
 const PlaylistColumn = styled.div`
@@ -321,12 +315,6 @@ const Movement = styled.div<{
 
   transition: 0.5s;
   opacity: 0;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
-  ${media.fullWidth} {
-  }
 `
 
 const MovementDescription = styled.div`
@@ -338,8 +326,6 @@ const MovementDescription = styled.div`
   }
   ${media.mobile} {
     width: 100%;
-  }
-  ${media.fullWidth} {
   }
 `
 
@@ -404,12 +390,8 @@ const MvtTime = styled.div`
   margin-top: 2.81vw;
   position: relative;
 
-  ${media.tablet} {
-  }
   ${media.mobile} {
     ${text.mobile.bodyL};
-  }
-  ${media.fullWidth} {
   }
 `
 
@@ -517,8 +499,6 @@ const ButtonContainer = styled.div<{ visible: boolean }>`
       opacity: ${props => (props.visible ? 1 : 0.1)};
     }
   }
-  ${media.fullWidth} {
-  }
 `
 
 const Playlist = styled.div`
@@ -544,24 +524,15 @@ const Date = styled.p`
   ${text.desktop.bodyL};
   color: ${colors.coolWhite};
   opacity: 0.33;
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
     ${text.mobile.bodyL};
-  }
-  ${media.fullWidth} {
   }
 `
 
 const Instrumentation = styled.div`
   display: flex;
   flex-wrap: wrap;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
-  ${media.fullWidth} {
-  }
 `
 
 const Instrument = styled.p`

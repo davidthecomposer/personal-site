@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import colors from "styles/colors"
-import text from "styles/text"
-import media from "styles/media"
-import { graphql, navigate } from "gatsby"
+import colors from "assets/styles/colors"
+import text from "assets/styles/text"
+import media from "assets/styles/media"
+import { navigate } from "gatsby"
 import gsap from "gsap"
 import { ReactComponent as NewsCard1BGSVG } from "assets/svg/news1BG.svg"
 import { ReactComponent as NewsCard2BGSVG } from "assets/svg/news2BG.svg"
@@ -13,7 +13,6 @@ import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
 const News: React.FC<{ data: any }> = ({ data }) => {
-  const [openLink, setOpenLink] = useState("")
   const newsWrapper = useRef<HTMLDivElement>(null)
   const NewsStories = data
 

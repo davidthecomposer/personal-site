@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState, useContext } from "react"
 import styled from "styled-components"
-import { PrimaryButtonStyle } from "styles/Buttons"
-import colors from "styles/colors"
-import text from "styles/text"
+import colors from "assets/styles/colors"
+import text from "assets/styles/text"
 import twitter from "assets/svg/twitterIcon.svg"
 import linkedin from "assets/svg/linkedIcon.svg"
 import facebook from "assets/svg/facebookIcon.svg"
-import media from "styles/media"
+import media from "assets/styles/media"
 import gsap from "gsap"
 import { navigate } from "gatsby"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
@@ -272,12 +271,9 @@ const Line = styled.div`
   background: ${colors.headlineWhite};
   opacity: 0.23;
   border-radius: 3px;
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
     margin: 2.67vw 0;
-  }
-  ${media.fullWidth} {
   }
 `
 
@@ -318,8 +314,6 @@ const Links = styled.div`
     }
   }
 
-  ${media.tablet} {
-  }
   ${media.mobile} {
     width: 100%;
     height: 10.67vw;
@@ -328,8 +322,6 @@ const Links = styled.div`
       height: 5.33vw;
     }
   }
-  ${media.tabletPortrait} {
-  } ;
 `
 
 const BottomContainer = styled.div`
@@ -509,8 +501,7 @@ const Content = styled.div<{ activeCard: boolean }>`
   color: ${colors.coolWhite};
   opacity: ${props => (props.activeCard ? 1 : 0)};
   transition: 0.3s;
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
     position: relative;
 
@@ -521,8 +512,6 @@ const Content = styled.div<{ activeCard: boolean }>`
     opacity: 1;
     margin-left: 0;
   }
-  ${media.fullWidth} {
-  }
 `
 
 const ContributorTitle = styled.h3`
@@ -530,24 +519,18 @@ const ContributorTitle = styled.h3`
   ${text.desktop.h5};
   text-transform: uppercase;
   margin-bottom: 1.25vw;
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
     ${text.mobile.h3};
-  }
-  ${media.fullWidth} {
   }
 `
 
 const ContributorBio = styled.div`
   width: 100%;
   ${text.desktop.bodyM};
-  ${media.tablet} {
-  }
+
   ${media.mobile} {
     ${text.mobile.bodyM};
-  }
-  ${media.fullWidth} {
   }
 `
 
