@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "author": "David Campbell",
   "dependencies": {
-    "@react-three/drei": "^7.26.1",
+    "@react-three/drei": "^8.8.3",
     "@react-three/fiber": "^7.0.21",
     "@svgr/webpack": "^5.4.0",
     "@types/react": "^17.0.37",
