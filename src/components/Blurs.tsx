@@ -7,7 +7,6 @@ export const useRectGlow = (
   posY: number,
   radX: number,
   radY: number,
-  rotation: number,
   color: string
 ) => {
   useEffect(() => {

@@ -127,7 +127,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
         })
       : parsedMovements
 
-  const audioRefs = useRef([])
+  const audioRefs = useRef<HTMLAudioElement[]>([])
 
   const handlePlay = (
     i: number,
@@ -150,7 +150,7 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
       }
     }
   }
-  const handleGetAudioRef = (ref: any) => {
+  const handleGetAudioRef = (ref: HTMLAudioElement) => {
     const newArr = audioRefs.current
     newArr.push(ref)
 
@@ -194,7 +194,6 @@ const ConcertPiece: React.FC<props> = ({ pageContext, mobile, data }) => {
   const renderActiveMvt = useCallback(
     (arr: any) => {
       return arr.filter((list: any, i: number, arr: any) => {
-        console.log(list)
         if (arr.length === 1) {
           return list
         } else {

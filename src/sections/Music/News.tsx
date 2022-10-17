@@ -18,33 +18,6 @@ const News: React.FC<{ data: any }> = ({ data }) => {
 
   const NewsStories = data
 
-  useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: headerLine.current })
-
-    tl.to(headerLine.current, {
-      scale: 1,
-      duration: 1,
-      ease: "power1.inOut",
-    })
-      .to(header.current, { y: 0, duration: 0.6 }, 1)
-      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-  }, [])
-
-  useEffect(() => {
-    NewsStories.forEach((item: any, i: number) => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
-      })
-
-      tl.from(`.newsCard-${i}`, {
-        opacity: 0,
-        x: i % 2 === 0 ? "-=2vw" : "+=2vw",
-        duration: 0.9,
-        ease: "power1.inOut",
-      })
-    })
-  }, [])
-
   const allNewsItems = NewsStories.filter((item: any) => item.news).map(
     (item: any, i: number) => {
       const { articleBlurb, paragraph } = item
@@ -91,6 +64,35 @@ const News: React.FC<{ data: any }> = ({ data }) => {
     }
   )
 
+  useEffect(() => {
+    const tl = gsap.timeline({ scrollTrigger: headerLine.current })
+
+    tl.to(headerLine.current, {
+      scale: 1,
+      duration: 1,
+      ease: "power1.inOut",
+    })
+      .to(header.current, { y: 0, duration: 0.6 }, 1)
+      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
+  }, [NewsStories])
+
+  useEffect(() => {
+    if (allNewsItems) {
+      allNewsItems.slice(0, 4).forEach((item: any, i: number) => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
+        })
+
+        tl.from(`.newsCard-${i}`, {
+          opacity: 0,
+          x: i % 2 === 0 ? "-=2vw" : "+=2vw",
+          duration: 0.9,
+          ease: "power1.inOut",
+        })
+      })
+    }
+  }, [allNewsItems])
+
   return (
     <Wrapper id="news">
       <SectionHeaders left text="News" classRoot="news-header" />
@@ -120,7 +122,7 @@ const Wrapper = styled.section`
   
 `
 
-const NewsCard1BG = styled(NewsCard1BGSVG)`
+const NewsCard1BG = styled(props => <NewsCard1BGSVG {...props} />)`
   position: absolute;
   z-index: 0;
   top: 0;
@@ -135,7 +137,7 @@ const NewsCard1BG = styled(NewsCard1BGSVG)`
     transform: scale(2);
   }
 `
-const NewsCard2BG = styled(NewsCard2BGSVG)`
+export const NewsCard2BG = styled(props => <NewsCard2BGSVG {...props} />)`
   position: absolute;
   z-index: 0;
   top: 0;
@@ -150,7 +152,7 @@ const NewsCard2BG = styled(NewsCard2BGSVG)`
     transform: scale(2);
   }
 `
-const NewsCard3BG = styled(NewsCard3BGSVG)`
+export const NewsCard3BG = styled(props => <NewsCard3BGSVG {...props} />)`
   position: absolute;
   z-index: 0;
   top: 0;
@@ -165,7 +167,7 @@ const NewsCard3BG = styled(NewsCard3BGSVG)`
     transform: scale(2);
   }
 `
-const NewsCard4BG = styled(NewsCard4BGSVG)`
+export const NewsCard4BG = styled(props => <NewsCard4BGSVG {...props} />)`
   position: absolute;
   z-index: 0;
   top: 0;

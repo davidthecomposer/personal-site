@@ -1,4 +1,10 @@
-import React, { useState, useEffect, createContext, useMemo } from "react"
+import React, {
+  useState,
+  useEffect,
+  createContext,
+  useMemo,
+  ReactNode,
+} from "react"
 import { mobile, desktop, tablet } from "assets/styles/media"
 import AudioPlayer from "./AudioPlayer"
 export const DesktopContext = createContext(false)
@@ -6,22 +12,18 @@ export const TabletContext = createContext(false)
 export const MobileContext = createContext(false)
 import "fonts/reset.css"
 import "fonts/typography.css"
+import { ActiveTrack } from "types/types"
+
 export const AudioPlayerContext = createContext<{
-  activeTracks: ActiveTrack | null
+  activeTracks: ActiveTrack
   setActiveTracks: React.Dispatch<ActiveTrack>
 }>({
   activeTracks: { audioRef: null, title: "none", year: "2022" },
   setActiveTracks: () => {},
 })
 
-type ActiveTrack = {
-  audioRef: React.SetStateAction<HTMLAudioElement | null>
-  title: string
-  year: string
-}
-
 type Props = {
-  children: any
+  children: ReactNode
 }
 
 const ContextStore: React.FC<Props> = ({ children }) => {
@@ -29,7 +31,7 @@ const ContextStore: React.FC<Props> = ({ children }) => {
   const [desktopBool, setDesktop] = useState(false)
   const [tabletBool, setTablet] = useState(false)
 
-  const [activeTracks, setActiveTracks] = useState<ActiveTrack | null>({
+  const [activeTracks, setActiveTracks] = useState<ActiveTrack>({
     audioRef: null,
     title: "none",
     year: "2022",

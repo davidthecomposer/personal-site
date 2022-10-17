@@ -13,11 +13,11 @@ import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
 const News: React.FC<{ data: any }> = ({ data }) => {
-  const newsWrapper = useRef<HTMLDivElement>(null)
+  const [newsWrapper, setNewsWrapper] = useState<HTMLDivElement | null>(null)
   const NewsStories = data
 
   useEffect(() => {
-    if (newsWrapper.current) {
+    if (newsWrapper) {
       NewsStories.forEach((item: any, i: number) => {
         const tl = gsap.timeline({
           scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 60%" },
@@ -29,9 +29,13 @@ const News: React.FC<{ data: any }> = ({ data }) => {
           duration: 0.9,
           ease: "power1.inOut",
         })
+
+        return () => {
+          tl.kill()
+        }
       })
     }
-  }, [])
+  }, [newsWrapper])
 
   const allNewsItems = NewsStories.map((item: any, i: number) => {
     const { articleBlurb, paragraph } = item
@@ -108,7 +112,9 @@ const News: React.FC<{ data: any }> = ({ data }) => {
           Back to Music
         </MainButton>
       </UpperRow>
-      <NewsItemsWrapper ref={newsWrapper}>{allNewsItems}</NewsItemsWrapper>
+      <NewsItemsWrapper ref={ref => setNewsWrapper(ref)}>
+        {allNewsItems}
+      </NewsItemsWrapper>
       <LowerRow>
         <MainButton
           borderColor={colors.dullTeal}
