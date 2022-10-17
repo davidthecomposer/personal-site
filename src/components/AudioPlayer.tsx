@@ -4,14 +4,15 @@ import text from "assets/styles/text"
 import colors from "../assets/styles/colors"
 import gsap from "gsap"
 import media from "assets/styles/media"
-import { MobileContext, AudioPlayerContext } from "components/ContextStore"
+import { ActiveTrack } from "types/types"
+import { AudioPlayerContext } from "components/ContextStore"
 import { ReactComponent as PlayButtonSVG } from "assets/svg/playButton.svg"
 import { ReactComponent as PauseButtonSVG } from "assets/svg/pauseButton.svg"
 
 type AudioElementProps = {
   audio: string
   myKey: string
-  getRef: any
+  getRef: (arg0: HTMLAudioElement) => void
 }
 
 export const AudioPlayerElement: React.FC<AudioElementProps> = ({
@@ -41,21 +42,14 @@ export const AudioPlayerElement: React.FC<AudioElementProps> = ({
   )
 }
 
-type ActiveTrack = {
-  audioRef: React.SetStateAction<HTMLAudioElement | null>
-  title: string
-  year: string
-}
 type Props = {
-  activeTracks: any
+  activeTracks: ActiveTrack
 }
 
 const AudioPlayer: React.FC<Props> = ({ activeTracks }) => {
-  const { audioRef, title, year } = activeTracks
+  const { audioRef, title, year } = activeTracks && activeTracks
   const playList = useRef(null)
   const [playPushed, setPlayPushed] = useState(false)
-  const playPressed = useRef(false)
-  const mobile = useContext(MobileContext)
   const [canProgress, setCanProgress] = useState<boolean>(false)
   const [player, setPlayer] = useState<HTMLAudioElement | null>(null)
   const setActiveTracks = useContext(AudioPlayerContext).setActiveTracks
@@ -323,7 +317,7 @@ const PlayBack = styled.div`
   }
 `
 
-const PlayButton = styled(PlayButtonSVG)`
+export const PlayButton = styled(props => <PlayButtonSVG {...props} />)`
   opacity: 1;
   position: relative;
   width: 100%;
@@ -333,7 +327,7 @@ const PlayButton = styled(PlayButtonSVG)`
   }
 `
 
-const PauseButton = styled(PauseButtonSVG)`
+export const PauseButton = styled(props => <PauseButtonSVG {...props} />)`
   opacity: 1;
   position: absolute;
   width: 100%;

@@ -11,11 +11,11 @@ import colors from "assets/styles/colors"
 import media from "assets/styles/media"
 import ContactForm from "components/ContactForm"
 import concertMusicBG from "assets/images/concertMusic.webp"
-import concertMusicBGM from "assets/images/concertMusicM.webp"
 import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
 import PieceCard from "components/elements/PieceCard"
+import shadows from "assets/styles/shadows"
 
 type props = {
   mobile: boolean
@@ -291,7 +291,7 @@ const ConcertPiecesContainer = styled.div`
   background: rgba(23, 27, 28, 0.73);
   border-radius: 0.25vw;
   margin: 3.38vw auto 19.44vw;
-
+  ${shadows.purple};
   ${media.fullWidth} {
     width: 1400px;
     padding: 36px;
@@ -387,8 +387,6 @@ const Label = styled.p`
     :nth-of-type(5) {
       //Movements
     }
-  }
-  ${media.tablet} {
   }
   ${media.mobile} {
     ${text.mobile.h5};

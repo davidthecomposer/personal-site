@@ -24,7 +24,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   const line = useRef(null)
   const myRole = useRef(null)
   const navLinks = useRef(null)
-  const wrapper = useRef(null)
+  const [wrapper, setWrapper] = useState<HTMLElement | null>(null)
   const [display, setDisplay] = useState(true)
   const [navOpen, setNavOpen] = useState(true)
   const navIsOpen = useRef(true)
@@ -45,12 +45,12 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   }, [globalThis])
 
   useEffect(() => {
-    if (mobile && !initial) {
+    if (mobile && !initial && wrapper) {
       const tl = gsap.timeline()
 
       if (!navOpen) {
         tl.to(
-          wrapper.current,
+          wrapper,
           { width: "96vw", duration: 0, background: "rgba(0,0,0,0.5)" },
           0
         ).to(
@@ -76,12 +76,8 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
           },
           0
         )
-          .to(wrapper.current, { width: "12vw", duration: 0 }, 0.4)
-          .to(
-            wrapper.current,
-            { background: "rgba(0,0,0,0)", duration: 0.2 },
-            0.4
-          )
+          .to(wrapper, { width: "12vw", duration: 0 }, 0.4)
+          .to(wrapper, { background: "rgba(0,0,0,0)", duration: 0.2 }, 0.4)
       }
     }
   }, [navOpen, mobile, initial])
@@ -97,46 +93,27 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   }
 
   useEffect(() => {
-    const pathname = window.location.pathname
-    const tl = gsap.timeline({
-      onStart: () => (mobile ? null : setInitial(false)),
-      onComplete: () => setIntro(false),
-    })
-    if (!mobile && pathname === "/music") {
-      gsap.set(line.current, { scaleY: 0, opacity: 0 })
-      gsap.set(myRole.current, { scaleY: 1, opacity: 1 })
-
-      tl.to(
-        line.current,
-        { scaleY: 1, opacity: 1, duration: 0.6, ease: "power1.inOut" },
-        0
-      )
-        .to(
-          ".carousel_line1, .carousel_line2",
-          { stagger: 0.3, scaleX: "100%", duration: 1 },
-          0.2
-        )
-        .to(".carousel_vert", { scaleY: "100%", duration: 0.9 }, 0.5)
-        .to(name.current, { left: 0, duration: 1.3, ease: "power1.inOut" }, 0.3)
-
-        .to(
-          myRole.current,
-          { left: "1.3vw", duration: 0.8, ease: "power1.inOut" },
-          0.7
-        )
-        .to(
-          ".header__link",
-          { opacity: 1, stagger: 0.15, duration: 0.4, ease: "power1.inOut" },
-          1
-        )
-    } else {
-      if (initial) {
+    if (wrapper) {
+      const pathname = window.location.pathname
+      const tl = gsap.timeline({
+        onStart: () => (mobile ? null : setInitial(false)),
+        onComplete: () => setIntro(false),
+      })
+      if (!mobile && pathname === "/music") {
         gsap.set(line.current, { scaleY: 0, opacity: 0 })
+        gsap.set(myRole.current, { scaleY: 1, opacity: 1 })
+
         tl.to(
           line.current,
-          { scaleY: 1, duration: 0.6, opacity: 1, ease: "power1.inOut" },
+          { scaleY: 1, opacity: 1, duration: 0.6, ease: "power1.inOut" },
           0
         )
+          .to(
+            ".carousel_line1, .carousel_line2",
+            { stagger: 0.3, scaleX: "100%", duration: 1 },
+            0.2
+          )
+          .to(".carousel_vert", { scaleY: "100%", duration: 0.9 }, 0.5)
           .to(
             name.current,
             { left: 0, duration: 1.3, ease: "power1.inOut" },
@@ -149,45 +126,73 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
             0.7
           )
           .to(
-            [name.current, line.current, myRole.current],
-            { scaleY: 0, duration: 0.3 },
-            1.5
-          )
-          .to(
             ".header__link",
-            {
-              opacity: 1,
-              stagger: 0.05,
-              duration: 0.2,
-              ease: "power1.inOut",
-            },
-            1.5
+            { opacity: 1, stagger: 0.15, duration: 0.4, ease: "power1.inOut" },
+            1
           )
-          .to(
-            ".header__link",
-            {
-              opacity: 0,
-              stagger: 0.05,
-              duration: 0.2,
-              ease: "power1.inOut",
-            },
-            2
+      } else {
+        if (initial) {
+          gsap.set(line.current, { scaleY: 0, opacity: 0 })
+          tl.to(
+            line.current,
+            { scaleY: 1, duration: 0.6, opacity: 1, ease: "power1.inOut" },
+            0
           )
-          .to(
-            wrapper.current,
-            {
-              width: "12vw",
-              duration: 0.4,
-              onComplete: () => {
-                setIntro(false)
-                setInitial(false)
+            .to(
+              name.current,
+              { left: 0, duration: 1.3, ease: "power1.inOut" },
+              0.3
+            )
+
+            .to(
+              myRole.current,
+              { left: "1.3vw", duration: 0.8, ease: "power1.inOut" },
+              0.7
+            )
+            .to(
+              [name.current, line.current, myRole.current],
+              { scaleY: 0, duration: 0.3 },
+              1.5
+            )
+            .to(
+              ".header__link",
+              {
+                opacity: 1,
+                stagger: 0.05,
+                duration: 0.2,
+                ease: "power1.inOut",
               },
-            },
-            2.3
-          )
+              1.5
+            )
+            .to(
+              ".header__link",
+              {
+                opacity: 0,
+                stagger: 0.05,
+                duration: 0.2,
+                ease: "power1.inOut",
+              },
+              2
+            )
+            .to(
+              wrapper,
+              {
+                width: "12vw",
+                duration: 0.4,
+                onComplete: () => {
+                  setIntro(false)
+                  setInitial(false)
+                },
+              },
+              2.3
+            )
+        }
+      }
+      return () => {
+        tl.kill()
       }
     }
-  }, [mobile, initial])
+  }, [mobile, initial, wrapper])
 
   const handleScroll = useCallback(() => {
     if (!mobile) {
@@ -230,7 +235,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   }, [handleScroll])
 
   useEffect(() => {
-    if (!mobile) {
+    if (!mobile && wrapper) {
       if (!initial) {
         const ready =
           !gsap.isTweening(".music__nav-btn") &&
@@ -251,7 +256,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
           if (!ready) {
             gsap.set(".music__nav-btn", { opacity: 1, zIndex: 10 })
             gsap.set(".header__link", { opacity: 0, zIndex: 0 })
-            gsap.set(wrapper.current, {
+            gsap.set(wrapper, {
               width: mobile ? "20vw" : "4vw",
               duration: 0,
             })
@@ -260,7 +265,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
 
           tl.to(".music__nav-btn", { opacity: 0, zIndex: 0, duration: 0.3 }, 0)
             .to(
-              wrapper.current,
+              wrapper,
               {
                 width: "96vw",
                 duration: 0,
@@ -289,6 +294,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
               },
               0
             )
+          return () => tl.kill()
         } else {
           if (!ready) {
             gsap.set(".header__link", { opacity: 0, zIndex: 10 })
@@ -297,7 +303,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
               zIndex: 10,
               duration: 0.3,
             })
-            gsap.to(wrapper.current, {
+            gsap.to(wrapper, {
               width: mobile ? "20vw" : "4vw",
               duration: 0,
             })
@@ -313,7 +319,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
                 width: "56vw",
                 duration: 0,
               })
-              gsap.to(wrapper.current, {
+              gsap.to(wrapper, {
                 width: mobile ? "20vw" : "4vw",
                 duration: 0,
                 delay: 0.4,
@@ -361,11 +367,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
                 },
                 0
               )
-              .to(
-                wrapper.current,
-                { width: mobile ? "20vw" : "4vw", duration: 0 },
-                0.3
-              )
+              .to(wrapper, { width: mobile ? "20vw" : "4vw", duration: 0 }, 0.3)
               .to(
                 ".titleWrapper",
                 {
@@ -374,11 +376,15 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
                 },
                 0.3
               )
+
+            return () => {
+              tl1.kill()
+            }
           }
         }
       }
     }
-  }, [navOpen, initial, mobile])
+  }, [navOpen, initial, mobile, wrapper])
 
   const handleLinkClick = (sectionID: string) => {
     gsap.to(window, { duration: 0.2, scrollTo: sectionID })
@@ -386,7 +392,7 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
 
   return (
     <Wrapper
-      ref={wrapper}
+      ref={ref => setWrapper(ref)}
       // willDisplay={display}
       open={navOpen && !pressed.current}
     >
@@ -571,7 +577,7 @@ const Role = styled.span`
   }
 `
 
-const DavidSig = styled(DavidSigSVG)`
+const DavidSig = styled(props => <DavidSigSVG {...props} />)`
   width: 100%;
   height: 100%;
 `
@@ -691,7 +697,7 @@ const NavLinks = styled.div<{ open: boolean; initial: boolean }>`
   }
 `
 
-const DavidInitials = styled(DavidInitialsSVG)`
+export const DavidInitials = styled(props => <DavidInitialsSVG {...props} />)`
   ${media.mobile} {
     width: 12vw;
     height: 12vw;

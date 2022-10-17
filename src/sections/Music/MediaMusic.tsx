@@ -10,6 +10,7 @@ import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 import { AudioPlayerElement } from "components/AudioPlayer"
 import { AudioPlayerContext } from "components/ContextStore"
+import shadows from "assets/styles/shadows"
 type props = {
   mobile: boolean
   data: any
@@ -28,7 +29,7 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
   const playing = useRef<boolean>(false)
   const [buttonText, setButtonText] = useState("Watch")
   const [info, setInfo] = useState(-1)
-  console.log(track)
+
   const handlePlay = () => {
     if (track.audio) {
       if (value.setActiveTracks && audioRef) {
@@ -63,7 +64,6 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
       video.current.pause()
       video.current.load()
     }
-    console.log(video.current)
   }
 
   return (
@@ -162,8 +162,6 @@ const MediaMusic: React.FC<props> = ({ mobile, data }) => {
       })
     }
   }, [])
-
-  const playMedia = () => {}
 
   const allTracks = data.map((track: any, i: number) => {
     return <MediaPiece key={`track-presentation-${i}`} track={track} i={i} />
@@ -369,10 +367,7 @@ const PieceWrapper = styled.div<{ info: boolean }>`
     rgba(7, 10, 1, 0.5) 0.1%,
     rgba(16, 17, 16, 0.38) 99.67%
   );
-  -webkit-box-shadow: 5px 5px 5px 0px #00000000,
-    inset 4px 4px 15px 0px #00000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
-  box-shadow: 5px 5px 5px 0px #00000000, inset 4px 4px 15px 0px #00000000,
-    5px 5px 15px 5px rgba(0, 0, 0, 0);
+  ${shadows.grey};
 
   ${TextWrapper} {
     ${props =>

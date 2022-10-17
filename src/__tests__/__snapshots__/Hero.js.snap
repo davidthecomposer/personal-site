@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly 1`] = `
+<section
+  className="sc-lknQiW cRFuly"
+  id="music-hero"
+>
+  <div
+    className="sc-dUipGc cwFbrU"
+  >
+    <div
+      className="sc-jmpzUR bmVpoa carousel_line1"
+    />
+    <div
+      className="sc-fWHiwC caVqzk"
+    >
+      <div
+        className="sc-gUJyNl gKuDCh carousel_vert"
+      />
+      <div
+        className="sc-gkSfol bXUKkD"
+      >
+        <div
+          className="sc-gzrROc kZtABh active-slide-num"
+        >
+          0
+          1
+        </div>
+        <div
+          className="sc-fmPOXC bXclCH slide_line"
+        />
+        <div
+          className="sc-gzrROc kZtABh total-slide-num"
+        >
+          0
+          1
+        </div>
+      </div>
+      <div
+        className="sc-fIhvWL bCtTdS slide_0"
+      >
+        <button
+          className="sc-gswNZR gusbqD"
+          onClick={[Function]}
+        >
+          <span>
+            Hear it now
+          </span>
+          <div
+            className="sc-bcXHqe YMuFP"
+          />
+        </button>
+      </div>
+    </div>
+    <div
+      className="sc-hsWlPz knIrxI"
+    >
+      <h4
+        className="sc-caPbAK bQlEgK slide_0"
+      >
+        Fake Title
+      </h4>
+      <img
+        alt="Fake Title"
+        className="sc-hjjlnc jOpAql slide_0"
+        src="test-file-stub"
+      />
+    </div>
+    <div
+      className="sc-jmpzUR fCcOBm carousel_line2"
+    />
+  </div>
+</section>
+`;

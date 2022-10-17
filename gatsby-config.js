@@ -40,13 +40,21 @@ module.exports = {
         memo: true,
         svgoConfig: {
           plugins: [
-            { removeViewBox: false },
-            { removeDimensions: true },
-            { removeRasterImages: true },
-            { reusePaths: true },
-            { cleanupIDs: false },
-            { prefixIds: false },
-            { removeUselessDefs: true },
+            {
+              name: "preset-default",
+              params: {
+                overrides: {
+                  // disable plugins
+                  cleanupIDs: false,
+                  prefixIds: false,
+                  removeViewBox: false,
+                },
+              },
+            },
+            "removeUselessDefs",
+            "removeDimensions",
+            "removeRasterImages",
+            "reusePaths",
           ],
         },
       },

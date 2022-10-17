@@ -16,6 +16,7 @@ import { ReactComponent as TrebleUnderlaySVG } from "assets/svg/trebleUnderlay.s
 import { ReactComponent as AltoUnderlaySVG } from "assets/svg/altoUnderlay.svg"
 import { ReactComponent as BassUnderlaySVG } from "assets/svg/bassUnderlay.svg"
 import { AudioPlayerContext, MobileContext } from "components/ContextStore"
+import shadows from "assets/styles/shadows"
 
 type Props = {
   myKey: string
@@ -126,7 +127,7 @@ const PieceCard = styled.div<{ bGColor: string }>`
   opacity: 0.8;
   transition: 0.4s;
 
-
+  ${shadows.main};
   ${media.hover} {
     :hover {
       opacity: 1;
@@ -174,7 +175,7 @@ const PieceTitle = styled.h3`
   }
 `
 
-const TrebleUnderlay = styled(TrebleUnderlaySVG)`
+export const TrebleUnderlay = styled(props => <TrebleUnderlaySVG {...props} />)`
   position: absolute;
   width: 82.88vw;
   height: 8.63vw;
@@ -198,7 +199,7 @@ const TrebleUnderlay = styled(TrebleUnderlaySVG)`
     height: 100%;
   }
 `
-const AltoUnderlay = styled(AltoUnderlaySVG)`
+export const AltoUnderlay = styled(props => <AltoUnderlaySVG {...props} />)`
   position: absolute;
   width: 82.88vw;
   height: 8.63vw;
@@ -222,7 +223,7 @@ const AltoUnderlay = styled(AltoUnderlaySVG)`
     height: 100%;
   }
 `
-const BassUnderlay = styled(BassUnderlaySVG)`
+export const BassUnderlay = styled(props => <BassUnderlaySVG {...props} />)`
   position: absolute;
   width: 82.88vw;
   height: 8.63vw;

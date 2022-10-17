@@ -3,6 +3,7 @@ import styled from "styled-components"
 import colors from "../../assets/styles/colors"
 import text from "assets/styles/text"
 import media from "assets/styles/media"
+import shadows from "assets/styles/shadows"
 
 // import useAnimationFrame useMedia  from "utils/Hooks";
 
@@ -55,12 +56,6 @@ const BG = styled.div<{ bGColor: string }>`
   transform-origin: 50% 50%;
   transition: 0.3s;
   border-radius: 100%;
-  ${media.tablet} {
-  }
-  ${media.mobile} {
-  }
-  ${media.fullWidth} {
-  }
 `
 
 const Button = styled.button<{
@@ -94,7 +89,7 @@ const Button = styled.button<{
   box-sizing: border-box;
   border-radius: 7.5vw;
   text-align: center;
-
+  ${shadows.light}
   cursor: pointer;
   ${media.hover} {
     :hover {

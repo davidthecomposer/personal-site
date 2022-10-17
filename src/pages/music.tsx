@@ -26,12 +26,24 @@ const MusicPage: React.FC<data> = ({ data }) => {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-  //
+
+  const newsDataCurated = newsData.map((news: any) => {
+    return {
+      title: news.title,
+      image: news.mainImages[0].file.url,
+      slug: news.url,
+      buttonText: news.buttonText,
+      news: news.news,
+      audio: "",
+      video: "",
+    }
+  })
+
   return (
     <Layout>
       <IntroAnimationContext.Provider value={intro}>
         <Header setIntro={setIntro} />
-        <Hero data={newsData} mobile={mobile} />
+        <Hero data={newsDataCurated} mobile={mobile} />
         <MediaMusic data={mediaData} mobile={mobile} />
         <ConcertMusic tags={uniqueConcert} data={concertData} mobile={mobile} />
         <News data={newsData} />
@@ -41,10 +53,6 @@ const MusicPage: React.FC<data> = ({ data }) => {
     </Layout>
   )
 }
-
-const Wrapper = styled.main`
-  background: #000000;
-`
 
 export default MusicPage
 
