@@ -26,7 +26,6 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
   const value = useContext(AudioPlayerContext)
   const video = useRef<HTMLVideoElement>(null)
   const panel = useRef<HTMLDivElement>(null)
-  const playing = useRef<boolean>(false)
   const [buttonText, setButtonText] = useState("Watch")
   const [info, setInfo] = useState(-1)
 

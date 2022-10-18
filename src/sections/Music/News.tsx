@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import colors from "assets/styles/colors"
 import text from "assets/styles/text"
@@ -13,8 +13,6 @@ import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
 const News: React.FC<{ data: any }> = ({ data }) => {
-  const header = useRef(null)
-  const headerLine = useRef(null)
   const [newsWrapper, setNewsWrapper] = useState<HTMLDivElement | null>(null)
 
   const allNewsItems = data
@@ -67,27 +65,8 @@ const News: React.FC<{ data: any }> = ({ data }) => {
 
   useEffect(() => {
     if (newsWrapper) {
-      const tl = gsap.timeline({ scrollTrigger: headerLine.current })
-
-      tl.to(headerLine.current, {
-        scale: 1,
-        duration: 1,
-        ease: "power1.inOut",
-      })
-        .to(header.current, { y: 0, duration: 0.6 }, 1)
-        .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-
-      return () => {
-        tl.kill()
-      }
-    }
-  }, [newsWrapper])
-
-  useEffect(() => {
-    if (newsWrapper) {
       const allNews = newsWrapper.querySelectorAll(".newsCard")
 
-      console.log(allNews)
       Array.prototype.slice.call(allNews).forEach((item: any, i: number) => {
         gsap.from(item, {
           opacity: 0,
