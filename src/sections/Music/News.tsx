@@ -15,6 +15,7 @@ import SectionHeaders from "components/textElements/SectionHeaders"
 const News: React.FC<{ data: any }> = ({ data }) => {
   const header = useRef(null)
   const headerLine = useRef(null)
+  const [newsWrapper, setNewsWrapper] = useState<HTMLDivElement | null>(null)
 
   const NewsStories = data
 
@@ -67,41 +68,48 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   )
 
   useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: headerLine.current })
+    if (newsWrapper) {
+      const tl = gsap.timeline({ scrollTrigger: headerLine.current })
 
-    tl.to(headerLine.current, {
-      scale: 1,
-      duration: 1,
-      ease: "power1.inOut",
-    })
-      .to(header.current, { y: 0, duration: 0.6 }, 1)
-      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-  }, [NewsStories])
-
-  useEffect(() => {
-    console.log(allNewsItems)
-    allNewsItems.forEach((item: any, i: number) => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
-      })
-
-      tl.from(`.newsCard-${i}`, {
-        opacity: 0,
-        x: i % 2 === 0 ? "-=2vw" : "+=2vw",
-        duration: 0.9,
+      tl.to(headerLine.current, {
+        scale: 1,
+        duration: 1,
         ease: "power1.inOut",
       })
+        .to(header.current, { y: 0, duration: 0.6 }, 1)
+        .to(header.current, { x: 0, duration: 0.6 }, 1.6)
 
       return () => {
         tl.kill()
       }
-    })
-  }, [allNewsItems])
+    }
+  }, [NewsStories, newsWrapper])
+
+  useEffect(() => {
+    if (newsWrapper) {
+      allNewsItems.forEach((item: any, i: number) => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
+        })
+
+        tl.from(`.newsCard-${i}`, {
+          opacity: 0,
+          x: i % 2 === 0 ? "-=2vw" : "+=2vw",
+          duration: 0.9,
+          ease: "power1.inOut",
+        })
+
+        return () => {
+          tl.kill()
+        }
+      })
+    }
+  }, [allNewsItems, newsWrapper])
 
   return (
     <Wrapper id="news">
       <SectionHeaders left text="News" classRoot="news-header" />
-      <NewsItemsWrapper>
+      <NewsItemsWrapper ref={ref => setNewsWrapper(ref)}>
         {allNewsItems}
 
         <MainButton
