@@ -17,10 +17,9 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   const headerLine = useRef(null)
   const [newsWrapper, setNewsWrapper] = useState<HTMLDivElement | null>(null)
 
-  const NewsStories = data
-
-  const allNewsItems = NewsStories.filter((item: any) => item.news).map(
-    (item: any, i: number) => {
+  const allNewsItems = data
+    .filter((item: any) => item.news)
+    .map((item: any, i: number) => {
       const { articleBlurb, paragraph } = item
       const story = {
         title: item.title,
@@ -64,8 +63,7 @@ const News: React.FC<{ data: any }> = ({ data }) => {
           </NewsCard>
         )
       }
-    }
-  )
+    })
 
   useEffect(() => {
     if (newsWrapper) {
@@ -83,12 +81,11 @@ const News: React.FC<{ data: any }> = ({ data }) => {
         tl.kill()
       }
     }
-  }, [NewsStories, newsWrapper])
+  }, [newsWrapper])
 
   useEffect(() => {
-    if (newsWrapper) {
+    if (newsWrapper && allNewsItems) {
       allNewsItems.forEach((item: any, i: number) => {
-        console.log(item)
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: `.${item.props.className}`,
