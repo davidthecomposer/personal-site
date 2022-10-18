@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import colors from "assets/styles/colors"
 import text from "assets/styles/text"
@@ -13,13 +13,11 @@ import MainButton from "components/buttons/MainButton"
 import SectionHeaders from "components/textElements/SectionHeaders"
 
 const News: React.FC<{ data: any }> = ({ data }) => {
-  const header = useRef(null)
-  const headerLine = useRef(null)
+  const [newsWrapper, setNewsWrapper] = useState<HTMLDivElement | null>(null)
 
-  const NewsStories = data
-
-  const allNewsItems = NewsStories.filter((item: any) => item.news).map(
-    (item: any, i: number) => {
+  const allNewsItems = data
+    .filter((item: any) => item.news)
+    .map((item: any, i: number) => {
       const { articleBlurb, paragraph } = item
       const story = {
         title: item.title,
@@ -27,77 +25,68 @@ const News: React.FC<{ data: any }> = ({ data }) => {
       }
       const pathName = item.url
 
-      return (
-        <NewsCard
-          className={`newsCard-${i}`}
-          key={`newsCard-${i}`}
-          reversed={i % 2 !== 0}
-        >
-          <TitleContainer>
-            <NewsTitle>{story.title ? story.title : "no title"}</NewsTitle>
-          </TitleContainer>
-          <NewsRow>
-            <Text>{story.blurb}</Text>
-            <ButtonRow>
-              <MainButton
-                onClick={() => navigate(`/news/${pathName}`)}
-                borderColor={colors.dullTeal}
-                backgroundColor={colors.inputTeal}
-                bGOpacity={"20"}
-              >
-                More
-              </MainButton>
-            </ButtonRow>
-          </NewsRow>
+      if (i <= 4) {
+        return (
+          <NewsCard
+            className={`newsCard newsCard-${i}`}
+            key={`newsCard-${i}`}
+            reversed={i % 2 !== 0}
+          >
+            <TitleContainer>
+              <NewsTitle>{story.title ? story.title : "no title"}</NewsTitle>
+            </TitleContainer>
+            <NewsRow>
+              <Text>{story.blurb}</Text>
+              <ButtonRow>
+                <MainButton
+                  onClick={() => navigate(`/news/${pathName}`)}
+                  borderColor={colors.dullTeal}
+                  backgroundColor={colors.inputTeal}
+                  bGOpacity={"20"}
+                >
+                  More
+                </MainButton>
+              </ButtonRow>
+            </NewsRow>
 
-          {i % 4 === 0 ? (
-            <NewsCard4BG />
-          ) : i % 3 === 0 ? (
-            <NewsCard3BG />
-          ) : i % 2 === 0 ? (
-            <NewsCard2BG />
-          ) : (
-            <NewsCard1BG />
-          )}
-        </NewsCard>
-      )
-    }
-  )
-
-  useEffect(() => {
-    const tl = gsap.timeline({ scrollTrigger: headerLine.current })
-
-    tl.to(headerLine.current, {
-      scale: 1,
-      duration: 1,
-      ease: "power1.inOut",
+            {i % 4 === 0 ? (
+              <NewsCard4BG />
+            ) : i % 3 === 0 ? (
+              <NewsCard3BG />
+            ) : i % 2 === 0 ? (
+              <NewsCard2BG />
+            ) : (
+              <NewsCard1BG />
+            )}
+          </NewsCard>
+        )
+      }
     })
-      .to(header.current, { y: 0, duration: 0.6 }, 1)
-      .to(header.current, { x: 0, duration: 0.6 }, 1.6)
-  }, [NewsStories])
 
   useEffect(() => {
-    if (allNewsItems) {
-      allNewsItems.slice(0, 4).forEach((item: any, i: number) => {
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
-        })
+    if (newsWrapper) {
+      const allNews = newsWrapper.querySelectorAll(".newsCard")
 
-        tl.from(`.newsCard-${i}`, {
+      Array.prototype.slice.call(allNews).forEach((item: any, i: number) => {
+        gsap.from(item, {
           opacity: 0,
           x: i % 2 === 0 ? "-=2vw" : "+=2vw",
           duration: 0.9,
           ease: "power1.inOut",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 80%",
+          },
         })
       })
     }
-  }, [allNewsItems])
+  }, [newsWrapper])
 
   return (
     <Wrapper id="news">
       <SectionHeaders left text="News" classRoot="news-header" />
-      <NewsItemsWrapper>
-        {allNewsItems.slice(0, 4)}
+      <NewsItemsWrapper ref={ref => setNewsWrapper(ref)}>
+        {allNewsItems}
 
         <MainButton
           onClick={() => navigate("/news")}
@@ -122,7 +111,7 @@ const Wrapper = styled.section`
   
 `
 
-const NewsCard1BG = styled(props => <NewsCard1BGSVG {...props} />)`
+export const NewsCard1BG = styled(props => <NewsCard1BGSVG {...props} />)`
   position: absolute;
   z-index: 0;
   top: 0;
