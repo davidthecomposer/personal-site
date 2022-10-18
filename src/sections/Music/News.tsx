@@ -26,41 +26,43 @@ const News: React.FC<{ data: any }> = ({ data }) => {
         blurb: articleBlurb.articleBlurb,
       }
       const pathName = item.url
+      console.log(item)
+      if (i <= 4) {
+        return (
+          <NewsCard
+            className={`newsCard-${i}`}
+            key={`newsCard-${i}`}
+            reversed={i % 2 !== 0}
+          >
+            <TitleContainer>
+              <NewsTitle>{story.title ? story.title : "no title"}</NewsTitle>
+            </TitleContainer>
+            <NewsRow>
+              <Text>{story.blurb}</Text>
+              <ButtonRow>
+                <MainButton
+                  onClick={() => navigate(`/news/${pathName}`)}
+                  borderColor={colors.dullTeal}
+                  backgroundColor={colors.inputTeal}
+                  bGOpacity={"20"}
+                >
+                  More
+                </MainButton>
+              </ButtonRow>
+            </NewsRow>
 
-      return (
-        <NewsCard
-          className={`newsCard-${i}`}
-          key={`newsCard-${i}`}
-          reversed={i % 2 !== 0}
-        >
-          <TitleContainer>
-            <NewsTitle>{story.title ? story.title : "no title"}</NewsTitle>
-          </TitleContainer>
-          <NewsRow>
-            <Text>{story.blurb}</Text>
-            <ButtonRow>
-              <MainButton
-                onClick={() => navigate(`/news/${pathName}`)}
-                borderColor={colors.dullTeal}
-                backgroundColor={colors.inputTeal}
-                bGOpacity={"20"}
-              >
-                More
-              </MainButton>
-            </ButtonRow>
-          </NewsRow>
-
-          {i % 4 === 0 ? (
-            <NewsCard4BG />
-          ) : i % 3 === 0 ? (
-            <NewsCard3BG />
-          ) : i % 2 === 0 ? (
-            <NewsCard2BG />
-          ) : (
-            <NewsCard1BG />
-          )}
-        </NewsCard>
-      )
+            {i % 4 === 0 ? (
+              <NewsCard4BG />
+            ) : i % 3 === 0 ? (
+              <NewsCard3BG />
+            ) : i % 2 === 0 ? (
+              <NewsCard2BG />
+            ) : (
+              <NewsCard1BG />
+            )}
+          </NewsCard>
+        )
+      }
     }
   )
 
@@ -77,27 +79,29 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   }, [NewsStories])
 
   useEffect(() => {
-    if (allNewsItems) {
-      allNewsItems.slice(0, 4).forEach((item: any, i: number) => {
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
-        })
-
-        tl.from(`.newsCard-${i}`, {
-          opacity: 0,
-          x: i % 2 === 0 ? "-=2vw" : "+=2vw",
-          duration: 0.9,
-          ease: "power1.inOut",
-        })
+    allNewsItems.forEach((item: any, i: number) => {
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
       })
-    }
+
+      tl.from(`.newsCard-${i}`, {
+        opacity: 0,
+        x: i % 2 === 0 ? "-=2vw" : "+=2vw",
+        duration: 0.9,
+        ease: "power1.inOut",
+      })
+
+      return () => {
+        tl.kill()
+      }
+    })
   }, [allNewsItems])
 
   return (
     <Wrapper id="news">
       <SectionHeaders left text="News" classRoot="news-header" />
       <NewsItemsWrapper>
-        {allNewsItems.slice(0, 4)}
+        {allNewsItems}
 
         <MainButton
           onClick={() => navigate("/news")}
