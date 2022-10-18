@@ -88,20 +88,20 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   useEffect(() => {
     if (newsWrapper) {
       allNewsItems.forEach((item: any, i: number) => {
+        console.log(item)
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
+          scrollTrigger: {
+            trigger: `.${item.props.className}`,
+            start: "top 80%",
+          },
         })
 
-        tl.from(`.newsCard-${i}`, {
+        tl.from(`.${item.props.className}`, {
           opacity: 0,
           x: i % 2 === 0 ? "-=2vw" : "+=2vw",
           duration: 0.9,
           ease: "power1.inOut",
         })
-
-        return () => {
-          tl.kill()
-        }
       })
     }
   }, [allNewsItems, newsWrapper])
