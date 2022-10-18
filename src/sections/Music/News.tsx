@@ -30,7 +30,7 @@ const News: React.FC<{ data: any }> = ({ data }) => {
       if (i <= 4) {
         return (
           <NewsCard
-            className={`newsCard-${i}`}
+            className={`newsCard newsCard-${i}`}
             key={`newsCard-${i}`}
             reversed={i % 2 !== 0}
           >
@@ -84,24 +84,24 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   }, [newsWrapper])
 
   useEffect(() => {
-    if (newsWrapper && allNewsItems) {
-      allNewsItems.forEach((item: any, i: number) => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: `.${item.props.className}`,
-            start: "top 80%",
-          },
-        })
+    if (newsWrapper) {
+      const allNews = newsWrapper.querySelectorAll(".newsCard")
 
-        tl.from(`.${item.props.className}`, {
+      console.log(allNews)
+      Array.prototype.slice.call(allNews).forEach((item: any, i: number) => {
+        gsap.from(item, {
           opacity: 0,
           x: i % 2 === 0 ? "-=2vw" : "+=2vw",
           duration: 0.9,
           ease: "power1.inOut",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 80%",
+          },
         })
       })
     }
-  }, [allNewsItems, newsWrapper])
+  }, [newsWrapper])
 
   return (
     <Wrapper id="news">
