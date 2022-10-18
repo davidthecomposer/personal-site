@@ -26,7 +26,7 @@ const News: React.FC<{ data: any }> = ({ data }) => {
         blurb: articleBlurb.articleBlurb,
       }
       const pathName = item.url
-      console.log(item)
+
       if (i <= 4) {
         return (
           <NewsCard
@@ -79,6 +79,7 @@ const News: React.FC<{ data: any }> = ({ data }) => {
   }, [NewsStories])
 
   useEffect(() => {
+    console.log(allNewsItems)
     allNewsItems.forEach((item: any, i: number) => {
       const tl = gsap.timeline({
         scrollTrigger: { trigger: `.newsCard-${i}`, start: "top 80%" },
