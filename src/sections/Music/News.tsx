@@ -135,7 +135,7 @@ const Wrapper = styled.section`
   
 `
 
-const NewsCard1BG = styled(props => <NewsCard1BGSVG {...props} />)`
+export const NewsCard1BG = styled(props => <NewsCard1BGSVG {...props} />)`
   position: absolute;
   z-index: 0;
   top: 0;
