@@ -64,7 +64,7 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
       video.current.load()
     }
   }
-
+  // Todo: delete
   return (
     <PieceWrapper className={`media_pieces`} info={info === i}>
       <ImageWrapper>
