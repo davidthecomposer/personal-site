@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "author": "David Campbell",
   "dependencies": {
-    "@svgr/webpack": "^6.4.0",
+    "@svgr/webpack": "^6.5.1",
     "@types/react": "^18.0.21",
     "@types/react-helmet": "^6.1.4",
     "@types/react-router-dom": "^5.3.2",
