@@ -10,6 +10,7 @@ import { IntroAnimationContext } from "pages/music"
 
 import { navigate } from "gatsby"
 import shadows from "assets/styles/shadows"
+import { GatsbyImage } from "gatsby-plugin-image"
 
 const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
   const [carouselWrapper, setCarouselWrapper] = useState<HTMLDivElement | null>(
@@ -107,14 +108,15 @@ const Hero: React.FC<{ mobile: boolean; data: any }> = ({ data }) => {
   const slides = useMemo(
     () =>
       fakeNews.map((news: any, i: number) => {
+        console.log(news)
         return (
           <Slide key={`music_slide${i}`}>
-            {news.audio && <audio src={news.audio} />}
-            {news.video && <video src={news.audio} />}
+            {news.audio && <audio src={news.audio} preload="none" />}
+            {news.video && <video src={news.audio} preload="none" />}
             <Title className={`slide_${i}`}>{news.title}</Title>
             <MainImage
               className={`slide_${i}`}
-              src={news.image}
+              image={news.image[0].gatsbyImageData}
               alt={news.title}
             />
           </Slide>
@@ -265,7 +267,7 @@ const Title = styled.h4`
   }
 `
 
-const MainImage = styled.img`
+const MainImage = styled(GatsbyImage)`
   width: 72.5vw;
   height: 36.63vw;
   border-radius: 1.205vw;

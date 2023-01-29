@@ -28,9 +28,10 @@ const MusicPage: React.FC<data> = ({ data }) => {
   }, [])
 
   const newsDataCurated = newsData.map((news: any) => {
+    console.log(news)
     return {
       title: news.title,
-      image: news.mainImages[0].file.url,
+      image: news.mainImages,
       slug: news.url,
       buttonText: news.buttonText,
       news: news.news,
@@ -38,6 +39,8 @@ const MusicPage: React.FC<data> = ({ data }) => {
       video: "",
     }
   })
+
+  console.log(mediaData, "media")
 
   return (
     <Layout>
@@ -66,10 +69,7 @@ export const announceQuery = graphql`
         news
         buttonText
         mainImages {
-          file {
-            fileName
-            url
-          }
+          ...ContentfulImageQuery
         }
         articleBlurb {
           articleBlurb
@@ -103,9 +103,9 @@ export const announceQuery = graphql`
       totalCount
     }
     allContentfulEnsemble {
-      distinct(field: ensembleName)
+      distinct(field: { ensembleName: SELECT })
     }
-    allContentfulConcertPiece(sort: { fields: ensemble___ensembleName }) {
+    allContentfulConcertPiece(sort: { ensemble: { ensembleName: ASC } }) {
       nodes {
         instrumentation
         id
@@ -171,9 +171,14 @@ export const announceQuery = graphql`
         tags
         title
         images {
+          ...ContentfulImageQuery
+        }
+        posterImage: images {
           file {
+            fileName
             url
           }
+          title
         }
       }
     }

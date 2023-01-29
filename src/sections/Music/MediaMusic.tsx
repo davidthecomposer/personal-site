@@ -11,6 +11,7 @@ import SectionHeaders from "components/textElements/SectionHeaders"
 import { AudioPlayerElement } from "components/AudioPlayer"
 import { AudioPlayerContext } from "components/ContextStore"
 import shadows from "assets/styles/shadows"
+import { GatsbyImage } from "gatsby-plugin-image"
 type props = {
   mobile: boolean
   data: any
@@ -64,7 +65,7 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
       video.current.load()
     }
   }
-  // Todo: delete
+
   return (
     <PieceWrapper className={`media_pieces`} info={info === i}>
       <ImageWrapper>
@@ -93,7 +94,10 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
         )}
         {track.audio ? (
           <>
-            <img src={track.images[0].file.url} alt={track.title} />
+            <GatsbyImage
+              image={track.images[0].gatsbyImageData}
+              alt={track.title}
+            />
             <AudioWrapper>
               <AudioPlayerElement
                 myKey={track.key}
@@ -105,8 +109,8 @@ const MediaPiece: React.FC<pieceProps> = ({ track, i }) => {
         ) : (
           <video
             src={track.video.file.url}
-            poster={track.images[0].file.url}
-            preload={"meta"}
+            poster={track.posterImage[0].file.url}
+            preload="none"
             ref={video}
             onMouseEnter={setControls}
             onMouseLeave={unsetControls}
