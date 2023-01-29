@@ -593,7 +593,7 @@ export default ConcertPiece
 
 export const announceQuery = graphql`
   {
-    allContentfulConcertPiece(sort: { fields: ensemble___ensembleName }) {
+    allContentfulConcertPiece(sort: { ensemble: { ensembleName: ASC } }) {
       nodes {
         key
         title

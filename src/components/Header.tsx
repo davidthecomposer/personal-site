@@ -16,7 +16,6 @@ import { ReactComponent as DavidInitialsSVG } from "assets/svg/logoT.svg"
 
 const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   const mobile = useContext(MobileContext)
-  // const tablet = useContext(TabletContext);
 
   const [role, setRole] = useState("")
 
@@ -25,7 +24,6 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
   const myRole = useRef(null)
   const navLinks = useRef(null)
   const [wrapper, setWrapper] = useState<HTMLElement | null>(null)
-  const [display, setDisplay] = useState(true)
   const [navOpen, setNavOpen] = useState(true)
   const navIsOpen = useRef(true)
   const [initial, setInitial] = useState(true)
@@ -376,7 +374,6 @@ const Header: React.FC<{ setIntro: any }> = ({ setIntro }) => {
                 },
                 0.3
               )
-
             return () => {
               tl1.kill()
             }

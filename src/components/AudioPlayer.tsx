@@ -35,7 +35,7 @@ export const AudioPlayerElement: React.FC<AudioElementProps> = ({
       src={audio}
       ref={player}
       onLoadedMetadata={() => setCheck(!check)}
-      preload="metadata"
+      preload="none"
       playsInline
       controls
     />
